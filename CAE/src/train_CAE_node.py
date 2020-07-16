@@ -11,7 +11,7 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
 MODEL_DIR = DATA_DIR + "model_CAE20/"
-trainset = MyDataSet(TRAIN_PATH, 0.1)
+trainset = MyDataSet(TRAIN_PATH)
 testset = MyDataSet(TEST_PATH)
 net = Net()
 

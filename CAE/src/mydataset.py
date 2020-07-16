@@ -6,33 +6,12 @@ from pathlib import Path
 from PIL import Image
 import math
 
-"""IMAGE DATASET"""
-
-
-# class MyDataSetForCAE(torch.utils.data.Dataset):
-#     def __init__(self, dir_path):
-#         super().__init__()
-#         # image
-#         self._image_paths = [str(p) for p in Path(dir_path).glob("./*/*.jpg")]
-#         self._len = len(self._image_paths)
-
-#     def __len__(self):
-#         return self._len
-
-#     def __getitem__(self, index):
-#         p = self._image_paths[index]
-#         image = Image.open(p)
-#         image = image.convert("RGB")
-#         image = torchvision.transforms.ToTensor()(image)
-#         return image, image
-
 
 class MyDataSetForCAE(torch.utils.data.Dataset):
-    def __init__(self, dir_path, noise=0):
+    def __init__(self, dir_path):
         super().__init__()
-        self._noise = noise
+        # self._noise = noise
         self._image_paths = [str(p) for p in Path(dir_path).glob("./*/*/*.jpg")]
-
         self._image_paths.sort()
 
         self._imgs = [self.get_img(str(p)) for p in self._image_paths]

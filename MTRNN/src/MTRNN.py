@@ -1,136 +1,72 @@
-#!/usr/bin/env python3
-# coding: utf-8
+#!/usr/bin/env python
+# coding:utf-8
+
 import torch
-from torch.nn import Module, Linear
+import torch.nn as nn
+import torch.nn.functional as F
 import numpy as np
 
 
-class MTRNNCell(torch.nn.Module):
+class MTRNN(nn.Module):  # [TODO]cannot use GPU now
     def __init__(
         self,
-        input_output_size=1,
-        input_output_hidden_size=10,
-        fast_hidden_size=10,
-        slow_hidden_size=5,
-        tau_input_output=2,
-        tau_fast_hidden=5,
-        tau_slow_hidden=70,
+        in_size,
+        out_size,
+        c_size={"io": 3, "cf": 4, "cs": 5},
+        tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
     ):
         super().__init__()
+        self.in_size = in_size
+        self.out_size = out_size
+        self.c_size = c_size
+        self.tau = tau
+        self.i2io = nn.Linear(self.in_size, self.c_size["io"])
+        self.io2o = nn.Linear(self.c_size["io"], self.out_size)
+        self.io2io = nn.Linear(self.c_size["io"], self.c_size["io"])
+        self.io2cf = nn.Linear(self.c_size["io"], self.c_size["cf"])
+        self.cf2io = nn.Linear(self.c_size["cf"], self.c_size["io"])
+        self.cf2cs = nn.Linear(self.c_size["cf"], self.c_size["cs"])
+        self.cf2cf = nn.Linear(self.c_size["cf"], self.c_size["cf"])
+        self.cs2cf = nn.Linear(self.c_size["cs"], self.c_size["cf"])
+        self.cs2cs = nn.Linear(self.c_size["cs"], self.c_size["cs"])
+        self.activate = torch.nn.Tanh()
 
-        # hidden layer sizes
-        self.input_output_size = input_output_size
-        self.input_output_hidden_size = input_output_hidden_size
-        self.fast_hidden_size = fast_hidden_size
-        self.slow_hidden_size = slow_hidden_size
+    def init_state(self, batch_size):
+        # self.io_state = torch.zeros(size=(batch_size, self.c_size["io"]))
+        # self.cf_state = torch.zeros(size=(batch_size, self.c_size["cf"]))
+        # self.cs_state = torch.zeros(size=(batch_size, self.c_size["cs"]))
+        self.io_state = torch.full(size=(batch_size, self.c_size["io"]), fill_value=0.5)
+        self.cf_state = torch.full(size=(batch_size, self.c_size["cf"]), fill_value=0.5)
+        self.cs_state = torch.full(size=(batch_size, self.c_size["cs"]), fill_value=0.5)
 
-        # decay rates
-        self.tau_input_output = tau_input_output
-        self.tau_fast_hidden = tau_fast_hidden
-        self.tau_slow_hidden = tau_slow_hidden
-
-        # linear mappings
-        self.input_to_io_mapping = Linear(
-            self.input_output_size, self.input_output_hidden_size
-        )
-        self.input_to_fast_mapping = Linear(
-            self.input_output_hidden_size, self.input_output_hidden_size
-        )
-        self.fast_to_fast_mapping = Linear(self.fast_hidden_size, self.fast_hidden_size)
-        self.fast_to_slow_mapping = Linear(self.fast_hidden_size, self.slow_hidden_size)
-        self.slow_to_slow_mapping = Linear(self.slow_hidden_size, self.slow_hidden_size)
-        self.slow_to_fast_mapping = Linear(self.slow_hidden_size, self.fast_hidden_size)
-        self.fast_to_io_mapping = Linear(
-            self.fast_hidden_size, self.input_output_hidden_size
-        )
-        self.io_to_io_mapping = Linear(
-            self.input_output_hidden_size, self.input_output_hidden_size
-        )
-        self.io_to_output_mapping = Linear(
-            self.input_output_hidden_size, self.input_output_size
-        )
-
-    def forward(self, input, hidden_states):
-
-        if hidden_states is None:
-            hidden_states = self._get_initial_hidden_states(input.size(0))
-        io_hidden_state, fast_hidden_state, slow_hidden_state = hidden_states
-        io_hidden_state = io_hidden_state.detach()
-
-        new_fast_hidden_state = self._update_state(
-            previous=fast_hidden_state,
-            new=[
-                self.fast_to_fast_mapping(fast_hidden_state),
-                self.slow_to_fast_mapping(slow_hidden_state),
-                self.input_to_fast_mapping(io_hidden_state),
-            ],
-            tau=self.tau_fast_hidden,
-        )
-
-        new_slow_hidden_state = self._update_state(
-            previous=slow_hidden_state,
-            new=[
-                self.slow_to_slow_mapping(slow_hidden_state),
-                self.fast_to_slow_mapping(fast_hidden_state),
-            ],
-            tau=self.tau_slow_hidden,
-        )
-
-        new_io_hidden_state = self._update_state(
-            previous=io_hidden_state,
-            new=[
-                self.io_to_io_mapping(io_hidden_state),
-                self.fast_to_io_mapping(fast_hidden_state),
-                self.input_to_io_mapping(input),
-            ],
-            tau=self.tau_input_output,
-        )
-
-        output = torch.tanh(self.io_to_output_mapping(io_hidden_state))
-        new_hidden_states = (
-            torch.sigmoid(new_io_hidden_state),
-            torch.sigmoid(new_fast_hidden_state),
-            torch.sigmoid(new_slow_hidden_state),
-        )
-
-        return output, new_hidden_states
-
-    def _update_state(self, previous, new, tau):
+    def _next_state(self, previous, new, tau):
         connected = torch.stack(new)
         new_summed = connected.sum(dim=0)
-        return (1 - 1 / tau) * previous + new_summed / tau
+        ret = (1 - 1 / tau) * previous + new_summed / tau
+        return self.activate(ret)
 
-    def _get_initial_hidden_states(self, batch_size):
-        # Allocate memory
-        input_output_hidden_state = torch.FloatTensor(
-            batch_size, self.input_output_hidden_size
+    def forward(self, x):  # x.shape(batch,x)
+        new_io_state = self._next_state(
+            previous=self.io_state,
+            new=[self.io2io(self.io_state), self.cf2io(self.cf_state), self.i2io(x),],
+            tau=self.tau["tau_io"],
         )
-        fast_hidden_state = torch.FloatTensor(batch_size, self.fast_hidden_size)
-        slow_hidden_state = torch.FloatTensor(batch_size, self.slow_hidden_size)
-
-        # Initialize by sampling uniformly from (-sqrt(1/hidden_size), sqrt(1/hidden_size))
-        input_output_hidden_state.uniform_(
-            -np.sqrt(1 / self.input_output_hidden_size),
-            np.sqrt(1 / self.input_output_hidden_size),
+        new_cf_state = self._next_state(
+            previous=self.cf_state,
+            new=[
+                self.cf2cf(self.cf_state),
+                self.cs2cf(self.cs_state),
+                self.io2cf(self.io_state),
+            ],
+            tau=self.tau["tau_cf"],
         )
-        fast_hidden_state.uniform_(
-            -np.sqrt(1 / self.fast_hidden_size), np.sqrt(1 / self.fast_hidden_size)
+        new_cs_state = self._next_state(
+            previous=self.cs_state,
+            new=[self.cs2cs(self.cs_state), self.cf2cs(self.cf_state),],
+            tau=self.tau["tau_cs"],
         )
-        slow_hidden_state.uniform_(
-            -np.sqrt(1 / self.slow_hidden_size), np.sqrt(1 / self.slow_hidden_size)
-        )
-
-        return input_output_hidden_state, fast_hidden_state, slow_hidden_state
-
-
-class CustomRNN(Module):
-    def __init__(self, cell):
-        super().__init__()
-        self.rnn = cell
-
-    def forward(self, input, hidden_state=None):
-        output = torch.empty_like(input)
-        for t in range(input.size(0)):
-            output[t], hidden_state = self.rnn(input[t], hidden_state)
-            # print(t, input[t], output[t])
-        return output, hidden_state
+        self.io_state = new_io_state
+        self.cf_state = new_cf_state
+        self.cs_state = new_cs_state
+        y = self.activate(self.io2o(self.io_state))
+        return y
