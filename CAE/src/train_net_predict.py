@@ -126,17 +126,17 @@ class TrainNet:
         return mean_loss
 
     def test_each_epoch(self):
-        self._net.eval()
-        sum_loss = 0.0  # loss
-        for (inputs, labels) in self._testloader:
-            inputs, labels = inputs.to(self._device), labels.to(self._device)
-            self._optimizer.zero_grad()
-            outputs = self._net(inputs)
-            loss = self._criterion(outputs, labels)
-            sum_loss += loss.item()
-        mean_loss = sum_loss / len(self._testloader)
-        print("test meanloss={}".format(mean_loss))
-        return mean_loss
+        # self._net.eval()
+        # sum_loss = 0.0  # loss
+        # for (inputs, labels) in self._testloader:
+        #     inputs, labels = inputs.to(self._device), labels.to(self._device)
+        #     self._optimizer.zero_grad()
+        #     outputs = self._net(inputs)
+        #     loss = self._criterion(outputs, labels)
+        #     sum_loss += loss.item()
+        # mean_loss = sum_loss / len(self._testloader)
+        # print("test meanloss={}".format(mean_loss))
+        return 0  # mean_loss
 
     def show_result(self):
         """RESULT OUTPUT"""

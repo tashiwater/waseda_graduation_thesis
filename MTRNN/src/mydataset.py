@@ -74,3 +74,27 @@ class EasyDataSet(torch.utils.data.Dataset):
             ret2.append(x2)
         x = torch.tensor(ret).view(-1)
         return torch.tensor(ret).view(-1, 2), torch.tensor(ret2).view(-1, 2)
+
+
+class CustomDataSet(CsvDataSet):
+    def __init__(self, dir_path, tactile_frame_num):
+        super().__init__(dir_path)
+        self._motor = self._datas[:][:][:14]
+        tactile = self._datas[:][:][14:30]
+        self._img = self._datas[:][:][30:]
+        zero = torch.zeros(size=(tactile[0].shape[1], tactile_frame_num))
+        tactile_with0 = [torch.cat([zero, i], axis=0) for i in tactile]
+        self._tactile = [
+            tactile_with0[:][i : i + 5] for i in range(tactile[0].shape[0])
+        ]
+
+    def __getitem__(self, index):
+        # print(self._datas[index][1:].shape)
+        return (
+            [
+                self._motor[index][0:-1],
+                self._tactile[index][0:-1],
+                self._img[index][0:-1],
+            ],
+            self._datas[index][1:],
+        )

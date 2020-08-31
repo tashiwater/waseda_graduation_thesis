@@ -20,7 +20,6 @@ class TrainNet:
             "weight_decay": 0,
             "learn_rate": 0.001,
             "betas": (0.9, 0.999),
-            "open_rate": 1,  # train with open
         }
 
         self._param_dict.update(param_dict)
@@ -101,11 +100,7 @@ class TrainNet:
             outputs = torch.zeros_like(labels_transposed)
             self._optimizer.zero_grad()
             for i, inputs_t in enumerate(inputs_transposed):
-                closed_input = (
-                    self._param_dict["open_rate"] * inputs_t
-                    + (1 - self._param_dict["open_rate"]) * outputs[i - 1]
-                )
-                outputs[i] = self._net(closed_input)
+                outputs[i] = self._net(inputs_t)
                 # print(self._net.io_state)
                 # print(self._net.cf_state)
                 # print(self._net.cs_state)

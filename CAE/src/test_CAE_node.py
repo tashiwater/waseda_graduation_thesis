@@ -17,10 +17,11 @@ MODEL_DIR = DATA_DIR + "model_CAE20/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "6_22/20200623_093348_200finish.pth"
-net.load_state_dict(torch.load(model_path))
+model_path = MODEL_DIR + "20200830_234052_250.pth"
+checkpoint = torch.load(model_path)
+net.load_state_dict(checkpoint["model"])
 
-dataset = MyDataSet(DATA_PATH)
+dataset = MyDataSet(DATA_PATH, noise=0.05)
 testloader = torch.utils.data.DataLoader(
     dataset, batch_size=len(dataset), shuffle=False, num_workers=4,
 )

@@ -15,10 +15,13 @@ def read_csvs(folder_name):
 
 def get_meaned_data(data, sequence_num, each_sample):
     can_change_num = min(sequence_num, int(len(data) / each_sample))
-    ret = [
-        data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
-        for i in range(can_change_num)
-    ]
+    if each_sample == 1:
+        ret = data
+    else:
+        ret = [
+            data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
+            for i in range(can_change_num)
+        ]
     for i in range(sequence_num - len(ret)):
         ret.append(ret[-1])
     ret = np.array(ret)
@@ -47,7 +50,7 @@ if __name__ == "__main__":
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
 
-    sequence_num = len(image_feature_datas[0])
+    sequence_num = 300  # len(image_feature_datas[0])
     motion_before_scale = [
         [-1.309, 4.451],
         [-2.094, 0.140],
@@ -91,7 +94,7 @@ if __name__ == "__main__":
             + ["image{}".format(i) for i in range(image_feature_data.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
-        df.to_csv(RESULT_DIR + "{:02}.csv".format(i + 1), index=False)
+        df.to_csv(RESULT_DIR + "{:03}.csv".format(i + 1), index=False)
         #     connected_datas.append(connected_data)
         # connected_datas = np.ndarray(connected_datas)
         # # [TODO] add title

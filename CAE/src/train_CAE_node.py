@@ -2,26 +2,22 @@
 # coding: utf-8
 import os
 from mydataset import MyDataSetForCAE as MyDataSet
-from CAE import Net
-from train_net_predict import TrainNet
+from CAE2 import Net
+from train import TrainNet
 import torch
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
-MODEL_DIR = DATA_DIR + "model_CAE20/"
-trainset = MyDataSet(TRAIN_PATH)
+MODEL_DIR = DATA_DIR + "model_CAE20/more_deep/"
+trainset = MyDataSet(TRAIN_PATH, noise=0.05)
 testset = MyDataSet(TEST_PATH)
 net = Net()
-
-## modelをロードしたとき
-# model_path = MODEL_DIR + "20200612_103406_100.pth"
-# net.load_state_dict(torch.load(model_path))
 param_dict = {
-    "train_batch_size": 100,
-    # "test_batch_size": 1,
-    "epoch": 1,
+    "train_batch_size": 500,
+    "test_batch_size": 500,
+    "epoch": None,
     "save_span": 50,
     "graph_span": 5,
     "weight_decay": 0.00001,

@@ -14,21 +14,19 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 RESULT_DIR = DATA_DIR + "result/"
 # RESULT2_DIR = DATA_DIR + "result_correct/"
-MODEL_DIR = DATA_DIR + "model_tanh/"
+MODEL_DIR = DATA_DIR + "model/"
 VALIDATE_PATH = DATA_DIR + "test"
 
 dataset = MyDataSet(VALIDATE_PATH)
 # dataset = MyDataSet(0, 600, 0.02, 1, 0.1)
 in_size = dataset[0][0].shape[1]
 net = MTRNN(
-    in_size=in_size,
-    out_size=in_size,
-    c_size={"io": 34, "cf": 160, "cs": 13},
+    layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 160, "cs": 13},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 50},
+    open_rate=0.3,
 )
-OPEN_RATE = 1
 ### modelをロード
-model_path = MODEL_DIR + "20200715_135244_3000.pth"
+model_path = MODEL_DIR + "20200719_181607_7000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
@@ -59,8 +57,7 @@ for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
     cf_states = []
     cs_states = []
     for i, inputs_t in enumerate(inputs_transposed):
-        closed_input = OPEN_RATE * inputs_t + (1 - OPEN_RATE) * outputs[i - 1]
-        outputs[i] = net(closed_input)
+        outputs[i] = net(inputs_t)
         io_states.append(net.io_state.view(-1).detach().numpy())
         cf_states.append(net.cf_state.view(-1).detach().numpy())
         cs_states.append(net.cs_state.view(-1).detach().numpy())
