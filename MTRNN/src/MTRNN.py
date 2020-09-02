@@ -31,23 +31,24 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.activate = torch.nn.Tanh()
 
     def init_state(self, batch_size):
-        # self.io_state = torch.zeros(size=(batch_size, self.layer_size["io"]))
-        # self.cf_state = torch.zeros(size=(batch_size, self.layer_size["cf"]))
-        # self.cs_state = torch.zeros(size=(batch_size, self.layer_size["cs"]))
+        self.last_output = torch.zeros(size=(batch_size, self.layer_size["out"]))
+        self.io_state = torch.zeros(size=(batch_size, self.layer_size["io"]))
+        self.cf_state = torch.zeros(size=(batch_size, self.layer_size["cf"]))
+        self.cs_state = torch.zeros(size=(batch_size, self.layer_size["cs"]))
 
-        fill_value = 0
-        self.last_output = torch.full(
-            size=(batch_size, self.layer_size["out"]), fill_value=fill_value
-        )
-        self.io_state = torch.full(
-            size=(batch_size, self.layer_size["io"]), fill_value=fill_value
-        )
-        self.cf_state = torch.full(
-            size=(batch_size, self.layer_size["cf"]), fill_value=fill_value
-        )
-        self.cs_state = torch.full(
-            size=(batch_size, self.layer_size["cs"]), fill_value=fill_value
-        )
+        # fill_value = 0
+        # self.last_output = torch.full(
+        #     size=(batch_size, self.layer_size["out"]), fill_value=fill_value,
+        # )
+        # self.io_state = torch.full(
+        #     size=(batch_size, self.layer_size["io"]), fill_value=fill_value
+        # )
+        # self.cf_state = torch.full(
+        #     size=(batch_size, self.layer_size["cf"]), fill_value=fill_value
+        # )
+        # self.cs_state = torch.full(
+        #     size=(batch_size, self.layer_size["cs"]), fill_value=fill_value
+        # )
 
     def _next_state(self, previous, new, tau):
         connected = torch.stack(new)
@@ -94,7 +95,6 @@ class CustomNet(nn.Module):
         layer_size={"in": 1, "out": 1, "io": 3, "cf": 4, "cs": 5},
         tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
         open_rate=1,
-        tactile_fram_num=5,
     ):
         super().__init__()
         self.mtrnn = MTRNN(layer_size, tau, open_rate)
@@ -103,10 +103,10 @@ class CustomNet(nn.Module):
             torch.nn.Conv2d(1, 8, 3, stride=2, padding=1),  # ->8*8*3
             torch.nn.BatchNorm2d(8),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(1, 8, 3, stride=2, padding=1),  # 8*4*2
+            torch.nn.Conv2d(8, 8, 3, stride=2, padding=1),  # 8*4*2
             torch.nn.BatchNorm2d(8),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(1, 8, 3, stride=2, padding=1),  # 8*2*1
+            torch.nn.Conv2d(8, 8, 3, stride=2, padding=1),  # 8*2*1
             torch.nn.BatchNorm2d(8),
             torch.nn.Flatten(),
             torch.nn.Sigmoid(),

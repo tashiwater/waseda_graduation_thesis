@@ -119,7 +119,7 @@ class TrainNet:
             "model": self._net.state_dict(),
             "optimizer": self._optimizer.state_dict(),
         }
-        torch.save(state, filename + ".pth")
+        torch.save(state, filename + ".pth", _use_new_zipfile_serialization=False)
 
         df = pd.DataFrame(
             data={

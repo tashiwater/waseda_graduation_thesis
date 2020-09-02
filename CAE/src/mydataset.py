@@ -30,7 +30,6 @@ class MyDataSetForCAE(torch.utils.data.Dataset):
         # )
         image = image.resize((128, 96))
         image = torchvision.transforms.ToTensor()(image)
-
         return image
 
     def __getitem__(self, index):

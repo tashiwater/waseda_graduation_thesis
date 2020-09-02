@@ -22,7 +22,7 @@ class ImgPreprocess:
                 image = Image.open(img_path)
                 image.save(output_dir + "/{:03d}.jpg".format(j + min_index))
 
-    def resize(self):
+    def resize(self, size):
         for i, img_dir in enumerate(self._img_dirs):
             img_paths = [str(p) for p in Path(img_dir).glob("./*")]
             img_paths.sort()
@@ -30,15 +30,15 @@ class ImgPreprocess:
             os.mkdir(output_dir)
             for j, img_path in enumerate(img_paths):
                 image = Image.open(img_path)
-                image = image.resize((128, 96))
+                image = image.resize(size)
                 image.save(output_dir + "/{:03d}.jpg".format(j))
 
 
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
-    IMG_DIR = DATA_DIR + "image_compressed/"
-    OUTPUT_DIR = DATA_DIR + "image_extract/"
+    IMG_DIR = DATA_DIR + "image_raw/"
+    OUTPUT_DIR = DATA_DIR + "image_compressed/"
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
-    process.extract(50, 200)
-    # process.resize()
+    # process.extract(50, 200)
+    process.resize(size=(128, 96))

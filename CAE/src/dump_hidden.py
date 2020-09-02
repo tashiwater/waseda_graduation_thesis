@@ -12,15 +12,15 @@ from pathlib import Path
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 IMAGE_PATH = DATA_DIR + "image/"
-RESULT_DIR = DATA_DIR + "result/"
 MODEL_DIR = DATA_DIR + "model_CAE20/"
 HIDDEN_DIR = DATA_DIR + "image_feature/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "20200827_225616_200.pth"
-net.load_state_dict(torch.load(model_path))
+model_path = MODEL_DIR + "use_little/20200831_121336_250finish.pth"
+checkpoint = torch.load(model_path)
+net.load_state_dict(checkpoint["model"])
 
 
 device = torch.device("cuda:0")

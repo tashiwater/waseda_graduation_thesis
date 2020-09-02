@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def read_csvs(folder_name):
-    paths = [str(p) for p in Path(folder_name).glob("./*/*.csv")]
+    paths = [str(p) for p in Path(folder_name).glob("./*.csv")]
     paths.sort()
     ret = [np.loadtxt(path, delimiter=",") for path in paths]
     return ret
@@ -16,7 +16,7 @@ def read_csvs(folder_name):
 def get_meaned_data(data, sequence_num, each_sample):
     can_change_num = min(sequence_num, int(len(data) / each_sample))
     if each_sample == 1:
-        ret = data
+        ret = list(data[:can_change_num])
     else:
         ret = [
             data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
@@ -43,14 +43,14 @@ def sigmoid_normalize(data, before_scale):
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
-    INPUT_DIR = DATA_DIR + "inputs/"
+    INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
-    tactile_datas = read_csvs(INPUT_DIR + "tactile/")
+    tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
 
-    sequence_num = 300  # len(image_feature_datas[0])
+    sequence_num = 250  # len(image_feature_datas[0])
     motion_before_scale = [
         [-1.309, 4.451],
         [-2.094, 0.140],
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
     image_before_scale = [[0, 1] for _ in range(image_feature_datas[0].shape[1])]
     # image_before_scale = [[0,1] for _ in range(image_feature_data.shape[1])]
-    for i, (motion_data, tactile_data, image_feature_data) in enumerate(
+    for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
     ):
         motion_preprocessed = get_meaned_data(motion_data, sequence_num, EACH_SAMPLE)
@@ -81,20 +81,19 @@ if __name__ == "__main__":
         tactile_preprocessed = sigmoid_normalize(
             tactile_preprocessed, tactile_before_scale
         )
-        image_feature_datas_preprocessed = sigmoid_normalize(
-            image_feature_data, image_before_scale
-        )
+        img_preprocessed = get_meaned_data(img, sequence_num, 1)
+        img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
         connected_data = np.block(
-            [motion_preprocessed, tactile_preprocessed, image_feature_data]
+            [motion_preprocessed, tactile_preprocessed, img_preprocessed]
         )
         header = (
             ["position{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["torque{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["tactile{}".format(i) for i in range(tactile_preprocessed.shape[1])]
-            + ["image{}".format(i) for i in range(image_feature_data.shape[1])]
+            + ["image{}".format(i) for i in range(img.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
-        df.to_csv(RESULT_DIR + "{:03}.csv".format(i + 1), index=False)
+        df.to_csv(RESULT_DIR + "{:03}.csv".format(i), index=False)
         #     connected_datas.append(connected_data)
         # connected_datas = np.ndarray(connected_datas)
         # # [TODO] add title

@@ -21,7 +21,7 @@ in_size = trainset[0][0].shape[1]
 net = MTRNN(
     layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 160, "cs": 13},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 50},
-    open_rate=0.5,
+    open_rate=0.8,
 )
 ## modelをロードしたとき
 # model_path = MODEL_DIR + "20200612_103406_100.pth"
@@ -29,26 +29,18 @@ net = MTRNN(
 param_dict = {
     "train_batch_size": len(trainset),
     "test_batch_size": len(testset),
-    "epoch": 7000,
+    "epoch": 1,
     "save_span": 500,
     "graph_span": 5,
     "weight_decay": 0.00001,
-    "dims": [46],
+    "dims": [50],
     "loss_rates": [1],
     # "learn_rate": 0.01,
     # "betas": (0.999, 0.999),
 }
 criterion = torch.nn.MSELoss()
-train_net = TrainNet(
-    net,
-    criterion,
-    trainset,
-    testset,
-    MODEL_DIR,
-    param_dict,
-    device=torch.device("cuda:0"),
-)
-# train_net.load_model("20200719_173814_500")
+train_net = TrainNet(net, criterion, trainset, testset, MODEL_DIR, param_dict,)
+train_net.load_model("20200831_162534_9000")
 # for data in train_net._net.parameters():
 #     print(data)
 
