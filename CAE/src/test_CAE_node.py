@@ -17,7 +17,7 @@ MODEL_DIR = DATA_DIR + "model_CAE20/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "sigmoid/20200902_093919_1300.pth"
+model_path = MODEL_DIR + "hsv/20200909_171042_300.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -32,15 +32,18 @@ net = net.to(device)
 net.eval()
 for i, (inputs, labels) in enumerate(testloader):
     inputs, labels = inputs.to(device), labels.to(device)
-    outputs = net(inputs)
+    outputs = net.encoder(inputs)
+    outputs = net.decoder(outputs)
     loss = criterion(outputs, labels)
     print(loss.item())
     # print(torch.min(inputs))
     for j, img in enumerate(inputs.cpu()):
-        torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+        MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
 
     for j, img in enumerate(outputs.cpu()):
-        torchvision.utils.save_image(img, RESULT_DIR + "{}_{}.png".format(i, j))
+        MyDataSet.save_img(img, RESULT_DIR + "{}_{}.png".format(i, j))
+        # torchvision.utils.save_image(img, RESULT_DIR + "{}_{}.png".format(i, j))
 
 ###model output
 # torch.onnx.export(net, inputs, RESULT_DIR + "model.onnx", verbose=True)

@@ -2,8 +2,7 @@
 # coding: utf-8
 import os
 from mydataset import MyDataSetForCAE as MyDataSet
-from CAE import Net
-from train_net_predict import TrainNet
+from CAE import CAEwithAttention as Net
 import torch
 import torchvision
 import numpy as np
@@ -18,7 +17,7 @@ HIDDEN_DIR = DATA_DIR + "image_feature/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "use_little/20200831_121336_250finish.pth"
+model_path = MODEL_DIR + "attention0001/20200911_212809_2200.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -43,7 +42,7 @@ for j, img_dir in enumerate(img_dirs):  # deal with each file
         # imgs = net.decoder(outputs)
         np.savetxt(
             HIDDEN_DIR + "{:03}.csv".format(j),
-            outputs.to("cpu").detach().numpy(),
+            outputs[0].to("cpu").detach().numpy(),
             delimiter=",",
         )
         # for j, img in enumerate(imgs.cpu()):

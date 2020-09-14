@@ -26,7 +26,7 @@ net = MTRNN(
     open_rate=0.3,
 )
 ### modelをロード
-model_path = MODEL_DIR + "20200719_181607_7000.pth"
+model_path = MODEL_DIR + "20200831_162534_9000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
@@ -36,7 +36,7 @@ def get_header(add_word):
     return (
         [add_word + "position{}".format(i) for i in range(7)]
         + [add_word + "torque{}".format(i) for i in range(7)]
-        + [add_word + "tactile{}".format(i) for i in range(12)]
+        + [add_word + "tactile{}".format(i) for i in range(16)]
         + [add_word + "image{}".format(i) for i in range(20)]
     )
 
