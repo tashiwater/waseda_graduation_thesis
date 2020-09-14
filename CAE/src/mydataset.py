@@ -49,7 +49,7 @@ class MyDataSetForCAE(torch.utils.data.Dataset):
 
 class MyDataSetForAttention(torch.utils.data.Dataset):
     def __init__(self, dir_path, jpg_path="./*/*/*.jpg", noise=0):
-        super().__init__()
+        super(MyDataSetForAttention, self).__init__()
         # self._noise = noise
         class_dirs = [str(p) for p in Path(dir_path).glob("./*")]
         class_dirs.sort()

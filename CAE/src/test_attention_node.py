@@ -17,19 +17,19 @@ MODEL_DIR = DATA_DIR + "model_CAE20/"
 net = Net()
 
 ### modelをロード
+"""
 model_path = MODEL_DIR + "attention0001/model.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint)
 """
-model_path = MODEL_DIR + "attention0001/20200911_212809_2200.pth"
+model_path = MODEL_DIR + "attention0001/20200911_185308_500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 torch.save(
     net.state_dict(),
-    MODEL_DIR + "attention0001/model.pth",
+    MODEL_DIR + "attention0001/model500.pth",
     _use_new_zipfile_serialization=False,
 )
-"""
 dataset = MyDataSet(DATA_PATH, noise=0)
 testloader = torch.utils.data.DataLoader(
     dataset, batch_size=500, shuffle=False, num_workers=4,
