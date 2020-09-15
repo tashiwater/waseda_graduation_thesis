@@ -21,12 +21,12 @@ dataset = MyDataSet(VALIDATE_PATH)
 # dataset = MyDataSet(0, 600, 0.02, 1, 0.1)
 in_size = dataset[0][0].shape[1]
 net = MTRNN(
-    layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 160, "cs": 13},
+    layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 200, "cs": 15},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 50},
     open_rate=0.3,
 )
 ### modelをロード
-model_path = MODEL_DIR + "20200831_162534_9000.pth"
+model_path = MODEL_DIR + "default/20200913_103221_30500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
