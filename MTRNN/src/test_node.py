@@ -23,10 +23,10 @@ in_size = dataset[0][0].shape[1]
 net = MTRNN(
     layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 200, "cs": 15},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 50},
-    open_rate=0.3,
+    open_rate=0.8,
 )
 ### modelをロード
-model_path = MODEL_DIR + "default/20200913_103221_30500.pth"
+model_path = MODEL_DIR + "default/20200913_030624_17000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
@@ -72,7 +72,7 @@ for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
     np_output = outputs.view(-1, dataset[0][0].shape[1]).detach().numpy()
     cs_pca = PCA(n_components=2).fit_transform(cs_states)
     cf_pca = PCA(n_components=2).fit_transform(cf_states)
-    connected_data = np.block(
+    connected_data = np.hstack(
         [np_input, np_output, cf_pca, cs_pca]  # , io_states, cf_states, cs_states
     )
     header = (

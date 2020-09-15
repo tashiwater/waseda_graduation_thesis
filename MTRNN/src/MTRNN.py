@@ -14,7 +14,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
         open_rate=1,
     ):
-        super().__init__()
+        super(MTRNN,self).__init__()
         self.layer_size = layer_size
         self.tau = tau
         self.open_rate = open_rate

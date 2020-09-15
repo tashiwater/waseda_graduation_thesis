@@ -10,9 +10,10 @@ import pandas as pd
 
 class CsvDataSet(torch.utils.data.Dataset):
     def __init__(self, dir_path):
-        super().__init__()
+        super(CsvDataSet,self).__init__()
         self._paths = [str(p) for p in Path(dir_path).glob("./*/*.csv")]
         self._paths.sort()
+        
         self._datas = []
         for path in self._paths:
             df = pd.read_csv(path)
