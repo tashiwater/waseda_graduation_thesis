@@ -26,22 +26,26 @@ model_path = MODEL_DIR + "attention0001/20200911_185308_500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 """
-torch.save(
-    net.state_dict(),
-    MODEL_DIR + "attention0001/model500.pth",
-    _use_new_zipfile_serialization=False,
-)
+# torch.save(
+#     net.state_dict(),
+#     MODEL_DIR + "attention0001/model500.pth",
+#     _use_new_zipfile_serialization=False,
+# )
 dataset = MyDataSet(DATA_PATH, noise=0)
 testloader = torch.utils.data.DataLoader(
     dataset, batch_size=500, shuffle=False, num_workers=4,
 )
 
-device = torch.device("cuda:0")
+# device = torch.device("cuda:0")
+device = None
+
 criterion = torch.nn.MSELoss()
-net = net.to(device)
+if device is not None:
+    net = net.to(device)
 net.eval()
 for i, (inputs, labels) in enumerate(testloader):
-    inputs = inputs.to(device)  # , labels.to(device)
+    if device is not None:
+        inputs = inputs.to(device)  # , labels.to(device)
     outputs = net.encoder(inputs)
     val, class_num = torch.max(outputs[1], 1)
     outputs = net.decoder(outputs[0])
