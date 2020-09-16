@@ -10,7 +10,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train_attention"
 TEST_PATH = DATA_DIR + "test_attention"
-MODEL_DIR = DATA_DIR + "model_CAE20/attention/"
+MODEL_DIR = DATA_DIR + "model_CAE20/attention0001/"
 trainset = MyDataSet(TRAIN_PATH, noise=0.01)
 testset = MyDataSet(TEST_PATH)
 net = Net()
@@ -34,7 +34,7 @@ train_net = TrainNet(
     testset,
     MODEL_DIR,
     param_dict,
-    device=torch.device("cuda:0"),
+    # device=torch.device("cuda:0"),
     criterion_rate=criterion_rate,
 )
 # train_net.load_model("20200911_174618_200")

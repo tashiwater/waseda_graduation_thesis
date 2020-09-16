@@ -50,8 +50,8 @@ for i, (inputs, labels) in enumerate(testloader):
     val, class_num = torch.max(outputs[1], 1)
     outputs = net.decoder(outputs[0])
     attention_maps = net.attention_map
-    # loss = criterion(outputs, labels)
-    # print(loss.item())
+    loss = criterion(outputs, inputs)
+    print(loss.item())
     # print(torch.min(inputs))
     inputs = inputs.cpu()
     # for j, img in enumerate(inputs):
