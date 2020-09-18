@@ -2,7 +2,7 @@
 # coding: utf-8
 import os
 from mydataset import MyDataSetForAttention as MyDataSet
-from CAE import CAEwithAttention as Net
+from CAE import CAE as Net
 import torch
 import torchvision
 from PIL import Image, ImageChops
@@ -18,14 +18,11 @@ net = Net()
 
 ### modelをロード
 
-model_path = MODEL_DIR + "attention0001/model500.pth"
+model_path = "/media/hdd_1tb/model/dropout3_30/20200918_094940_400.pth"
 checkpoint = torch.load(model_path)
-net.load_state_dict(checkpoint)
-"""
-model_path = MODEL_DIR + "attention0001/20200911_185308_500.pth"
-checkpoint = torch.load(model_path)
+# net.load_state_dict(checkpoint)
 net.load_state_dict(checkpoint["model"])
-"""
+
 # torch.save(
 #     net.state_dict(),
 #     MODEL_DIR + "attention0001/model500.pth",
@@ -55,7 +52,7 @@ for i, (inputs, labels) in enumerate(testloader):
     # print(torch.min(inputs))
     inputs = inputs.cpu()
     # for j, img in enumerate(inputs):
-    #    MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    #     MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
     # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
     outputs = outputs.cpu()
     for j, img in enumerate(outputs):

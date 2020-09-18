@@ -2,22 +2,22 @@
 # coding: utf-8
 import os
 from mydataset import MyDataSetForAttention as MyDataSet
-from CAE import CAEwithAttention as Net
+from CAE import CAE as Net
 from train_attention import TrainNet
 import torch
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-TRAIN_PATH = DATA_DIR + "train_attention"
-TEST_PATH = DATA_DIR + "test_attention"
-MODEL_DIR = DATA_DIR + "model_CAE20/attention0001/"
+TRAIN_PATH = DATA_DIR + "train"
+TEST_PATH = DATA_DIR + "test"
+MODEL_DIR = "/media/hdd_1tb/model/theta0/"
 trainset = MyDataSet(TRAIN_PATH, noise=0.01)
 testset = MyDataSet(TEST_PATH)
 net = Net()
 param_dict = {
     "train_batch_size": 500,
     "test_batch_size": 500,
-    "epoch": None,
+    "epoch": 2000,
     "save_span": 50,
     "graph_span": 5,
     # "weight_decay": 0.00001,
@@ -34,7 +34,7 @@ train_net = TrainNet(
     testset,
     MODEL_DIR,
     param_dict,
-    # device=torch.device("cuda:0"),
+    device=torch.device("cuda:0"),
     criterion_rate=criterion_rate,
 )
 # train_net.load_model("20200911_174618_200")
