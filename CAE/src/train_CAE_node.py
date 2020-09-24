@@ -11,12 +11,12 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
 MODEL_DIR = "/media/hdd_1tb/model/theta0/"
-trainset = MyDataSet(TRAIN_PATH, noise=0.01)
-testset = MyDataSet(TEST_PATH)
+trainset = MyDataSet(TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5)
+testset = MyDataSet(TEST_PATH, img_size=(128, 96), is_test=True, dsize=5)
 net = Net()
 param_dict = {
-    "train_batch_size": 500,
-    "test_batch_size": 500,
+    "train_batch_size": 250,
+    "test_batch_size": 250,
     "epoch": 2000,
     "save_span": 50,
     "graph_span": 5,
@@ -34,8 +34,8 @@ train_net = TrainNet(
     testset,
     MODEL_DIR,
     param_dict,
-    device=torch.device("cuda:0"),
+    # device=torch.device("cuda:0"),
     criterion_rate=criterion_rate,
 )
-train_net.load_model("20200918_113808_550")
+# train_net.load_model("20200918_113808_550")
 train_net.run()

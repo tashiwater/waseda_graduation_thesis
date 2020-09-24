@@ -9,10 +9,8 @@ import torch.nn.functional as F
 import numpy as np
 
 import random
-from .utils.argments.resize import resize_image
-from .utils.argments.crop import random_crop_image
-from .utils.argments.flip import random_flip_image
-from .utils.argments.distort import random_distort
+from utils.argments.crop import random_crop_image
+from utils.argments.distort import random_distort
 
 
 class MyDataSetForCAE(torch.utils.data.Dataset):
@@ -54,8 +52,19 @@ class MyDataSetForCAE(torch.utils.data.Dataset):
 
 
 class MyDataSetForAttention(torch.utils.data.Dataset):
-    def __init__(self, dir_path, jpg_path="./*/*/*.jpg", noise=0):
+    def __init__(
+        self,
+        dir_path,
+        img_size=(128, 96),
+        is_test=False,
+        dsize=10,
+    ):
         super(MyDataSetForAttention, self).__init__()
+
+        self.size = img_size
+        self.test = is_test
+        self.distort = not is_test
+        self.dsize = dsize
         # self._noise = noise
         class_dirs = [str(p) for p in Path(dir_path).glob("./*")]
         class_dirs.sort()
@@ -70,7 +79,6 @@ class MyDataSetForAttention(torch.utils.data.Dataset):
             self._image_paths += img_paths
         self._imgs = [self.get_img(str(p)) for p in self._image_paths]
         self._len = len(self._imgs)
-        self._noise = noise
 
     def __len__(self):
         return self._len
@@ -78,27 +86,21 @@ class MyDataSetForAttention(torch.utils.data.Dataset):
     def get_img(self, path):
         image = Image.open(path)
         image = image.convert("RGB")
-        # image = image.transform(
-        #     image.size, Image.AFFINE, (1, 0, 15, 0, 1, 15), Image.BILINEAR
-        # )
-        # image2 = np.array(image)
-
-        image = image.resize((128 + self.dsize, 96 + self.dsize))
+        image = image.resize((self.size[0] + self.dsize, self.size[1] + self.dsize))
+        # image = image.resize((128, 96))
+        # image = torchvision.transforms.ToTensor()(image)
         return image
 
     def transform(self, img):
         img = random_crop_image(img, self.size, test=self.test)
+        img = np.asarray(img)
+        img_distort = np.copy(img)
         if self.distort:
-            img_distort = np.copy(img)
-            if random.randrange(2):
+            if random.randrange(2):  # add random at twice
                 img_distort = random_distort(img_distort)
-            img_distort = img_distort.astype(np.float32).transpose(2, 0, 1)
-            img_distort /= 255.0
-        else:
-            img_distort = np.copy(img)
-            img_distort = img_distort.astype(np.float32).transpose(2, 0, 1)
-            img_distort /= 255.0
+        img_distort = img_distort.astype(np.float32).transpose(2, 0, 1)
         img = img.astype(np.float32).transpose(2, 0, 1)
+        img_distort /= 255.0
         img /= 255.0  # <- very important !!! (VAE)
         # if self.test:
         #    save_img(img, os.path.join("/home/assimilation","test_"+imgpath.split("/")[-1]))
@@ -124,3 +126,26 @@ class MyDataSetForAttention(torch.utils.data.Dataset):
         # rgb = hsv.convert("RGB")
         # rgb.save(filename)
         torchvision.utils.save_image(tensor, filename)
+
+
+if __name__ == "__main__":
+    import os
+
+    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+    DATA_DIR = CURRENT_DIR + "/../data/"
+    DATA_PATH = DATA_DIR + "validate"
+    CORRECT_DIR = DATA_DIR + "datacheck/"
+
+    dataset = MyDataSetForAttention(DATA_PATH, is_test=False, dsize=5)
+    testloader = torch.utils.data.DataLoader(
+        dataset,
+        batch_size=500,
+        shuffle=False,
+        num_workers=4,
+    )
+    for i, (inputs, labels) in enumerate(testloader):
+        # inputs, labels = inputs.cpu(), labels.cpu()
+
+        for j, img in enumerate(inputs):
+            dataset.save_img(img, CORRECT_DIR + "{}_{}_input.jpg".format(i, j))
+            # dataset.save_img(labels[0][j], CORRECT_DIR + "{}_{}_label.jpg".format(i, j))

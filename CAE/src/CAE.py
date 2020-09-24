@@ -70,7 +70,7 @@ class CAE(torch.nn.Module):
         )
         self.get_attention_map = CNNCell(class_num, 1, 1, 1, 0, "sigmoid")
         self.get_class = torch.nn.Sequential(
-            torch.nn.Dropout2d(p=0.3),
+            # torch.nn.Dropout2d(p=0.3),
             torch.nn.Conv2d(
                 class_num, class_num, 1, stride=1, padding=0
             ),  # ->8*6*class_num
@@ -89,7 +89,7 @@ class CAE(torch.nn.Module):
             CNNCell(256, 128, mode="conv_trans"),
             CNNCell(128, 64, mode="conv_trans"),
             CNNCell(64, 32, mode="conv_trans"),
-            torch.nn.Dropout2d(p=0.3),
+            # torch.nn.Dropout2d(p=0.3),
             torch.nn.ConvTranspose2d(32, 3, 4, stride=2, padding=1),
             torch.nn.ReLU(),
         )
@@ -114,4 +114,3 @@ if __name__ == "__main__":
     # device = torch.device("cuda:0")
     # net = net.to(device)
     summary(net, (3, 96, 128), device="cpu")
-

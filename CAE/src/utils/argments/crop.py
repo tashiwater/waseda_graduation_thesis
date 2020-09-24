@@ -6,22 +6,20 @@ import numpy as np
 
 # from chainer import cuda
 
-
+###PIL version by Shimizu
 def random_crop_image(img, size, test=False):
     # _, H, W = img.shape
-    H, W, _ = img.shape
+    W, H = img.size
 
     ### crop input image with including target bbox
     min_top = 0
     min_left = 0
-    h_size = size[0]
-    w_size = size[1]
+    w_size = size[0]
+    h_size = size[1]
     max_top = H - h_size
     max_left = W - w_size
 
     if test:
-        # dsize = img.shape[-1] - size
-        dsize = img.shape[0] - size
         top = (H - h_size) / 2
         left = (W - w_size) / 2
     else:
@@ -31,5 +29,5 @@ def random_crop_image(img, size, test=False):
     bottom = top + h_size
     right = left + w_size
     # img = img[:, top:bottom, left:right]
-    img = img[top:bottom, left:right, :]
-    return img
+    # img = img[top:bottom, left:right, :]
+    return img.crop((left, top, right, bottom))

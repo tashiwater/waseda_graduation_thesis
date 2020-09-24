@@ -28,9 +28,12 @@ net.load_state_dict(checkpoint["model"])
 #     MODEL_DIR + "attention0001/model500.pth",
 #     _use_new_zipfile_serialization=False,
 # )
-dataset = MyDataSet(DATA_PATH, noise=0)
+dataset = MyDataSet(DATA_PATH, is_test=True, dsize=10)
 testloader = torch.utils.data.DataLoader(
-    dataset, batch_size=500, shuffle=False, num_workers=4,
+    dataset,
+    batch_size=500,
+    shuffle=False,
+    num_workers=4,
 )
 
 # device = torch.device("cuda:0")
@@ -51,9 +54,9 @@ for i, (inputs, labels) in enumerate(testloader):
     print(loss.item())
     # print(torch.min(inputs))
     inputs = inputs.cpu()
-    # for j, img in enumerate(inputs):
-    #     MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
-    # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    for j, img in enumerate(inputs):
+        MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
     outputs = outputs.cpu()
     for j, img in enumerate(outputs):
         MyDataSet.save_img(
