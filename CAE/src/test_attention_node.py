@@ -18,7 +18,7 @@ net = Net()
 
 ### modelをロード
 
-model_path = "/media/hdd_1tb/model/dropout3_30/20200918_094940_400.pth"
+model_path = "/media/hdd_1tb/model/dropout3_2/20200917_220833_1250.pth"
 checkpoint = torch.load(model_path)
 # net.load_state_dict(checkpoint)
 net.load_state_dict(checkpoint["model"])

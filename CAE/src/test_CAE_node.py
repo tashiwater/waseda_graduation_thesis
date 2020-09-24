@@ -2,8 +2,7 @@
 # coding: utf-8
 import os
 from mydataset import MyDataSetForCAE as MyDataSet
-from CAE import CAE as Net
-from train_net_predict import TrainNet
+from oldCAE import CAE as Net
 import torch
 import torchvision
 
@@ -17,7 +16,7 @@ MODEL_DIR = DATA_DIR + "model_CAE20/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "hsv/20200909_171042_300.pth"
+model_path = MODEL_DIR + "use_all/20200830_115126_100.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

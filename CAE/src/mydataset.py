@@ -8,6 +8,12 @@ import math
 import torch.nn.functional as F
 import numpy as np
 
+import random
+from .utils.argments.resize import resize_image
+from .utils.argments.crop import random_crop_image
+from .utils.argments.flip import random_flip_image
+from .utils.argments.distort import random_distort
+
 
 class MyDataSetForCAE(torch.utils.data.Dataset):
     def __init__(self, dir_path, jpg_path="./*/*/*.jpg", noise=0):
@@ -77,15 +83,39 @@ class MyDataSetForAttention(torch.utils.data.Dataset):
         # )
         # image2 = np.array(image)
 
-        image = image.resize((128, 96))
-        image = torchvision.transforms.ToTensor()(image)
+        image = image.resize((128 + self.dsize, 96 + self.dsize))
         return image
 
+    def transform(self, img):
+        img = random_crop_image(img, self.size, test=self.test)
+        if self.distort:
+            img_distort = np.copy(img)
+            if random.randrange(2):
+                img_distort = random_distort(img_distort)
+            img_distort = img_distort.astype(np.float32).transpose(2, 0, 1)
+            img_distort /= 255.0
+        else:
+            img_distort = np.copy(img)
+            img_distort = img_distort.astype(np.float32).transpose(2, 0, 1)
+            img_distort /= 255.0
+        img = img.astype(np.float32).transpose(2, 0, 1)
+        img /= 255.0  # <- very important !!! (VAE)
+        # if self.test:
+        #    save_img(img, os.path.join("/home/assimilation","test_"+imgpath.split("/")[-1]))
+        # else:
+        #    save_img(img, os.path.join("/home/assimilation",imgpath.split("/")[-1]))
+        # save_img(img, os.path.join("/home/assimilation","test2_"+imgpath.split("/")[-1]))
+        # sys.exit()
+        img_distort = torch.from_numpy(img_distort)
+        img = torch.from_numpy(img)
+        return img_distort, img
+
     def __getitem__(self, index):
-        image = self._imgs[index]
+        img = self._imgs[index]
+        img_distort, img = self.transform(img)
         return (
-            image + torch.randn(image.shape) * self._noise,
-            [image, self._class_id[index]],
+            img_distort,
+            [img, self._class_id[index]],
         )
 
     @classmethod

@@ -37,5 +37,5 @@ train_net = TrainNet(
     device=torch.device("cuda:0"),
     criterion_rate=criterion_rate,
 )
-# train_net.load_model("20200911_174618_200")
+train_net.load_model("20200918_113808_550")
 train_net.run()
