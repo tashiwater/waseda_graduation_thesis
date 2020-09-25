@@ -18,7 +18,8 @@ net = Net()
 
 ### modelをロード
 
-model_path = "/media/hdd_1tb/model/argumentation/20200925_135148_1000.pth"
+# model_path = "/media/hdd_1tb/model/argumentation/20200925_135148_1000.pth"
+model_path = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/model/CAE/argumentation1/20200924_210301_1500.pth"
 checkpoint = torch.load(model_path)
 # net.load_state_dict(checkpoint)
 net.load_state_dict(checkpoint["model"])
@@ -33,8 +34,8 @@ testloader = torch.utils.data.DataLoader(
     dataset, batch_size=500, shuffle=False, num_workers=4,
 )
 
-device = torch.device("cuda:0")
-# device = None
+# device = torch.device("cuda:0")
+device = None
 
 criterion = torch.nn.MSELoss()
 if device is not None:

@@ -1,7 +1,7 @@
 *.pyc
 *.ipynb_checkpoints
 __pycache__
-*/CAE/data/result
-*/CAE/data/datacheck
-*/MTRNN/data/result
+CAE/data/result
+CAE/data/datacheck
+MTRNN/data/result
 
