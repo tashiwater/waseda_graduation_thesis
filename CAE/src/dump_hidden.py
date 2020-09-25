@@ -2,7 +2,7 @@
 # coding: utf-8
 import os
 from mydataset import MyDataSetForCAE as MyDataSet
-from CAE import CAEwithAttention as Net
+from CAE import CAE as Net
 import torch
 import torchvision
 import numpy as np
@@ -10,14 +10,14 @@ from pathlib import Path
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-IMAGE_PATH = DATA_DIR + "image/"
+IMAGE_PATH = DATA_DIR + "all/"
 MODEL_DIR = DATA_DIR + "model_CAE20/"
 HIDDEN_DIR = DATA_DIR + "image_feature/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "attention0001/20200911_212809_2200.pth"
+model_path = "/media/hdd_1tb/model/argumentation/20200924_210301_1500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

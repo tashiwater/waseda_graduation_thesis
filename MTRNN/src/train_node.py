@@ -44,5 +44,5 @@ param_dict = {
 }
 criterion = torch.nn.MSELoss()
 train_net = TrainNet(net, criterion, trainset, testset, MODEL_DIR, param_dict,)
-train_net.load_model("20200913_103221_30500")
+# train_net.load_model("20200913_103221_30500")
 train_net.run()

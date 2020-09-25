@@ -1,11 +1,13 @@
-#!/usr/bin/env python3
-# coding: utf-8
+#!/usr/bin/env python
+# coding:utf-8
 
-# import numpy as np
+import torch
+import numpy as np
 
-# a_3d = np.arange(24).reshape(3, 2, 4)
-# a2 = a_3d.transpose(1, 0, 2)
-# print(a2
-a = [[1], [3], [5]]
-b = a[[0, 2]]
-print(b)
+tau = 5
+a = torch.tensor(np.array([[2, 4, 3], [4, 8, 6]]), dtype=torch.float)
+b = torch.tensor(np.array([[1, 2, 3], [4, 5, 6]]), dtype=torch.float)
+t = 1 - 1.0 / tau
+c = t * b + a / tau
+print(t)
+print(c)

@@ -4,6 +4,7 @@
 import random
 import cv2
 import numpy as np
+from PIL import ImageEnhance
 
 """
 brightness_delta = 32
@@ -12,12 +13,12 @@ saturation_range = [0.5, 1.5]
 hue_delta = 18
 #"""
 
-# """
+"""
 brightness_delta = 8
 contrast_range = [0.9, 1.1]
 saturation_range = [0.9, 1.1]
 hue_delta = 4
-# """
+"""
 
 """
 brightness_delta = 64
@@ -25,12 +26,19 @@ contrast_range = [0.4, 1.9]
 saturation_range = [0.4, 1.9]
 hue_delta = 36
 """
+brightness_delta = 64
+contrast_range = [0.8, 1.2]
+saturation_range = [0.8, 1.2]
+hue_delta = 8
+
+pil_range = [0.6, 1.4]
 
 
 def convert(img, alpha=1, beta=0):
     img = img.astype(float) * alpha + beta
-    img[img < 0] = 0
-    img[img > 255] = 255
+    # img[img < 0] = 0
+    # img[img > 255] = 255
+    img = img.clip(0, 255)
     return img.astype(np.uint8)
 
 
@@ -70,30 +78,43 @@ def hue(img):
         return img
 
 
+def color_argumentation(img):
+    img = ImageEnhance.Brightness(img)
+    img = img.enhance(random.uniform(pil_range[0], pil_range[1]))
+    img = ImageEnhance.Contrast(img)
+    img = img.enhance(random.uniform(pil_range[0], pil_range[1]))
+    img = ImageEnhance.Color(img)
+    img = img.enhance(random.uniform(pil_range[0], pil_range[1]))
+    return img
+
+
+"""
 def random_distort(img, test=False):
     # img = img[::-1].transpose((1, 2, 0)).astype(np.uint8) # change PIL format to cv2 format
     img = img[:, :, ::-1].astype(np.uint8)  # change PIL format to cv2 format
 
     ### color argmentation
     img = brightness(img)
-    if random.randrange(2):
-        img = contrast(img)
-        # img = saturation(img)
-        # img = hue(img)
-    else:
-        # img = saturation(img)
-        # img = hue(img)
-        img = contrast(img)
+    # if random.randrange(2):
+    #     img = contrast(img)
+    #     img = saturation(img)
+    #     img = hue(img)
+    # else:
+    #     img = saturation(img)
+    #     img = hue(img)
+    #     img = contrast(img)
 
-    # """
-    if random.randrange(2):
-        img[:, :, 0] = img[:, :, 0] * random.uniform(0.5, 1.5)
-    if random.randrange(2):
-        img[:, :, 0] = img[:, :, 1] * random.uniform(0.5, 1.5)
-    if random.randrange(2):
-        img[:, :, 0] = img[:, :, 2] * random.uniform(0.5, 1.5)
-    # """
 
+    # if random.randrange(2):
+    #     img[:, :, 0] = img[:, :, 0] * random.uniform(0.5, 1.5)
+    # if random.randrange(2):
+    #     img[:, :, 0] = img[:, :, 1] * random.uniform(0.5, 1.5)
+    # if random.randrange(2):
+    #     img[:, :, 0] = img[:, :, 2] * random.uniform(0.5, 1.5)
+
+    # img = img + np.random.normal(size=img.shape) * 1
+    img = img.clip(0, 255)
     # img = img.astype(np.float32).transpose((2, 0, 1))[::-1]
     img = img[:, :, ::-1]
     return img
+"""

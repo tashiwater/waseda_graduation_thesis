@@ -30,19 +30,19 @@ rectangle = pca[circle_num:]
 
 one_num = 9
 container_num = 9
-"""
+
 stack1 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
 stack2 = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
 stack3 = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
 # stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
-"""
+
 stack1 = circle[:9]
 stack2 = circle[9:18]
-stack3 = circle  # [18:]
+stack3 = circle[18:]
 
 stack4 = rectangle[:9]
 stack5 = rectangle[9:18]
-stack6 = rectangle  # [18:]
+stack6 = rectangle[18:]
 
 
 data1 = np.vstack(stack1)[3:]

@@ -26,10 +26,24 @@ net = MTRNN(
     open_rate=0.8,
 )
 ### modelをロード
-model_path = MODEL_DIR + "default/20200913_030624_17000.pth"
+model_path = MODEL_DIR + "default/20200925_095956_14500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
+
+
+# def pri(target):
+#     with open(
+#         "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/"
+#         + str(input("file name:"))
+#         + ".txt",
+#         "w",
+#     ) as f:
+#         # target = new_io_state
+#         # print(target, file=f)
+#         print >> f, target
+#         print(target)
+#     input("stop")
 
 
 def get_header(add_word):
@@ -58,6 +72,7 @@ for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
     cs_states = []
     for i, inputs_t in enumerate(inputs_transposed):
         outputs[i] = net(inputs_t)
+        # pri(outputs[i])
         io_states.append(net.io_state.view(-1).detach().numpy())
         cf_states.append(net.cf_state.view(-1).detach().numpy())
         cs_states.append(net.cs_state.view(-1).detach().numpy())

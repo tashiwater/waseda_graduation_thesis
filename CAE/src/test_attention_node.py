@@ -18,7 +18,7 @@ net = Net()
 
 ### modelをロード
 
-model_path = "/media/hdd_1tb/model/dropout3_2/20200917_220833_1250.pth"
+model_path = "/media/hdd_1tb/model/argumentation/20200925_135148_1000.pth"
 checkpoint = torch.load(model_path)
 # net.load_state_dict(checkpoint)
 net.load_state_dict(checkpoint["model"])
@@ -28,16 +28,13 @@ net.load_state_dict(checkpoint["model"])
 #     MODEL_DIR + "attention0001/model500.pth",
 #     _use_new_zipfile_serialization=False,
 # )
-dataset = MyDataSet(DATA_PATH, is_test=True, dsize=10)
+dataset = MyDataSet(DATA_PATH, is_test=True, dsize=5)
 testloader = torch.utils.data.DataLoader(
-    dataset,
-    batch_size=500,
-    shuffle=False,
-    num_workers=4,
+    dataset, batch_size=500, shuffle=False, num_workers=4,
 )
 
-# device = torch.device("cuda:0")
-device = None
+device = torch.device("cuda:0")
+# device = None
 
 criterion = torch.nn.MSELoss()
 if device is not None:
@@ -54,9 +51,9 @@ for i, (inputs, labels) in enumerate(testloader):
     print(loss.item())
     # print(torch.min(inputs))
     inputs = inputs.cpu()
-    for j, img in enumerate(inputs):
-        MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
-    torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    # for j, img in enumerate(inputs):
+    #   MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
     outputs = outputs.cpu()
     for j, img in enumerate(outputs):
         MyDataSet.save_img(

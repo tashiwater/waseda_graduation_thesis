@@ -14,7 +14,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
         open_rate=1,
     ):
-        super(MTRNN,self).__init__()
+        super(MTRNN, self).__init__()
         self.layer_size = layer_size
         self.tau = tau
         self.open_rate = open_rate
@@ -53,7 +53,8 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
     def _next_state(self, previous, new, tau):
         connected = torch.stack(new)
         new_summed = connected.sum(dim=0)
-        ret = (1 - 1 / tau) * previous + new_summed / tau
+        ret = (1 - 1.0 / tau) * previous + new_summed / tau
+
         return self.activate(ret)
 
     def forward(self, x):  # x.shape(batch,x)
