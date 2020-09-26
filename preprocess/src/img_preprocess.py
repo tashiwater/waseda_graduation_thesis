@@ -25,10 +25,9 @@ class ImgPreprocess:
                 image = Image.open(img_path)
                 image.save(output_dir + "/{:03d}.jpg".format(j + min_index))
 
-    def dump_for_learn(self, size):
+    def dump_for_learn(self, size, test_span):
         ### [TODO] this madgic number is class num
         class_num = 6
-        test_span = 3
         dir_num = len(self._img_dirs)
         one_class_num = dir_num // class_num
         for k in range(6):
@@ -64,8 +63,9 @@ class ImgPreprocess:
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
-    IMG_DIR = DATA_DIR + "image_raw/"
-    OUTPUT_DIR = DATA_DIR + "image_compressed/"
+    IMG_DIR = DATA_DIR + "renamed/image_raw/"
+    # OUTPUT_DIR = DATA_DIR + "image_compressed/"
+    OUTPUT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/CAE/data/"
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
     # process.extract(50, 200)
-    process.dump_for_learn(size=(128 + 5, 96 + 5))
+    process.dump_for_learn(size=(128 + 5, 96 + 5), test_span=4)
