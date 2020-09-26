@@ -6,6 +6,7 @@ import torchvision
 import matplotlib.pyplot as plt
 import datetime
 import pandas as pd
+import os
 
 
 class TrainNet:
@@ -20,6 +21,8 @@ class TrainNet:
         device=None,
         criterion_rate=[1, 1],
     ):
+        if not os.path.exists(model_dir):
+            raise OSError(model_dir)
         # default parameter
         self._param_dict = {
             "train_batch_size": 4,

@@ -15,7 +15,7 @@ from utils.argments.distort import color_argumentation
 
 class MyDataSetForCAE(torch.utils.data.Dataset):
     def __init__(self, dir_path, jpg_path="./*/*/*.jpg", noise=0):
-        super().__init__()
+        super(MyDataSetForCAE, self).__init__()
         # self._noise = noise
         self._image_paths = [str(p) for p in Path(dir_path).glob(jpg_path)]
         self._image_paths.sort()
@@ -53,7 +53,7 @@ class MyDataSetForCAE(torch.utils.data.Dataset):
 
 class MyDataSetForCAE2(torch.utils.data.Dataset):
     def __init__(self, dir_path, jpg_path="./*/*/*.jpg", dsize=5):
-        super().__init__()
+        super(MyDataSetForCAE2, self).__init__()
 
         self.dsize = dsize
         self.size = (128, 96)
@@ -132,7 +132,7 @@ class MyDataSetForAttention(torch.utils.data.Dataset):
         img_distort = img.copy()
         if self.distort:
             if random.randrange(2):  # add random at twice
-                img_distort = color_argumentation(img_distort)
+                img_distort = color_argumentation(img_distort, pil_range=[0.8, 1.2])
         img_distort = torchvision.transforms.ToTensor()(img_distort)
         img = torchvision.transforms.ToTensor()(img)
         return img_distort, img
@@ -187,7 +187,10 @@ if __name__ == "__main__":
 
     dataset = MyDataSetForAttention(DATA_PATH, is_test=False, dsize=5, noise=0.01)
     testloader = torch.utils.data.DataLoader(
-        dataset, batch_size=500, shuffle=False, num_workers=4,
+        dataset,
+        batch_size=500,
+        shuffle=False,
+        num_workers=4,
     )
     for i, (inputs, labels) in enumerate(testloader):
         # inputs, labels = inputs.cpu(), labels.cpu()
