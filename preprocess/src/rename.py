@@ -18,11 +18,11 @@ def rename(input_dir, output_dir, use_span, save_span, start_num):
             index = i % use_span
             use = False
             if index == 0:
-                #     output_name = "{}/{}{}".format(out, num, extension)
+                #     output_name = out + "{:03d}".format(num) + extension
                 #     num += 1
                 #     use = True
                 # if index == 1:
-                output_name = "{}/{}{}".format(out, num, extension)
+                output_name = out + "{:03d}".format(num) + extension
                 num += save_span
                 use = True
             if use:
