@@ -45,6 +45,7 @@ if __name__ == "__main__":
     DATA_DIR = CURRENT_DIR + "/../data/"
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
+    # ~/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/"
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
@@ -93,7 +94,13 @@ if __name__ == "__main__":
             + ["image{}".format(i) for i in range(img.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
-        df.to_csv(RESULT_DIR + "{:03}.csv".format(i), index=False)
+        # test_span = 4
+        # if i % test_span == 0:
+        #     file_path = RESULT_DIR + "test/{:03}.csv".format(i)
+        # else:
+        #     file_path = RESULT_DIR + "train/{:03}.csv".format(i)
+        file_path = RESULT_DIR + "{:03}.csv".format(i)
+        df.to_csv(file_path, index=False)
         #     connected_datas.append(connected_data)
         # connected_datas = np.ndarray(connected_datas)
         # # [TODO] add title

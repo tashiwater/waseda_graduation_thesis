@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-IMG_DIR = DATA_DIR + "image_raw/"
-img_dirs = [str(p) for p in Path(IMG_DIR).glob("./*/*")]
+IMG_DIR = DATA_DIR + "renamed/image_raw/"
+img_dirs = [str(p) for p in Path(IMG_DIR).glob("./*")]
 img_dirs.sort()
 img_nums = []
 for i, img_dir in enumerate(img_dirs):

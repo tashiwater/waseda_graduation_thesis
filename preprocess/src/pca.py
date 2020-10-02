@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 INPUT_PATH = DATA_DIR + "connected/"
-
+INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.csv")]
 paths.sort()
 datas = []
@@ -36,24 +36,27 @@ stack2 = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_
 stack3 = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
 # stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
 
-stack1 = circle[:9]
-stack2 = circle[9:18]
-stack3 = circle[18:]
+stack1 = circle[:one_num]
+stack2 = circle[one_num : one_num * 2]
+stack3 = circle[one_num * 2 :]
 
-stack4 = rectangle[:9]
-stack5 = rectangle[9:18]
-stack6 = rectangle[18:]
+stack4 = rectangle[:one_num]
+stack5 = rectangle[one_num : one_num * 2]
+stack6 = rectangle[one_num * 2 :]
 
+stack1 = pca[::3]
+stack2 = pca[1::3]
+stack3 = pca[2::3]
 
-data1 = np.vstack(stack1)[3:]
-data2 = np.vstack(stack2)[3:]
-data3 = np.vstack(stack3)[3:]
+data1 = np.vstack(stack1)  # [3:]
+data2 = np.vstack(stack2)  # [3:]
+data3 = np.vstack(stack3)  # [3:]
 data4 = np.vstack(stack4)
 data5 = np.vstack(stack5)
 data6 = np.vstack(stack6)
 
-# data1 = circle
-# data2 = rectangle
+# data5 = circle
+# data6 = rectangle
 
 for i in range(components):
     axis1 = i
@@ -61,21 +64,21 @@ for i in range(components):
         axis2 = 1 + j + i
         print(axis1, axis2)
         plt.scatter(
-            data1[:, axis1], data1[:, axis2], label="30", color="red", marker="o"
+            data1[:, axis1], data1[:, axis2], label="1", color="red", marker="o"
         )
         plt.scatter(
-            data2[:, axis1], data2[:, axis2], label="0", color="blue", marker="o"
+            data2[:, axis1], data2[:, axis2], label="2", color="blue", marker="o"
         )
         plt.scatter(
-            data3[:, axis1], data3[:, axis2], label="-30", color="green", marker="o"
+            data3[:, axis1], data3[:, axis2], label="3", color="green", marker="o"
         )
 
-        plt.scatter(data4[:, axis1], data4[:, axis2], color="purple", marker="o")
-        plt.scatter(data5[:, axis1], data5[:, axis2], color="black", marker="o")
-        plt.scatter(data6[:, axis1], data6[:, axis2], color="yellow", marker="o")
+        # plt.scatter(data4[:, axis1], data4[:, axis2], color="purple", marker="o")
+        # plt.scatter(data5[:, axis1], data5[:, axis2], color="black", marker="o")
+        # plt.scatter(data6[:, axis1], data6[:, axis2], color="yellow", marker="o")
 
         plt.xlabel("pca{}".format(axis1))
         plt.ylabel("pca{}".format(axis2))
-        # plt.legend()
+        plt.legend()
         plt.show()
 print(data1)

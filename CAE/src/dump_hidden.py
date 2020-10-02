@@ -12,12 +12,12 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 IMAGE_PATH = DATA_DIR + "all/"
 MODEL_DIR = DATA_DIR + "model_CAE20/"
-HIDDEN_DIR = DATA_DIR + "image_feature/"
+HIDDEN_DIR = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/preprocess/data/connect_input/image_feature/"
 
 net = Net()
 
 ### modelをロード
-model_path = "/media/hdd_1tb/model/argumentation/20200924_210301_1500.pth"
+model_path = "/media/hdd_1tb/model/mixdata2/best/20200928_122009_1000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

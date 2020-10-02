@@ -10,8 +10,8 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
-# MODEL_DIR = "/media/hdd_1tb/model/argumentation/"
-MODEL_DIR = "/home/assimilation/TAKUMI_SHIMIZU/model/newCAE/"
+MODEL_DIR = "/media/hdd_1tb/model/mixdata2/"
+# MODEL_DIR = "/home/assimilation/TAKUMI_SHIMIZU/model/newCAE/"
 trainset = MyDataSet(TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01)
 testset = MyDataSet(TEST_PATH, img_size=(128, 96), is_test=True, dsize=5)
 net = Net()
@@ -35,7 +35,7 @@ train_net = TrainNet(
     testset,
     MODEL_DIR,
     param_dict,
-    # device=torch.device("cuda:0"),
+    device=torch.device("cuda:0"),
     criterion_rate=criterion_rate,
 )
 # train_net.load_model("20200918_113808_550")
