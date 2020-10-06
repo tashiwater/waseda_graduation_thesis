@@ -26,7 +26,7 @@ net = MTRNN(
     open_rate=0.8,
 )
 ### modelをロード
-model_path = MODEL_DIR + "default/20200925_095956_14500.pth"
+model_path = MODEL_DIR + "default/20201006_140035_14000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
@@ -50,13 +50,16 @@ def get_header(add_word):
     return (
         [add_word + "position{}".format(i) for i in range(7)]
         + [add_word + "torque{}".format(i) for i in range(7)]
-        + [add_word + "tactile{}".format(i) for i in range(16)]
+        + [add_word + "tactile{}".format(i) for i in range(12)]
         + [add_word + "image{}".format(i) for i in range(20)]
     )
 
 
 dataloader = torch.utils.data.DataLoader(
-    dataset, batch_size=1, shuffle=False, num_workers=4,
+    dataset,
+    batch_size=1,
+    shuffle=False,
+    num_workers=4,
 )
 
 criterion = torch.nn.MSELoss()
