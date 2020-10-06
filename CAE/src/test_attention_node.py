@@ -12,13 +12,13 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 DATA_PATH = DATA_DIR + "validate"
 RESULT_DIR = DATA_DIR + "result/"
 CORRECT_DIR = DATA_DIR + "result_correct/"
-MODEL_DIR = DATA_DIR + "model_CAE20/"
+MODEL_DIR = DATA_DIR + "model/newcam/"
 
 net = Net()
 
 ### modelをロード
 
-model_path = "/media/hdd_1tb/model/mixdata2/best/20200928_122009_1000.pth"
+model_path = MODEL_DIR + "best/20201005_170823_2000.pth"
 checkpoint = torch.load(model_path)
 # net.load_state_dict(checkpoint)
 net.load_state_dict(checkpoint["model"])
@@ -30,7 +30,10 @@ net.load_state_dict(checkpoint["model"])
 # )
 dataset = MyDataSet(DATA_PATH, is_test=True, dsize=5)
 testloader = torch.utils.data.DataLoader(
-    dataset, batch_size=500, shuffle=False, num_workers=4,
+    dataset,
+    batch_size=500,
+    shuffle=False,
+    num_workers=4,
 )
 
 device = torch.device("cuda:0")

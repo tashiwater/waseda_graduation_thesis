@@ -11,13 +11,13 @@ from pathlib import Path
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 IMAGE_PATH = DATA_DIR + "all/"
-MODEL_DIR = DATA_DIR + "model_CAE20/"
-HIDDEN_DIR = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/preprocess/data/connect_input/image_feature/"
+MODEL_DIR = DATA_DIR + "model/newcam/"
+HIDDEN_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/preprocess/data/connect_input/image_feature/"
 
 net = Net()
 
 ### modelをロード
-model_path = "/media/hdd_1tb/model/mixdata2/best/20200928_122009_1000.pth"
+model_path = MODEL_DIR + "best/20201005_170823_2000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -33,7 +33,10 @@ img_dirs.sort()
 for j, img_dir in enumerate(img_dirs):  # deal with each file
     dataset = MyDataSet(img_dir, jpg_path="./*.jpg")
     testloader = torch.utils.data.DataLoader(
-        dataset, batch_size=len(dataset), shuffle=False, num_workers=4,
+        dataset,
+        batch_size=len(dataset),
+        shuffle=False,
+        num_workers=4,
     )
 
     for i, (inputs, labels) in enumerate(testloader):

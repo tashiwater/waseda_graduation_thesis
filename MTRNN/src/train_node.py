@@ -14,7 +14,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
-MODEL_DIR = DATA_DIR + "model/{}/".format(name)
+MODEL_DIR = CURRENT_DIR + "/../../../model/MTRNN/{}/".format(name)
 # one_sequence_size = 600  # traning dataのデータ数
 # trainset = MyDataSet(0, one_sequence_size, 0.02, 3, 0.1)
 # testset = MyDataSet(1, one_sequence_size, 0.02, 1)
@@ -43,6 +43,13 @@ param_dict = {
     # "betas": (0.999, 0.999),
 }
 criterion = torch.nn.MSELoss()
-train_net = TrainNet(net, criterion, trainset, testset, MODEL_DIR, param_dict,)
-# train_net.load_model("20200913_103221_30500")
+train_net = TrainNet(
+    net,
+    criterion,
+    trainset,
+    testset,
+    MODEL_DIR,
+    param_dict,
+)
+train_net.load_model("20201006_121635_6000")
 train_net.run()

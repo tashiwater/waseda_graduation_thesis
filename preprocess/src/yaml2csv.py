@@ -9,7 +9,9 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 
 for class_num in range(1):
     folder_name = ""  # "motion{}/".format(class_num + 1)
-    YAML_DIR = DATA_DIR + "renamed/motion_yaml/" + folder_name
+    YAML_DIR = (
+        "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1002/motion_yaml/" + folder_name
+    )
     RESULT_DIR = DATA_DIR + "connect_input/motion_csv/" + folder_name
     paths = [str(p) for p in Path(YAML_DIR).glob("./*.yaml")]
     paths.sort()
