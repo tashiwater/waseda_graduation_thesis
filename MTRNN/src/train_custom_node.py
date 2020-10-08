@@ -17,11 +17,11 @@ MODEL_DIR = DATA_DIR + "customMTRNN/"
 tactile_frame_num = 5
 trainset = MyDataSet(TRAIN_PATH, tactile_frame_num)
 testset = MyDataSet(TEST_PATH, tactile_frame_num)
-in_size = 50
+in_size = 46
 net = CustomNet(
     layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 160, "cs": 13},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 50},
-    open_rate=0.8,
+    open_rate=0.1,
 )
 ## modelをロードしたとき
 # model_path = MODEL_DIR + "20200612_103406_100.pth"
@@ -39,7 +39,14 @@ param_dict = {
     # "betas": (0.999, 0.999),
 }
 criterion = torch.nn.MSELoss()
-train_net = TrainNet(net, criterion, trainset, testset, MODEL_DIR, param_dict,)
+train_net = TrainNet(
+    net,
+    criterion,
+    trainset,
+    testset,
+    MODEL_DIR,
+    param_dict,
+)
 # train_net.load_model("20200719_173814_500")
 # for data in train_net._net.parameters():
 #     print(data)

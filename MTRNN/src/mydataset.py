@@ -70,9 +70,9 @@ class EasyDataSet(torch.utils.data.Dataset):
 
 
 class CustomDataSet(torch.utils.data.Dataset):
-    def __init__(self, dir_path, tactile_frame_num):
+    def __init__(self, dir_path, tactile_frame_num=5):
         super().__init__()
-        self._paths = [str(p) for p in Path(dir_path).glob("./*/*.csv")]
+        self._paths = [str(p) for p in Path(dir_path).glob("./*.csv")]
         self._paths.sort()
         self._datas = []
         for path in self._paths:
@@ -81,8 +81,8 @@ class CustomDataSet(torch.utils.data.Dataset):
         self._len = len(self._datas)
         self._datas = np.array(self._datas)
         self._motor = self._datas[:, :, :14]
-        tactile = self._datas[:, :, 14:30]
-        self._img = self._datas[:, :, 30:]
+        tactile = self._datas[:, :, 14:26]
+        self._img = self._datas[:, :, 26:]
         zero = np.zeros(shape=(tactile_frame_num - 1, tactile.shape[2]))
         # for i in tactile:
         #     print(i.shape)
