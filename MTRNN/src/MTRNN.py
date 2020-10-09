@@ -79,10 +79,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         )
         new_cs_state = self._next_state(
             previous=self.cs_state,
-            new=[
-                self.cs2cs(self.cs_state),
-                self.cf2cs(self.cf_state),
-            ],
+            new=[self.cs2cs(self.cs_state), self.cf2cs(self.cf_state),],
             tau=self.tau["tau_cs"],
         )
         self.io_state = new_io_state
@@ -100,7 +97,7 @@ class CustomNet(nn.Module):
         tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
         open_rate=1,
     ):
-        super().__init__()
+        super(CustomNet, self).__init__()
         self.mtrnn = MTRNN(layer_size, tau, open_rate)
         channel = 6
         self.tactile_extract = torch.nn.Sequential(

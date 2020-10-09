@@ -1,28 +1,37 @@
 #!/usr/bin/env python3
 # coding: utf-8
 import os
-
+import sys
 import torch
 
 ### normal MTRNN
 # from mydataset import CsvDataSet as MyDataSet
 # from MTRNN import MTRNN
 # from train import TrainNet
+
 ### custom MTRNN
 from MTRNN import CustomNet as MTRNN
 from mydataset import CustomDataSet as MyDataSet
 from train_custom import TrainNet
 
-name = input("file name :")
-cf_num = int(input("cf_num (default = 200):"))
-cs_tau = int(input("cs_tau (default = 50):"))
+argnum = len(sys.argv)
+if argnum == 1:
+    name = input("file name :")
+    cf_num = int(input("cf_num (default = 200):"))
+    cs_tau = int(input("cs_tau (default = 50):"))
+elif argnum == 4:
+    _, name, cf_num, cs_tau = sys.argv
+    cf_num = int(cf_num)
+    cs_tau = int(cs_tau)
+else:
+    raise Exception("Fail arg num")
 load_path = input("?.pth:")
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
-MODEL_DIR = CURRENT_DIR + "/../../../model/customMTRNN/{}/".format(name)
-# MODEL_DIR = "/media/hdd_1tb/model/MTRNN/{}/".format(name)
+# MODEL_DIR = CURRENT_DIR + "/../../../model/customMTRNN/{}/".format(name)
+MODEL_DIR = "/media/hdd_1tb/model/MTRNN/custom/{}/".format(name)
 # one_sequence_size = 600  # traning dataのデータ数
 # trainset = MyDataSet(0, one_sequence_size, 0.02, 3, 0.1)
 # testset = MyDataSet(1, one_sequence_size, 0.02, 1)
@@ -51,14 +60,7 @@ param_dict = {
     # "betas": (0.999, 0.999),
 }
 criterion = torch.nn.MSELoss()
-train_net = TrainNet(
-    net,
-    criterion,
-    trainset,
-    testset,
-    MODEL_DIR,
-    param_dict,
-)
+train_net = TrainNet(net, criterion, trainset, testset, MODEL_DIR, param_dict,)
 if load_path != "":
     train_net.load_model(load_path)
 train_net.run()
