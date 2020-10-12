@@ -18,7 +18,9 @@ net = Net()
 
 ### modelをロード
 
-model_path = MODEL_DIR + "best/20201005_170823_2000.pth"
+model_path = (
+    "/home/assimilation/TAKUMI_SHIMIZU/model/CAE/newcam/best/20201005_170823_2000.pth"
+)
 checkpoint = torch.load(model_path)
 # net.load_state_dict(checkpoint)
 net.load_state_dict(checkpoint["model"])
