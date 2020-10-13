@@ -26,7 +26,7 @@ net = MTRNN(
     open_rate=0.1,
 )
 ### modelをロード
-model_path = MODEL_DIR + "default/20201012_142451_18500.pth"
+model_path = MODEL_DIR + "default/20201013_000906_36500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)

@@ -31,7 +31,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.activate = torch.nn.Tanh()
 
     def init_state(self, batch_size):
-        self.last_output = torch.zeros(size=(batch_size, self.layer_size["out"]))
+        self.last_output = None
         self.io_state = torch.zeros(size=(batch_size, self.layer_size["io"]))
         self.cf_state = torch.zeros(size=(batch_size, self.layer_size["cf"]))
         self.cs_state = torch.zeros(size=(batch_size, self.layer_size["cs"]))
@@ -58,7 +58,10 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         return self.activate(ret)
 
     def forward(self, x):  # x.shape(batch,x)
-        closed_x = x * self.open_rate + self.last_output * (1 - self.open_rate)
+        if self.last_output is None:  # start val is not changed by open_rate
+            closed_x = x
+        else:
+            closed_x = x * self.open_rate + self.last_output * (1 - self.open_rate)
         new_io_state = self._next_state(
             previous=self.io_state,
             new=[
@@ -79,7 +82,10 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         )
         new_cs_state = self._next_state(
             previous=self.cs_state,
-            new=[self.cs2cs(self.cs_state), self.cf2cs(self.cf_state),],
+            new=[
+                self.cs2cs(self.cs_state),
+                self.cf2cs(self.cf_state),
+            ],
             tau=self.tau["tau_cs"],
         )
         self.io_state = new_io_state
