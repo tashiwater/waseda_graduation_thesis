@@ -23,10 +23,10 @@ in_size = 46
 net = MTRNN(
     layer_size={"in": in_size, "out": in_size, "io": 34, "cf": 200, "cs": 15},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 50},
-    open_rate=0.1,
+    open_rate=0.3,
 )
 ### modelをロード
-model_path = MODEL_DIR + "default/20201013_000906_36500.pth"
+model_path = MODEL_DIR + "open_03/default/20201014_052328_20000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
@@ -96,6 +96,11 @@ for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
     df_output = pd.DataFrame(data=connected_data, columns=header)
     df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
 
+    df_in_posi = pd.DataFrame(np_input[:, :7])
+    df_out_posi = pd.DataFrame(np_output[:, :7])
+    df_in_posi.plot()
+    df_out_posi.plot()
+    plt.show()
     # np.savetxt(
     #     RESULT_DIR + "{:02}.csv".format(j + 1), np_output, delimiter=",",
     # )

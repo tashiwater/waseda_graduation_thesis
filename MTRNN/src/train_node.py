@@ -12,7 +12,7 @@ import torch
 ### custom MTRNN
 from MTRNN import CustomNet as MTRNN
 from mydataset import CustomDataSet as MyDataSet
-from train_custom import TrainNet
+from train_base import TrainNet
 
 argnum = len(sys.argv)
 if argnum == 1:
@@ -30,7 +30,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
-MODEL_DIR = CURRENT_DIR + "/../../../model/custom/open_05/{}/".format(name)
+MODEL_DIR = CURRENT_DIR + "/../../../model/custom/open_03/{}/".format(name)
 # MODEL_DIR = "/media/hdd_1tb/model/MTRNN/custom/{}/".format(name)
 # one_sequence_size = 600  # traning dataのデータ数
 # trainset = MyDataSet(0, one_sequence_size, 0.02, 3, 0.1)
@@ -42,7 +42,7 @@ in_size = 46  # trainset[0][0].shape[1]
 net = MTRNN(
     layer_size={"in": in_size, "out": in_size, "io": 34, "cf": cf_num, "cs": 15},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
-    open_rate=0.5,
+    open_rate=0.3,
 )
 ## modelをロードしたとき
 # model_path = MODEL_DIR + "20200612_103406_100.pth"
@@ -50,7 +50,7 @@ net = MTRNN(
 param_dict = {
     "train_batch_size": len(trainset),
     "test_batch_size": len(testset),
-    "epoch": None,
+    "epoch": 36501,
     "save_span": 500,
     "graph_span": 5,
     "weight_decay": 0.00001,
