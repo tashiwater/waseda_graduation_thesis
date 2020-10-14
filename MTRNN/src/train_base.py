@@ -159,8 +159,8 @@ class TrainNet:
         """RESULT OUTPUT"""
 
         plt.figure(figsize=(6, 6))
-        plt.plot(self._graph_epoch[10:], self._train_loss_value[10:])
-        plt.plot(self._graph_epoch[10:], self._test_loss_value[10:], c="#00ff00")
+        plt.plot(self._graph_epoch[100:], self._train_loss_value[100:])
+        plt.plot(self._graph_epoch[100:], self._test_loss_value[100:], c="#00ff00")
         plt.xlim(1, self._param_dict["epoch"])
         # # plt.ylim(0, 0.2)
         plt.xlabel("epoch")
