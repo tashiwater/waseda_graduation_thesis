@@ -17,7 +17,7 @@ RESULT_DIR = DATA_DIR + "result/"
 MODEL_BASE = "/media/hdd_1tb/model/"
 # MODEL_BASE =  CURRENT_DIR + "/../../../model/"
 MODEL_DIR = MODEL_BASE + "MTRNN/custom/"
-VALIDATE_PATH = DATA_DIR + "test"
+VALIDATE_PATH = DATA_DIR + "train"
 
 dataset = MyDataSet(VALIDATE_PATH)
 # dataset = MyDataSet(0, 600, 0.02, 1, 0.1)

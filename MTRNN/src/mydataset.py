@@ -70,7 +70,7 @@ class EasyDataSet(torch.utils.data.Dataset):
 
 
 class CustomDataSet(torch.utils.data.Dataset):
-    def __init__(self, dir_path, tactile_frame_num=5):
+    def __init__(self, dir_path, tactile_frame_num=5, init_step=20):
         super().__init__()
         self._paths = [str(p) for p in Path(dir_path).glob("./*.csv")]
         self._paths.sort()
@@ -83,32 +83,55 @@ class CustomDataSet(torch.utils.data.Dataset):
         self._motor = self._datas[:, :, :14]
         tactile = self._datas[:, :, 14:26]
         self._img = self._datas[:, :, 26:]
-        zero = np.zeros(shape=(tactile_frame_num - 1, tactile.shape[2]))
-        # for i in tactile:
-        #     print(i.shape)
-        tactile_with0 = [np.concatenate([zero, i], axis=0) for i in tactile]
-        # tactile_with0 = np.concatenate(tactile_with0, axis=0)
-        tactile_with0 = np.array(tactile_with0)
+        self._init_step = init_step
+
+        tactile_with0 = self.make_init_step(
+            tactile, tactile_frame_num + self._init_step - 1
+        )
+
+        # zero = np.full(
+        #     shape=(tactile_frame_num + self._init_step - 2, tactile.shape[2]),
+        #     fill_value=-0.9,
+        # )
+        # # for i in tactile:
+        # #     print(i.shape)
+        # tactile_with0 = [np.concatenate([zero, i], axis=0) for i in tactile]
+        # # tactile_with0 = np.concatenate(tactile_with0, axis=0)
+        # tactile_with0 = np.array(tactile_with0)
         tactile5 = [
             [tactile_with0[:, i : i + tactile_frame_num]]
-            for i in range(tactile[0].shape[0])
+            for i in range(tactile[0].shape[0] + self._init_step - 1)
         ]
         tactile5 = np.array(tactile5)
         self._tactile = np.transpose(tactile5, (2, 0, 1, 3, 4))
+
         # self._tactile = np.array(self._tactile)
+
+        self._motor = self.make_init_step(self._motor, self._init_step)
+        self._img = self.make_init_step(self._img, self._init_step)
+        self._output = self.make_init_step(self._datas, self._init_step)
+
         self._motor = torch.from_numpy(self._motor).float()
         self._img = torch.from_numpy(self._img).float()
         self._tactile = torch.from_numpy(self._tactile).float()
 
+    def make_init_step(self, np_list, step):
+        start_step = np_list[:, 0:1, :]
+        for _ in range(step - 1):
+            np_list = np.concatenate([start_step, np_list], 1)
+        return np_list
+        # tactile_with0 = [np.concatenate([zero, i], axis=0) for i in tactile]
+        # # tactile_with0 = np.concatenate(tactile_with0, axis=0)
+        # tactile_with0 = np.array(tactile_with0)
+
     def __getitem__(self, index):
-        # print(self._datas[index][1:].shape)
         return (
             [
                 self._motor[index][0:-1],
                 self._tactile[index][0:-1],
                 self._img[index][0:-1],
             ],
-            self._datas[index][1:],
+            self._output[index][1:],
         )
 
     def __len__(self):

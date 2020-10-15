@@ -4,10 +4,12 @@
 import torch
 import numpy as np
 
-tau = 5
-a = torch.tensor(np.array([[2, 4, 3], [4, 8, 6]]), dtype=torch.float)
-b = torch.tensor(np.array([[1, 2, 3], [4, 5, 6]]), dtype=torch.float)
-t = 1 - 1.0 / tau
-c = t * b + a / tau
-print(t)
-print(c)
+
+a = np.array([[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]])
+a1 = np.array([[[1, 2, 3]], [[7, 8, 9]]])
+print(a1)
+for i in range(3):
+    a = np.concatenate([a1, a], 1)
+print(a)
+print(a.shape)
+print(a)

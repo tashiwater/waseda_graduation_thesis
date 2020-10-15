@@ -32,8 +32,10 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
 MODEL_BASE = "/media/hdd_1tb/model/"
-# MODEL_BASE =  CURRENT_DIR + "/../../../model/"
-MODEL_DIR = MODEL_BASE + "MTRNN/custom/open_{:02}/{}/".format(int(open_rate * 10), name)
+# MODEL_BASE = CURRENT_DIR + "/../../../model/"
+MODEL_DIR = MODEL_BASE + "MTRNN/custom_long/open_{:02}/{}/".format(
+    int(open_rate * 10), name
+)
 # MODEL_DIR = "/media/hdd_1tb/model/MTRNN/custom/{}/".format(name)
 # one_sequence_size = 600  # traning dataのデータ数
 # trainset = MyDataSet(0, one_sequence_size, 0.02, 3, 0.1)
