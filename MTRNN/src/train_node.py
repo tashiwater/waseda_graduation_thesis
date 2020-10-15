@@ -33,7 +33,7 @@ TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
 MODEL_BASE = "/media/hdd_1tb/model/"
 # MODEL_BASE = CURRENT_DIR + "/../../../model/"
-MODEL_DIR = MODEL_BASE + "MTRNN/custom_long/open_{:02}/{}/".format(
+MODEL_DIR = MODEL_BASE + "MTRNN/custom_data_add/open_{:02}/{}/".format(
     int(open_rate * 10), name
 )
 # MODEL_DIR = "/media/hdd_1tb/model/MTRNN/custom/{}/".format(name)
