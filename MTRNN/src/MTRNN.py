@@ -62,6 +62,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
             closed_x = x
         else:
             closed_x = x * self.open_rate + self.last_output * (1 - self.open_rate)
+
         new_io_state = self._next_state(
             previous=self.io_state,
             new=[
@@ -82,10 +83,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         )
         new_cs_state = self._next_state(
             previous=self.cs_state,
-            new=[
-                self.cs2cs(self.cs_state),
-                self.cf2cs(self.cf_state),
-            ],
+            new=[self.cs2cs(self.cs_state), self.cf2cs(self.cf_state),],
             tau=self.tau["tau_cs"],
         )
         self.io_state = new_io_state
