@@ -15,8 +15,8 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 RESULT_DIR = DATA_DIR + "result/"
 # RESULT2_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = "/media/hdd_1tb/model/"
-# MODEL_BASE =  CURRENT_DIR + "/../../../model/"
-MODEL_DIR = MODEL_BASE + "MTRNN/custom_long/"
+MODEL_BASE = CURRENT_DIR + "/../../../model/"
+MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/"
 VALIDATE_PATH = DATA_DIR + "test"
 
 dataset = MyDataSet(VALIDATE_PATH)
@@ -28,7 +28,7 @@ net = MTRNN(
     open_rate=0.1,
 )
 ### modelをロード
-model_path = MODEL_DIR + "open_01/default/20201015_235936_15000.pth"
+model_path = MODEL_DIR + "open_01/default/20201016_143604_10000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 print(net)
@@ -44,7 +44,10 @@ def get_header(add_word):
 
 
 dataloader = torch.utils.data.DataLoader(
-    dataset, batch_size=1, shuffle=False, num_workers=4,
+    dataset,
+    batch_size=1,
+    shuffle=False,
+    num_workers=4,
 )
 
 criterion = torch.nn.MSELoss()

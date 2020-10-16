@@ -108,19 +108,20 @@ class TrainNet:
                 # print(self._net.io_state)
                 # print(self._net.cf_state)
                 # print(self._net.cs_state)
-            # d1 = 0
-            # loss = []
-            # for dim, rate in zip(
-            #     self._param_dict["dims"], self._param_dict["loss_rates"]
-            # ):
-            #     d2 = d1 + dim
-            #     one_loss = self._criterion(
-            #         outputs[:, :, d1:d2], labels_transposed[:, :, d1:d2]
-            #     )
-            #     loss.append(one_loss * rate)
-            #     d1 = d2
+            d1 = 0
+            loss = []
+            for dim, rate in zip(
+                self._param_dict["dims"], self._param_dict["loss_rates"]
+            ):
+                d2 = d1 + dim
+                one_loss = self._criterion(
+                    outputs[:, :, d1:d2], labels_transposed[:, :, d1:d2]
+                )
+                loss.append(one_loss * rate)
+                d1 = d2
 
-            loss = self._criterion(outputs, labels_transposed)
+            # loss = self._criterion(outputs, labels_transposed)
+            loss = sum(loss)
             if mode == "train":
                 # sum(loss).backward()
                 # pritn(self._net.cs2cs.parameters.grad)

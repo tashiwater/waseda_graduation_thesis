@@ -32,8 +32,8 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
 MODEL_BASE = "/media/hdd_1tb/model/"
-# MODEL_BASE = CURRENT_DIR + "/../../../model/"
-MODEL_DIR = MODEL_BASE + "MTRNN/custom_data_add/open_{:02}/{}/".format(
+MODEL_BASE = CURRENT_DIR + "/../../../model/"
+MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     int(open_rate * 10), name
 )
 # MODEL_DIR = "/media/hdd_1tb/model/MTRNN/custom/{}/".format(name)
@@ -59,13 +59,20 @@ param_dict = {
     "save_span": 500,
     "graph_span": 5,
     "weight_decay": 0.00001,
-    "dims": [in_size],
-    "loss_rates": [1],
+    "dims": [7, 7, 20, 12],
+    "loss_rates": [2, 1, 1, 1],
     # "learn_rate": 0.01,
     # "betas": (0.999, 0.999),
 }
 criterion = torch.nn.MSELoss()
-train_net = TrainNet(net, criterion, trainset, testset, MODEL_DIR, param_dict,)
+train_net = TrainNet(
+    net,
+    criterion,
+    trainset,
+    testset,
+    MODEL_DIR,
+    param_dict,
+)
 if load_path != "":
     train_net.load_model(load_path)
 train_net.run()
