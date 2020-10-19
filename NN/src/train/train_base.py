@@ -34,6 +34,9 @@ class TrainBase:
         self._param_dict.update(param_dict)
         self._net = net
         print(self._net)
+        self._device = device
+        if device is not None:
+            self._net.to(device)
         print("num of (train,test)=({},{})".format(len(trainset), len(testset)))
         self._trainloader = torch.utils.data.DataLoader(
             trainset,
@@ -61,10 +64,6 @@ class TrainBase:
 
         if load_path != "":
             self.load_model(load_path)
-
-        self._device = device
-        if device is not None:
-            self._net.to(device)
 
     def load_model(self, filename):
 
