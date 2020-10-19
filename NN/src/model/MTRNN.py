@@ -58,7 +58,9 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         return self.activate(ret)
 
     def forward(self, x):  # x.shape(batch,x)
-        if self.last_output is None:  # start val is not changed by open_rate
+        if (
+            self.last_output is None or self.open_rate == 1
+        ):  # start val is not changed by open_rate
             closed_x = x
         else:
             closed_x = x * self.open_rate + self.last_output * (1 - self.open_rate)
@@ -83,7 +85,10 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         )
         new_cs_state = self._next_state(
             previous=self.cs_state,
-            new=[self.cs2cs(self.cs_state), self.cf2cs(self.cf_state),],
+            new=[
+                self.cs2cs(self.cs_state),
+                self.cf2cs(self.cf_state),
+            ],
             tau=self.tau["tau_cs"],
         )
         self.io_state = new_io_state
@@ -92,5 +97,3 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         y = self.activate(self.io2o(self.io_state))
         self.last_output = y
         return y
-
-

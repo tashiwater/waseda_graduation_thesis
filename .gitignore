@@ -4,4 +4,4 @@ __pycache__
 CAE/data/result
 CAE/data/datacheck
 MTRNN/data/result
-
+.DS_Store

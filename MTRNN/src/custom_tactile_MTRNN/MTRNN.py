@@ -94,3 +94,34 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         return y
 
 
+class CustomNet(nn.Module):
+    def __init__(
+        self,
+        layer_size={"in": 1, "out": 1, "io": 3, "cf": 4, "cs": 5},
+        tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
+        open_rate=1,
+    ):
+        super(CustomNet, self).__init__()
+        self.mtrnn = MTRNN(layer_size, tau, open_rate)
+        channel = 6
+        self.tactile_extract = torch.nn.Sequential(
+            # 1*12*5
+            torch.nn.Conv2d(1, channel, 3, stride=2, padding=1),  # ->channel*6*3
+            torch.nn.BatchNorm2d(channel),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(channel, channel, 3, stride=2, padding=1),  # channel*3*2
+            torch.nn.BatchNorm2d(channel),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(channel, channel, 3, stride=2, padding=1),  # channel*2*1
+            torch.nn.BatchNorm2d(channel),
+            torch.nn.Flatten(),
+            torch.nn.Tanh(),
+        )
+
+    def init_state(self, batch_size):
+        self.mtrnn.init_state(batch_size)
+
+    def forward(self, motion, tactile, img):
+        tactile = self.tactile_extract(tactile)
+        x = torch.cat([motion, tactile, img], axis=1)
+        return self.mtrnn(x)

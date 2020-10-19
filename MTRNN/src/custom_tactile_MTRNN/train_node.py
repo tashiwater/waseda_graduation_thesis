@@ -10,7 +10,7 @@ import torch
 # from train import TrainNet
 
 ### custom MTRNN
-from MTRNN import MTRNN as MTRNN
+from MTRNN import CustomNet as MTRNN
 from mydataset import CustomDataSet as MyDataSet
 from train_base import TrainNet
 
@@ -19,7 +19,6 @@ if argnum == 1:
     name = input("file name :")
     cf_num = int(input("cf_num (default = 200):"))
     cs_tau = int(input("cs_tau (default = 50):"))
-    open_rate = float(input("open:"))
 elif argnum == 5:
     _, name, cf_num, cs_tau, open_rate = sys.argv
     cf_num = int(cf_num)

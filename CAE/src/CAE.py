@@ -54,7 +54,7 @@ class CNNCell(torch.nn.Module):
 class CAE(torch.nn.Module):
     def __init__(self):
         super(CAE, self).__init__()
-        hidden_dim = 20
+        hidden_dim = 15 #20
         class_num = 6
         self.feature_extract = torch.nn.Sequential(
             # 128*96*3
