@@ -8,7 +8,7 @@ import torch
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from train_base import TrainBase
-from dataset.GatedMTRNNDataSet import MyDataSet
+from dataset.dataset_gated_MTRNN import MyDataSet
 from model.GatedMTRNN import GatedMTRNN
 
 if __name__ == "__main__":

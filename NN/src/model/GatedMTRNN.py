@@ -4,7 +4,7 @@
 
 import torch
 from .MTRNN import MTRNN
-from .Cell import Cell
+from .cell import Cell
 
 
 class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now

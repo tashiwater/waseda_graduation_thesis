@@ -17,6 +17,7 @@ class TrainBase:
         model_dir,
         param_dict={},
         load_path="",
+        device=None,
     ):
         # default parameter
         self._param_dict = {
@@ -31,7 +32,6 @@ class TrainBase:
         }
 
         self._param_dict.update(param_dict)
-
         self._net = net
         print(self._net)
         print("num of (train,test)=({},{})".format(len(trainset), len(testset)))
@@ -61,6 +61,10 @@ class TrainBase:
 
         if load_path != "":
             self.load_model(load_path)
+
+        self._device = device
+        if device is not None:
+            self._net.to(device)
 
     def load_model(self, filename):
 
