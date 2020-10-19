@@ -18,7 +18,7 @@ if __name__ == "__main__":
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     MODEL_DIR = MODEL_BASE + "AttentionCAE2/theta0/"
 
     trainset = MyDataSet(
@@ -33,6 +33,7 @@ if __name__ == "__main__":
         "save_span": 50,
         "graph_span": 5,
         "weight_decay": 0.00001,
+        "loss_rate": [1, 0.001],
     }
     criterion = [torch.nn.MSELoss(), torch.nn.CrossEntropyLoss()]
 
@@ -49,7 +50,8 @@ if __name__ == "__main__":
                 self._optimizer.zero_grad()
                 outputs = self._net(inputs)
                 loss = [
-                    self._criterion[i](outputs[i], labels[i]) * self._criterion_rate[i]
+                    self._criterion[i](outputs[i], labels[i])
+                    * self._param_dict["loss_rate"][i]
                     for i in range(2)
                 ]
                 # loss = self._criterion(outputs, labels[0])
