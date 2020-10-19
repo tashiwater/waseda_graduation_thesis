@@ -9,17 +9,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from train_base import TrainBase
 from dataset.dataset_CAE import MyDataSet
-from model.CAE import Model
+from model.CAE import CAE as Model
 
 if __name__ == "__main__":
     load_path = ""  # input("?aa.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
+    DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "CAE/"
+    MODEL_DIR = MODEL_BASE + "CAE/theta0/"
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01

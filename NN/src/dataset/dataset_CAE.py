@@ -7,8 +7,8 @@ from PIL import Image
 import numpy as np
 
 import random
-from CAE_utils.argments.crop import random_crop_image
-from CAE_utils.argments.distort import color_argumentation
+from .CAE_utils.argments.crop import random_crop_image
+from .CAE_utils.argments.distort import color_argumentation
 
 
 class MyDataSet(torch.utils.data.Dataset):

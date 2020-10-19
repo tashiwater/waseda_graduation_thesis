@@ -58,15 +58,15 @@ class AttentionCAE(torch.nn.Module):
         feature_extracted = self.feature_extract(x)
         attention_extracted = self.attention_extract(feature_extracted)
         self.attention_map = self.get_attention_map(attention_extracted)
-        box_class = self.get_class(attention_extracted)  # GAP
+        # box_class = self.get_class(attention_extracted)  # GAP
         temp = feature_extracted * self.attention_map  # dot
         hidden = self.get_hidden(temp)  # flatten
-        return hidden, box_class.view(box_class.size(0), -1)
+        return hidden  # , box_class.view(box_class.size(0), -1)
 
     def forward(self, x):
-        hidden, box_class = self.encoder(x)
+        hidden = self.encoder(x)
         x = self.decoder(hidden)
-        return x, box_class
+        return x
 
 
 if __name__ == "__main__":
