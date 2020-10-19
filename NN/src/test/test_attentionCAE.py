@@ -4,32 +4,31 @@ import os
 import sys
 import torch
 import torchvision
+from PIL import Image, ImageChops
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from dataset.dataset_CAE import MyDataSet
-from model.AttemtionCAE import AttentionCAE as Net
+from model.AttentionCAE import AttentionCAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
 DATA_PATH = DATA_DIR + "validate"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
-MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-MODEL_DIR = MODEL_BASE + "CAE/theta0/"
+MODEL_BASE = "/media/hdd_1tb/model/"
+# MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+MODEL_DIR = MODEL_BASE + "AttentionCAE/theta0/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "20201019_172434_500.pth"
+model_path = MODEL_DIR + "20201019_191028_2500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
 dataset = MyDataSet(DATA_PATH, img_size=(128, 96), is_test=True, dsize=5)
 testloader = torch.utils.data.DataLoader(
-    dataset,
-    batch_size=500,
-    shuffle=False,
-    num_workers=4,
+    dataset, batch_size=500, shuffle=False, num_workers=4,
 )
 
 device = torch.device("cuda:0")
@@ -50,7 +49,7 @@ for i, (inputs, labels) in enumerate(testloader):
     for j, img in enumerate(outputs.cpu()):
         MyDataSet.save_img(img, RESULT_DIR + "{}_{}.png".format(i, j))
         # torchvision.utils.save_image(img, RESULT_DIR + "{}_{}.png".format(i, j))
-    for j, (img, mask) in enumerate(zip(inputs, net.attention_map.cpu())):
+    for j, (img, mask) in enumerate(zip(inputs.cpu(), net.attention_map.cpu())):
         rgb = torchvision.transforms.functional.to_pil_image(img, "RGB")
 
         gray = torchvision.transforms.functional.to_pil_image(mask, "L")
