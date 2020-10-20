@@ -12,14 +12,14 @@ from dataset.dataset_CAE import MyDataSet
 from model.AttentionCAE2 import AttentionCAE as Model
 
 if __name__ == "__main__":
-    load_path = ""  # input("?aa.pth:")
+    load_path = input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "AttentionCAE2/rate001/"
+    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_DIR = MODEL_BASE + "AttentionCAE2/rate01/"
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         "save_span": 50,
         "graph_span": 5,
         "weight_decay": 0.00001,
-        "loss_rate": [1, 0.01],
+        "loss_rate": [1, 0.1],
     }
     criterion = [torch.nn.MSELoss(), torch.nn.CrossEntropyLoss()]
 

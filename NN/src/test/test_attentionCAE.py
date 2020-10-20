@@ -12,17 +12,17 @@ from model.AttentionCAE import AttentionCAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
-DATA_PATH = DATA_DIR + "validate"
+DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = "/media/hdd_1tb/model/"
 # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-MODEL_DIR = MODEL_BASE + "AttentionCAE/theta0/"
+MODEL_DIR = MODEL_BASE + "AttentionCAE/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "20201019_191028_2500.pth"
+model_path = MODEL_DIR + "0/20201020_174715_2000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

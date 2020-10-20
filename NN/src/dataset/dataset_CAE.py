@@ -70,3 +70,22 @@ class MyDataSet(torch.utils.data.Dataset):
         # rgb = hsv.convert("RGB")
         # rgb.save(filename)
         torchvision.utils.save_image(tensor, filename)
+
+
+class OneDataSet(MyDataSet):
+    def __init__(self, dir_path, img_size=(128, 96), is_test=False, dsize=5, noise=0):
+
+        self.size = img_size
+        self.test = is_test
+        self.distort = not is_test
+        self.dsize = dsize
+        self._noise = noise
+        self._image_paths = []
+        class_id = 0
+        img_paths = [str(p) for p in Path(dir_path).glob("./*.jpg")]
+        img_paths.sort()
+        self._class_id = [class_id for _ in range(len(img_paths))]
+        self._image_paths += img_paths
+        self._imgs = [self.get_img(str(p)) for p in self._image_paths]
+        self._len = len(self._imgs)
+

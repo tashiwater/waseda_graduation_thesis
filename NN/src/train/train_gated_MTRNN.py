@@ -34,7 +34,7 @@ if __name__ == "__main__":
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
-    in_size = 46  # trainset[0][0].shape[1]
+    in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
         layer_size={
