@@ -19,7 +19,7 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "AttentionCAE2/theta0/"
+    MODEL_DIR = MODEL_BASE + "AttentionCAE2/rate001/"
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         "save_span": 50,
         "graph_span": 5,
         "weight_decay": 0.00001,
-        "loss_rate": [1, 0.001],
+        "loss_rate": [1, 0.01],
     }
     criterion = [torch.nn.MSELoss(), torch.nn.CrossEntropyLoss()]
 

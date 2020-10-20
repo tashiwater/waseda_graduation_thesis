@@ -16,13 +16,13 @@ DATA_PATH = DATA_DIR + "validate"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = "/media/hdd_1tb/model/"
-# MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+MODEL_BASE = CURRENT_DIR + "/../../../../model/"
 MODEL_DIR = MODEL_BASE + "AttentionCAE2/theta0/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "20201019_191028_2500.pth"
+model_path = MODEL_DIR + "20201020_041027_6000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -52,7 +52,9 @@ for i, (inputs, labels) in enumerate(testloader):
     # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
 
     for j, img in enumerate(outputs.cpu()):
-        MyDataSet.save_img(img, RESULT_DIR + "{}_{}class{}.png".format(i, j, class_num))
+        MyDataSet.save_img(
+            img, RESULT_DIR + "{}_{}class{}.png".format(i, j, class_num[j])
+        )
         # torchvision.utils.save_image(img, RESULT_DIR + "{}_{}.png".format(i, j))
     for j, (img, mask) in enumerate(zip(inputs.cpu(), net.attention_map.cpu())):
         rgb = torchvision.transforms.functional.to_pil_image(img, "RGB")
