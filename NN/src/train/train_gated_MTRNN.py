@@ -24,25 +24,25 @@ if __name__ == "__main__":
     #     open_rate = float(open_rate)
     # else:
     #     raise Exception("Fail arg num")
-    cf_num = 100
+    cf_num = 200
     cs_tau = 50
     open_rate = 0.1
 
-    load_path = ""  # input("?aa.pth:")
+    load_path = input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN/default/"
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN/cf200/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
-    in_size = 41  # trainset[0][0].shape[1]
+    in_size = 46  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
         layer_size={

@@ -11,7 +11,8 @@ from pathlib import Path
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
 IMAGE_PATH = DATA_DIR + "all/"
-MODEL_DIR = DATA_DIR + "model/newcam/"
+MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+MODEL_DIR = MODEL_BASE + "CAE/newcam/"
 HIDDEN_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/preprocess/data/connect_input/image_feature/"
 
 net = Net()

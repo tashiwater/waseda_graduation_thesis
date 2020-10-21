@@ -86,13 +86,16 @@ class TrainBase:
         while self._param_dict["epoch"] is None or epoch < self._param_dict["epoch"]:
             epoch += 1
             print("epoch:", epoch)
+            self._net.train()
             train_mean_loss = self._each_epoch("train", self._trainloader)
             if (epoch % self._param_dict["graph_span"]) == 0 or epoch == 1:
+                self._net.eval()
                 test_mean_loss = self._each_epoch("test", self._testloader)
                 self._log_loss(epoch, train_mean_loss, test_mean_loss)
             if (epoch % self._param_dict["save_span"]) == 0 or epoch == 1:
                 self.model_save("_{}".format(epoch))
         self.model_save("_{}finish".format(epoch))
+        self._net.eval()
         test_mean_loss = self._each_epoch("test", self._testloader)
         self._log_loss(epoch, train_mean_loss, test_mean_loss)
         self.show_result()

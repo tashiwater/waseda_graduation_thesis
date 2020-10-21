@@ -5,4 +5,4 @@ CAE/data/result
 CAE/data/datacheck
 MTRNN/data/result
 .DS_Store
-NN/data/CAE/result
+NN/data/*/result

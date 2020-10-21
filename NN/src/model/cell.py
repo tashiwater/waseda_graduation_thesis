@@ -15,6 +15,7 @@ class Cell(torch.nn.Module):
         padding=1,
         activate="relu",
         mode="conv",
+        on_batchnorm=True,
     ):
         super(Cell, self).__init__()
         if mode == "conv":
@@ -38,10 +39,13 @@ class Cell(torch.nn.Module):
         elif activate == "tanh":
             self.activate = torch.nn.Tanh()
         elif activate == "softmax":
-            self.activate = torch.nn.Softmax()
+            self.activate = torch.nn.Softmax(dim=1)
+
+        self._on_batchnorm = on_batchnorm
 
     def forward(self, x):
         x = self.nn(x)
-        x = self.batchnorm(x)
+        if self._on_batchnorm:
+            x = self.batchnorm(x)
         x = self.activate(x)
         return x

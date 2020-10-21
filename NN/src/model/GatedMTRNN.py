@@ -20,9 +20,15 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
         self._position_dims = layer_size["out"]
         sensor_dims = layer_size["in"] - self._position_dims
         self.attention = torch.nn.Sequential(
-            Cell(sensor_dims, 100, activate="sigmoid", mode="linear"),
-            Cell(100, 100, activate="sigmoid", mode="linear"),
-            Cell(100, sensor_dims, activate="softmax", mode="linear"),
+            Cell(
+                sensor_dims, 100, activate="sigmoid", mode="linear", on_batchnorm=False
+            ),
+            Cell(100, 100, activate="sigmoid", mode="linear", on_batchnorm=False),
+            # Cell(100, 100, activate="sigmoid", mode="linear", on_batchnorm=False),
+            # Cell(100, 100, activate="sigmoid", mode="linear", on_batchnorm=False),
+            Cell(
+                100, sensor_dims, activate="softmax", mode="linear", on_batchnorm=False
+            ),
         )
 
     def init_state(self, batch_size):
