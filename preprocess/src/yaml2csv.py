@@ -10,17 +10,18 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 for class_num in range(1):
     folder_name = ""  # "motion{}/".format(class_num + 1)
     YAML_DIR = (
-        "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1019_theta0/motion_yaml/"
+        "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1022_theta0/motion_yaml/"
         + folder_name
     )
     RESULT_DIR = DATA_DIR + "connect_input/motion_csv/" + folder_name
     paths = [str(p) for p in Path(YAML_DIR).glob("./*.yaml")]
     paths.sort()
-    print(paths)
+    # print(paths)
     for i, path in enumerate(paths):
+        print(path)
         f_yaml = open(path, "r")
         f_csv = open(RESULT_DIR + "{:03}.csv".format(i), "w")
-        ydata = yaml.load(f_yaml)
+        ydata = yaml.safe_load(f_yaml)
         # {'arm_controller': {'teaching_trajectories': {'names': ['traj0'], 'traj0': [{'accelerations': [...], 'effort': [...], 'positions': [...], 'time_from_start': 0.0, 'velocities': [...]}, {'accelerations': ...]}]}}}
         # print(ydata["arm_controller"]["teaching_trajectories"]["traj0"])
         # strs = []

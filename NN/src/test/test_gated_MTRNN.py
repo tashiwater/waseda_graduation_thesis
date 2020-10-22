@@ -28,7 +28,7 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "GatedMTRNN/cf200/"
-    load_path = "20201021_164516_2500"  # input("?aa.pth:")
+    load_path = "20201021_160426_1"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 46  # trainset[0][0].shape[1]
@@ -78,10 +78,9 @@ if __name__ == "__main__":
         attention_map = []
         for i, inputs_t in enumerate(inputs_transposed):
             outputs[i] = net(inputs_t)
-            # for d in net.parameters():
+            # for d in net.attention.parameters():
             #     print(d)
             # input()
-            # pri(outputs[i])
             io_states.append(net.mtrnn.io_state.view(-1).detach().numpy())
             cf_states.append(net.mtrnn.cf_state.view(-1).detach().numpy())
             cs_states.append(net.mtrnn.cs_state.view(-1).detach().numpy())

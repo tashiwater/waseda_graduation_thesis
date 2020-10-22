@@ -59,7 +59,7 @@ if __name__ == "__main__":
         "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
         "epoch": None,
-        "save_span": 500,
+        "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
         "dims": [7],
