@@ -12,7 +12,7 @@ from dataset.dataset_CAE import MyDataSet
 from model.AttentionCAE import AttentionCAE as Model
 
 if __name__ == "__main__":
-    load_path = ""  # input("?aa.pth:")
+    load_path = input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
     TRAIN_PATH = DATA_DIR + "train"

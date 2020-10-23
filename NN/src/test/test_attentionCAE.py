@@ -16,19 +16,22 @@ DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = "/media/hdd_1tb/model/"
-# MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+MODEL_BASE = CURRENT_DIR + "/../../../../model/"
 MODEL_DIR = MODEL_BASE + "AttentionCAE/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "0/20201020_174715_2000.pth"
+model_path = MODEL_DIR + "0/20201022_194841_2500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
 dataset = MyDataSet(DATA_PATH, img_size=(128, 96), is_test=True, dsize=5)
 testloader = torch.utils.data.DataLoader(
-    dataset, batch_size=500, shuffle=False, num_workers=4,
+    dataset,
+    batch_size=500,
+    shuffle=False,
+    num_workers=4,
 )
 
 device = torch.device("cuda:0")
