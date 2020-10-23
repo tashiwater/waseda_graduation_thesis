@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #     open_rate = float(open_rate)
     # else:
     #     raise Exception("Fail arg num")
-    cf_num = 200
+    cf_num = 100
     cs_tau = 50
     open_rate = 0.1
 
@@ -34,24 +34,18 @@ if __name__ == "__main__":
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/hdd_1tb/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/cf200_2"
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/cf100_2/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
-        layer_size={
-            "in": in_size,
-            "out": in_size,
-            "io": 50,
-            "cf": cf_num,
-            "cs": 15,
-        },
+        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
     )
