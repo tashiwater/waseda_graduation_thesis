@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
-    in_size = 46  # trainset[0][0].shape[1]
+    in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
         layer_size={
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
-        "dims": [46],
+        "dims": [41],
         "loss_rates": [1],
         # "learn_rate": 0.01,
         # "betas": (0.999, 0.999),
