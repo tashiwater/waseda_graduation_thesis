@@ -16,7 +16,7 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
     ):
         super(GatedMTRNN, self).__init__()
         self.open_rate = open_rate
-        self.mtrnn = MTRNN(layer_size, tau, open_rate)
+        self.mtrnn = MTRNN(layer_size, tau, 1)
         # self._position_dims = 7  # layer_size["out"]
         # sensor_dims = layer_size["in"] - self._position_dims
         self.attention = torch.nn.Sequential(
@@ -44,10 +44,8 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
 
     def forward(self, x):
         # position = x[:, : self._position_dims]
-        # if self.mtrnn.last_output is not None:  # start val is not changed by open_rate
-        #     position = self.open_rate * position + self.mtrnn.last_output * (
-        #         1 - self.open_rate
-        #     )
+        if self.mtrnn.last_output is not None:  # start val is not changed by open_rate
+            x = self.open_rate * x + self.mtrnn.last_output * (1 - self.open_rate)
         # sensors = x[:, self._position_dims :]
         self.attention_map = self.attention(x)
         x = x * self.attention_map
