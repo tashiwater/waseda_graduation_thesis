@@ -48,6 +48,6 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
             x = self.open_rate * x + self.mtrnn.last_output * (1 - self.open_rate)
         # sensors = x[:, self._position_dims :]
         self.attention_map = self.attention(x)
-        x = x * self.attention_map
+        temp = x * self.attention_map
         # Sx = torch.cat([position, sensors], axis=1)
-        return self.mtrnn(x)
+        return self.mtrnn(temp)
