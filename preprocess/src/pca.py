@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-INPUT_PATH = DATA_DIR + "connected/"
+INPUT_PATH = DATA_DIR + "connected_attention/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.csv")]
 paths.sort()
@@ -20,7 +20,7 @@ for path in paths:
 datas = np.array(datas)
 imgs = datas[:, 0:1, 30:]
 imgs = np.vstack(imgs)
-components = 3
+components = 5
 pca = PCA(n_components=components).fit_transform(imgs)
 circle_num = 12
 circle = pca[:circle_num]
@@ -28,23 +28,24 @@ rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
-one_num = 9
-container_num = 9
-stack_num = 2
+one_num = 4
+container_num = 6
+stack_num = 6
 stack = [0 for i in range(stack_num)]
 
-stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
-stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
-stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
+# stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
+# stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
+# stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
 # stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
 
-# stack[0] = circle[:one_num]
-# stack[1] = circle[one_num : one_num * 2]
-# stack[2] = circle[one_num * 2 :]
 
-# stack[3] = rectangle[:one_num]
-# stack[4] = rectangle[one_num : one_num * 2]
-# stack[5] = rectangle[one_num * 2 :]
+stack[0] = circle[:one_num]
+stack[1] = circle[one_num : one_num * 2]
+stack[2] = circle[one_num * 2 :]
+
+stack[3] = rectangle[:one_num]
+stack[4] = rectangle[one_num : one_num * 2]
+stack[5] = rectangle[one_num * 2 :]
 
 # stack[0] = circle
 # stack[1] = rectangle

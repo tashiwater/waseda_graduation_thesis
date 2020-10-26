@@ -8,21 +8,21 @@ import numpy as np
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from dataset.dataset_CAE import OneDataSet
-from model.AttentionCAE import AttentionCAE as Net
+from model.CAE import CAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
 IMAGE_PATH = DATA_DIR + "all/"
 MODEL_BASE = "/media/hdd_1tb/model/"
 MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-MODEL_DIR = MODEL_BASE + "AttentionCAE/"
+MODEL_DIR = MODEL_BASE + "CAE/"
 
 HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_feature/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "0/20201022_194841_2500.pth"
+model_path = MODEL_DIR + "theta0/20201024_163220_1500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
