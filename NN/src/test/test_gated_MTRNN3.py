@@ -27,8 +27,8 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/cf100_3/"
-    load_path = "20201023_172821_6900"  # input("?aa.pth:")
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/"
+    load_path = "open1/20201026_222216_4000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]

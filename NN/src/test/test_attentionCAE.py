@@ -16,22 +16,19 @@ DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = "/media/hdd_1tb/model/"
-MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+# MODEL_BASE = CURRENT_DIR + "/../../../../model/"
 MODEL_DIR = MODEL_BASE + "AttentionCAE/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "0/20201022_215001_5000.pth"
+model_path = MODEL_DIR + "0/20201022_212259_5000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
 dataset = MyDataSet(DATA_PATH, img_size=(128, 96), is_test=True, dsize=5)
 testloader = torch.utils.data.DataLoader(
-    dataset,
-    batch_size=200,
-    shuffle=False,
-    num_workers=4,
+    dataset, batch_size=200, shuffle=False, num_workers=4,
 )
 
 device = torch.device("cuda:0")
@@ -50,7 +47,7 @@ for i, (inputs, labels) in enumerate(testloader):
     # print(torch.min(inputs))
     #     MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
     # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
-    """
+
     for j, img in enumerate(outputs.cpu()):
         MyDataSet.save_img(img, RESULT_DIR + "{}_{}.png".format(i, j))
         # torchvision.utils.save_image(img, RESULT_DIR + "{}_{}.png".format(i, j))
@@ -61,7 +58,7 @@ for i, (inputs, labels) in enumerate(testloader):
         gray = gray.resize((128, 96), Image.NEAREST).convert("RGB")
         add_img = ImageChops.multiply(rgb, gray)
         add_img.save(RESULT_DIR + "{}_{}_attention.png".format(i, j))
-    """
+
     for img, output_img, mask in zip(
         inputs.cpu(), outputs.cpu(), net.attention_map.cpu()
     ):

@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/cf100_4/"
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/open1/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
@@ -75,8 +75,8 @@ if __name__ == "__main__":
                 self._optimizer.zero_grad()
                 for i, inputs_t in enumerate(inputs_transposed):
                     outputs[i] = self._net(inputs_t)
-                d1 = 0
                 """
+                d1 = 0
                 loss = []
                 for dim, rate in zip(
                     self._param_dict["dims"], self._param_dict["loss_rates"]
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                     )
                     loss.append(one_loss * rate)
                     d1 = d2
-"""
+                """
                 loss = self._criterion(outputs, labels_transposed)
                 # loss = sum(loss)
                 if mode == "train":

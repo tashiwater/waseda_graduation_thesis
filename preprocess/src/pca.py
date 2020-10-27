@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-INPUT_PATH = DATA_DIR + "connected_attention/"
+INPUT_PATH = DATA_DIR + "connected/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.csv")]
 paths.sort()
@@ -18,7 +18,7 @@ for path in paths:
     df = pd.read_csv(path)
     datas.append(df)
 datas = np.array(datas)
-imgs = datas[:, 0:1, 30:]
+imgs = datas[:, 0:1, 26:]
 imgs = np.vstack(imgs)
 components = 5
 pca = PCA(n_components=components).fit_transform(imgs)
