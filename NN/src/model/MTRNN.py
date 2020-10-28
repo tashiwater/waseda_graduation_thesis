@@ -28,7 +28,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.cf2cf = nn.Linear(self.layer_size["cf"], self.layer_size["cf"])
         self.cs2cf = nn.Linear(self.layer_size["cs"], self.layer_size["cf"])
         self.cs2cs = nn.Linear(self.layer_size["cs"], self.layer_size["cs"])
-        self.activate = torch.nn.Tanh()
+        self.activate = torch.nn.ReLU()
 
     def init_state(self, batch_size):
         self.last_output = None

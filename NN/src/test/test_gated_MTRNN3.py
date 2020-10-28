@@ -23,18 +23,24 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/hdd_1tb/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "GatedMTRNN3/"
-    load_path = "open1/20201026_222216_4000"  # input("?aa.pth:")
+    load_path = "multi/20201028_212326_9900"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
     )
@@ -53,7 +59,10 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, shuffle=False, num_workers=4,
+        dataset,
+        batch_size=1,
+        shuffle=False,
+        num_workers=4,
     )
 
     net.eval()

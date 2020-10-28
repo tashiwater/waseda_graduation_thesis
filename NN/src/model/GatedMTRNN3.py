@@ -21,9 +21,9 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
         # sensor_dims = layer_size["in"] - self._position_dims
         self.attention = torch.nn.Sequential(
             torch.nn.Linear(layer_size["in"], 100),
-            torch.nn.Tanh(),
+            torch.nn.ReLU(),
             torch.nn.Linear(100, 100),
-            torch.nn.Tanh(),
+            torch.nn.ReLU(),
             torch.nn.Linear(100, layer_size["in"]),
             torch.nn.Softmax(dim=1),
         )
@@ -33,10 +33,10 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
 
     def forward(self, x):
         # position = x[:, : self._position_dims]
-        # if self.mtrnn.last_output is not None:  # start val is not changed by open_rate
-        #    x = self.open_rate * x + self.mtrnn.last_output * (1 - self.open_rate)
+        if self.mtrnn.last_output is not None:  # start val is not changed by open_rate
+            x = self.open_rate * x + self.mtrnn.last_output * (1 - self.open_rate)
         # sensors = x[:, self._position_dims :]
-        self.attention_map = self.attention(x)
+        self.attention_map = self.attention(x) * 41
         temp = x * self.attention_map
         # Sx = torch.cat([position, sensors], axis=1)
         return self.mtrnn(temp)

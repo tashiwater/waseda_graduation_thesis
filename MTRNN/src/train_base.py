@@ -94,17 +94,17 @@ class TrainNet:
         calc_num = 0
 
         for (one_batch_inputs, one_batch_labels) in dataloader:
-            motor, tactile, img = one_batch_inputs
-            motor = motor.transpose(1, 0)
-            tactile = tactile.transpose(1, 0)
-            img = img.transpose(1, 0)
-            # inputs_transposed = one_batch_inputs.transpose(1, 0)
+            # motor, tactile, img = one_batch_inputs
+            # motor = motor.transpose(1, 0)
+            # tactile = tactile.transpose(1, 0)
+            # img = img.transpose(1, 0)
+            inputs_transposed = one_batch_inputs.transpose(1, 0)
             labels_transposed = one_batch_labels.transpose(1, 0)
             self._net.init_state(labels_transposed.shape[1])
             outputs = torch.zeros_like(labels_transposed)
             self._optimizer.zero_grad()
-            for i, inputs_t in enumerate(zip(motor, tactile, img)):
-                outputs[i] = self._net(inputs_t[0], inputs_t[1], inputs_t[2])
+            for i, inputs_t in enumerate(inputs_transposed):
+                outputs[i] = self._net(inputs_t)
                 # print(self._net.io_state)
                 # print(self._net.cf_state)
                 # print(self._net.cs_state)

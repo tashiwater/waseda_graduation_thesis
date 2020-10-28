@@ -11,7 +11,7 @@ import torch
 
 ### custom MTRNN
 from MTRNN import MTRNN as MTRNN
-from mydataset import CustomDataSet as MyDataSet
+from mydataset import CsvDataSet as MyDataSet
 from train_base import TrainNet
 
 argnum = len(sys.argv)
@@ -34,9 +34,7 @@ TRAIN_PATH = DATA_DIR + "train"
 TEST_PATH = DATA_DIR + "test"
 MODEL_BASE = "/media/hdd_1tb/model/"
 MODEL_BASE = CURRENT_DIR + "/../../../model/"
-MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
-    int(open_rate * 10), name
-)
+MODEL_DIR = MODEL_BASE + "MTRNN/1022/old_program/"
 # MODEL_DIR = "/media/hdd_1tb/model/MTRNN/custom/{}/".format(name)
 # one_sequence_size = 600  # traning dataのデータ数
 # trainset = MyDataSet(0, one_sequence_size, 0.02, 3, 0.1)
@@ -44,7 +42,7 @@ MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
 
 trainset = MyDataSet(TRAIN_PATH)
 testset = MyDataSet(TEST_PATH)
-in_size = 46  # trainset[0][0].shape[1]
+in_size = 41  # trainset[0][0].shape[1]
 net = MTRNN(
     layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15},
     tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
@@ -60,8 +58,8 @@ param_dict = {
     "save_span": 500,
     "graph_span": 5,
     "weight_decay": 0.00001,
-    "dims": [7, 7, 20, 12],
-    "loss_rates": [2, 1, 1, 1],
+    "dims": [41],
+    "loss_rates": [1],
     # "learn_rate": 0.01,
     # "betas": (0.999, 0.999),
 }
