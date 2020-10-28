@@ -10,11 +10,11 @@ from sklearn.decomposition import PCA
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from dataset.dataset_gated_MTRNN import MyDataSet
-from model.GatedMTRNN import GatedMTRNN
+from dataset.dataset_MTRNN import MyDataSet
+from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
-    cf_num = 200
+    cf_num = 100
     cs_tau = 50
     open_rate = 0.1
 
@@ -27,16 +27,16 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN/cf200/"
-    load_path = "20201021_160426_1"  # input("?aa.pth:")
+    MODEL_DIR = MODEL_BASE + "MTRNN/1022/cf100/"
+    load_path = "20201027_193657_7000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
-    in_size = 46  # trainset[0][0].shape[1]
+    in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
-    net = GatedMTRNN(
+    net = Net(
         layer_size={
             "in": in_size,
-            "out": position_dims,
+            "out": in_size,
             "io": 50,
             "cf": cf_num,
             "cs": 15,
@@ -53,9 +53,9 @@ if __name__ == "__main__":
     def get_header(add_word):
         return (
             [add_word + "position{}".format(i) for i in range(7)]
-            # + [add_word + "torque{}".format(i) for i in range(7)]
-            # + [add_word + "tactile{}".format(i) for i in range(12)]
-            # + [add_word + "image{}".format(i) for i in range(20)]
+            + [add_word + "torque{}".format(i) for i in range(7)]
+            + [add_word + "tactile{}".format(i) for i in range(12)]
+            + [add_word + "image{}".format(i) for i in range(15)]
         )
 
     dataloader = torch.utils.data.DataLoader(
@@ -81,20 +81,20 @@ if __name__ == "__main__":
             # for d in net.attention.parameters():
             #     print(d)
             # input()
-            io_states.append(net.mtrnn.io_state.view(-1).detach().numpy())
-            cf_states.append(net.mtrnn.cf_state.view(-1).detach().numpy())
-            cs_states.append(net.mtrnn.cs_state.view(-1).detach().numpy())
-            attention_map.append(net.attention_map.view(-1).detach().numpy())
+            io_states.append(net.io_state.view(-1).detach().numpy())
+            cf_states.append(net.cf_state.view(-1).detach().numpy())
+            cs_states.append(net.cs_state.view(-1).detach().numpy())
+            # attention_map.append(net.attention_map.view(-1).detach().numpy())
         loss = criterion(outputs, labels_transposed)
         print("loss={}".format(loss.item()))
         alltype_cs += cs_states
         io_states = np.array(io_states)
         cf_states = np.array(cf_states)
         cs_states = np.array(cs_states)
-        attention_map = np.array(attention_map)
+        # attention_map = np.array(attention_map)
 
-        np_input = labels_transposed.view(-1, position_dims).detach().numpy()
-        np_output = outputs.view(-1, position_dims).detach().numpy()
+        np_input = labels_transposed.view(-1, in_size).detach().numpy()
+        np_output = outputs.view(-1, in_size).detach().numpy()
         cs_pca = PCA(n_components=2).fit_transform(cs_states)
         cf_pca = PCA(n_components=2).fit_transform(cf_states)
         connected_data = np.hstack(
@@ -103,7 +103,7 @@ if __name__ == "__main__":
                 np_output,
                 cf_pca,
                 cs_pca,
-                attention_map,
+                # attention_map,
             ]  # , io_states, cf_states, cs_states
         )
         header = (
@@ -113,7 +113,7 @@ if __name__ == "__main__":
             + get_header("out ")
             + ["cf_pca{}".format(i) for i in range(cf_pca.shape[1])]
             + ["cs_pca{}".format(i) for i in range(cs_pca.shape[1])]
-            + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
+            # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
             # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
             # + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
             # + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
