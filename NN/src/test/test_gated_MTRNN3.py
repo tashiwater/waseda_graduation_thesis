@@ -28,7 +28,7 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "GatedMTRNN3/"
-    load_path = "multi/20201028_212326_9900"  # input("?aa.pth:")
+    load_path = "multi2/20201029_000506_7000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
