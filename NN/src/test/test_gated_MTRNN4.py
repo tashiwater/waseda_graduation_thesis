@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/"
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/"
     load_path = "split/20201029_152302_10000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)

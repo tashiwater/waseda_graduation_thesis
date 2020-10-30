@@ -85,8 +85,9 @@ if __name__ == "__main__":
             cf_states.append(net.mtrnn.cf_state.view(-1).detach().numpy())
             cs_states.append(net.mtrnn.cs_state.view(-1).detach().numpy())
             attention_map.append(net.attention_map.view(-1).detach().numpy())
+        posi_loss = criterion(outputs[:, :, :7], labels_transposed[:, :, :7])
         loss = criterion(outputs, labels_transposed)
-        print("loss={}".format(loss.item()))
+        print("loss={} / {}".format(posi_loss.item(), loss.item()))
         alltype_cs += cs_states
         io_states = np.array(io_states)
         cf_states = np.array(cf_states)
