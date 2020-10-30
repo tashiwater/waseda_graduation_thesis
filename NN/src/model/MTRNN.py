@@ -13,6 +13,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         layer_size={"in": 1, "out": 1, "io": 3, "cf": 4, "cs": 5},
         tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
         open_rate=1,
+        activate=torch.nn.ReLU(),
     ):
         super(MTRNN, self).__init__()
         self.layer_size = layer_size
@@ -28,7 +29,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.cf2cf = nn.Linear(self.layer_size["cf"], self.layer_size["cf"])
         self.cs2cf = nn.Linear(self.layer_size["cs"], self.layer_size["cf"])
         self.cs2cs = nn.Linear(self.layer_size["cs"], self.layer_size["cs"])
-        self.activate = torch.nn.ReLU()
+        self.activate = activate
 
     def init_state(self, batch_size):
         self.last_output = None

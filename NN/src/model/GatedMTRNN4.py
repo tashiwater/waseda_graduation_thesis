@@ -24,7 +24,7 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
             torch.nn.ReLU(),
             torch.nn.Linear(100, 100),
             torch.nn.ReLU(),
-            torch.nn.Linear(100, 4),
+            torch.nn.Linear(100, 3),
             torch.nn.Softmax(dim=1),
         )
 
@@ -32,16 +32,14 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
         self.mtrnn.init_state(batch_size)
 
     def forward(self, x):
-        # position = x[:, : self._position_dims]
         if self.mtrnn.last_output is not None:  # start val is not changed by open_rate
             x = self.open_rate * x + self.mtrnn.last_output * (1 - self.open_rate)
-        # sensors = x[:, self._position_dims :]
         self.attention_map = self.attention(x)
-        # a = self.attention_map[:, 0:1].repeat(1, 7)
-        position = x[:, :7] * self.attention_map[:, 0:1].repeat(1, 7)
-        torque = x[:, 7:14] * self.attention_map[:, 1:2].repeat(1, 7)
-        tactile = x[:, 14:26] * self.attention_map[:, 2:3].repeat(1, 12)
-        img = x[:, 26:] * self.attention_map[:, 3:].repeat(1, 15)
+        # a = self.attention_map[:, 0].unsqueeze(1).repeat(1, 7)
+        position = x[:, :7]  # * self.attention_map[:, 0:1].repeat(1, 7)
+        torque = x[:, 7:14] * self.attention_map[:, 0].unsqueeze(1).repeat(1, 7)
+        tactile = x[:, 14:26] * self.attention_map[:, 1].unsqueeze(1).repeat(1, 12)
+        img = x[:, 26:] * self.attention_map[:, 2].unsqueeze(1).repeat(1, 15)
         # temp = x * self.attention_map
         temp = torch.cat([position, torque, tactile, img], axis=1)
         return self.mtrnn(temp)

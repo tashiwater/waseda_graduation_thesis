@@ -8,8 +8,8 @@ import torch
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from train_base import TrainBase
-from dataset.dataset_gated_MTRNN import MyDataSet
-from model.GatedMTRNN import GatedMTRNN
+from dataset.dataset_MTRNN import MyDataSet
+from model.GatedMTRNN4 import GatedMTRNN
 
 if __name__ == "__main__":
     # argnum = len(sys.argv)
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #     open_rate = float(open_rate)
     # else:
     #     raise Exception("Fail arg num")
-    cf_num = 200
+    cf_num = 100
     cs_tau = 50
     open_rate = 0.1
 
@@ -38,16 +38,16 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN/cf200/"
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/1/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
-    in_size = 46  # trainset[0][0].shape[1]
+    in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
         layer_size={
             "in": in_size,
-            "out": position_dims,
+            "out": in_size,
             "io": 50,
             "cf": cf_num,
             "cs": 15,
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
-        "dims": [7],
+        "dims": [41],
         "loss_rates": [1],
         # "learn_rate": 0.01,
         # "betas": (0.999, 0.999),
@@ -81,6 +81,7 @@ if __name__ == "__main__":
                 self._optimizer.zero_grad()
                 for i, inputs_t in enumerate(inputs_transposed):
                     outputs[i] = self._net(inputs_t)
+                """
                 d1 = 0
                 loss = []
                 for dim, rate in zip(
@@ -92,9 +93,9 @@ if __name__ == "__main__":
                     )
                     loss.append(one_loss * rate)
                     d1 = d2
-
-                # loss = self._criterion(outputs, labels_transposed)
-                loss = sum(loss)
+                """
+                loss = self._criterion(outputs, labels_transposed)
+                # loss = sum(loss)
                 if mode == "train":
                     # sum(loss).backward()
                     # pritn(self._net.cs2cs.parameters.grad)

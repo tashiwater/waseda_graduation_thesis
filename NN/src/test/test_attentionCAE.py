@@ -12,7 +12,7 @@ from model.AttentionCAE import AttentionCAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
-DATA_PATH = DATA_DIR + "test"
+DATA_PATH = DATA_DIR + "validate"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = "/media/hdd_1tb/model/"

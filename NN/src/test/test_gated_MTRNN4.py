@@ -11,7 +11,7 @@ from sklearn.decomposition import PCA
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from dataset.dataset_MTRNN import MyDataSet
-from model.MTRNN import MTRNN as Net
+from model.GatedMTRNN4 import GatedMTRNN
 
 if __name__ == "__main__":
     cf_num = 100
@@ -27,13 +27,13 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1022/"
-    load_path = "cf100/20201028_122342_15000"  # input("?aa.pth:")
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN3/"
+    load_path = "split/20201029_152302_10000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
-    net = Net(
+    net = GatedMTRNN(
         layer_size={
             "in": in_size,
             "out": in_size,
@@ -43,7 +43,6 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
-        activate=torch.nn.Tanh(),
     )
     model_path = MODEL_DIR + load_path + ".pth"
     checkpoint = torch.load(model_path)
@@ -82,19 +81,17 @@ if __name__ == "__main__":
             # for d in net.attention.parameters():
             #     print(d)
             # input()
-            io_states.append(net.io_state.view(-1).detach().numpy())
-            cf_states.append(net.cf_state.view(-1).detach().numpy())
-            cs_states.append(net.cs_state.view(-1).detach().numpy())
-            # attention_map.append(net.attention_map.view(-1).detach().numpy())
-        posi_loss = criterion(outputs[:, :, :7], labels_transposed[:, :, :7])
+            io_states.append(net.mtrnn.io_state.view(-1).detach().numpy())
+            cf_states.append(net.mtrnn.cf_state.view(-1).detach().numpy())
+            cs_states.append(net.mtrnn.cs_state.view(-1).detach().numpy())
+            attention_map.append(net.attention_map.view(-1).detach().numpy())
         loss = criterion(outputs, labels_transposed)
-        print("loss={} / {}".format(posi_loss.item(), loss.item()))
-
+        print("loss={}".format(loss.item()))
         alltype_cs += cs_states
         io_states = np.array(io_states)
         cf_states = np.array(cf_states)
         cs_states = np.array(cs_states)
-        # attention_map = np.array(attention_map)
+        attention_map = np.array(attention_map)
 
         np_input = labels_transposed.view(-1, in_size).detach().numpy()
         np_output = outputs.view(-1, in_size).detach().numpy()
@@ -106,7 +103,7 @@ if __name__ == "__main__":
                 np_output,
                 cf_pca,
                 cs_pca,
-                # attention_map,
+                attention_map,
             ]  # , io_states, cf_states, cs_states
         )
         header = (
@@ -116,7 +113,7 @@ if __name__ == "__main__":
             + get_header("out ")
             + ["cf_pca{}".format(i) for i in range(cf_pca.shape[1])]
             + ["cs_pca{}".format(i) for i in range(cs_pca.shape[1])]
-            # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
+            + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
             # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
             # + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
             # + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
