@@ -26,7 +26,7 @@ if __name__ == "__main__":
     #     raise Exception("Fail arg num")
     cf_num = 100
     cs_tau = 50
-    open_rate = 1
+    open_rate = 0.1
 
     load_path = input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1022/open1/"
+    MODEL_DIR = MODEL_BASE + "MTRNN/1022/ReLU/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
@@ -54,6 +54,7 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
+        activate=torch.nn.ReLU(),
     )
     param_dict = {
         "train_batch_size": len(trainset),

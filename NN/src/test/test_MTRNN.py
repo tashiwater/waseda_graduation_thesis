@@ -28,7 +28,7 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/1022/"
-    load_path = "cf100/20201028_122342_15000"  # input("?aa.pth:")
+    load_path = "ReLU/20201031_031500_20000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
-        activate=torch.nn.Tanh(),
+        activate=torch.nn.ReLU(),
     )
     model_path = MODEL_DIR + load_path + ".pth"
     checkpoint = torch.load(model_path)

@@ -11,7 +11,7 @@ from sklearn.decomposition import PCA
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from dataset.dataset_MTRNN import MyDataSet
-from model.GatedMTRNN2 import GatedMTRNN
+from model.GatedMTRNN4 import GatedMTRNN
 
 if __name__ == "__main__":
     cf_num = 100
@@ -27,8 +27,8 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN2/0/"
-    load_path = "20201030_073327_30000"  # input("?aa.pth:")
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/1/"
+    load_path = "20201031_090540_40000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
