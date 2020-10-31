@@ -36,7 +36,7 @@ def min_max_normalization(data, indataRange, outdataRange):
 
 def sigmoid_normalize(data, before_scale):
     for i, scale in enumerate(before_scale):
-        data[:, i] = min_max_normalization(data[:, i], scale, [0, 1])
+        data[:, i] = min_max_normalization(data[:, i], scale, [-0.9, 0.9])
     return data
 
 
@@ -60,10 +60,10 @@ if __name__ == "__main__":
         [-0.5, 2],
         [-1, 0.5],
         [-1.396, 0.087],
-        [-2, 40],
-        [-40, 15],
-        [-5, 15],
-        [-10, 15],
+        [10, 60],
+        [-10, 30],
+        [-15, 15],
+        [-15, 40],
         [-5, 5],
         [-5, 5],
         [-5, 5],
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     #     [-5, 5],
     # ]
     tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
-    image_before_scale = [[0, 1] for _ in range(image_feature_datas[0].shape[1])]
+    image_before_scale = [[0.2, 0.8] for _ in range(image_feature_datas[0].shape[1])]
     # image_before_scale = [[0,1] for _ in range(image_feature_data.shape[1])]
     for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
@@ -96,9 +96,9 @@ if __name__ == "__main__":
             motion_preprocessed, motion_before_scale
         )
         tactile_preprocessed = get_meaned_data(tactile_data, sequence_num, EACH_SAMPLE)
-        tactile_preprocessed = sigmoid_normalize(
-            tactile_preprocessed, tactile_before_scale
-        )
+        # tactile_preprocessed = sigmoid_normalize(
+        #     tactile_preprocessed, tactile_before_scale
+        # )
         img_preprocessed = get_meaned_data(img, sequence_num, 1)
         img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
         connected_data = np.block(

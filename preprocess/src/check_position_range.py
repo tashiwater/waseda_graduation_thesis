@@ -7,12 +7,19 @@ import numpy as np
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-dir_path = DATA_DIR + "connect_input/motion_csv/"
+dir_path = DATA_DIR + "connect_input/image_feature/"
 paths = [str(p) for p in Path(dir_path).glob("./*.csv")]
 paths.sort()
-dfs = [pd.read_csv(path, header=None).iloc[:, :7] for path in paths]
+dfs = [
+    pd.read_csv(path, header=None).iloc[
+        :,
+    ]
+    for path in paths
+]
 df = pd.concat(dfs)
 print(df.describe())
+# for d in dfs:
+#     print(d.head(1))
 # for i, path in enumerate(paths):
 #     df = pd.read_csv(path)
 
