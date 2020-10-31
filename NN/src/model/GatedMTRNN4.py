@@ -16,7 +16,7 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
     ):
         super(GatedMTRNN, self).__init__()
         self.open_rate = open_rate
-        self.mtrnn = MTRNN(layer_size, tau, 1)
+        self.mtrnn = MTRNN(layer_size, tau, 1, torch.nn.Tanh())
         # self._position_dims = 7  # layer_size["out"]
         # sensor_dims = layer_size["in"] - self._position_dims
         self.attention = torch.nn.Sequential(

@@ -42,13 +42,13 @@ class TrainBase:
             trainset,
             batch_size=self._param_dict["train_batch_size"],
             shuffle=True,
-            num_workers=4,
+            num_workers=12,
         )
         self._testloader = torch.utils.data.DataLoader(
             testset,
             batch_size=self._param_dict["test_batch_size"],
             shuffle=False,
-            num_workers=4,
+            num_workers=12,
         )
         self._criterion = criterion
         self._optimizer = torch.optim.Adam(
