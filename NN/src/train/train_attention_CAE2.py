@@ -17,9 +17,9 @@ if __name__ == "__main__":
     DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
-    MODEL_BASE = "/media/hdd_1tb/model/"
+    MODEL_BASE = "/media/user/ボリューム/model/"
     # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "AttentionCAE2/rate01/"
+    MODEL_DIR = MODEL_BASE + "AttentionCAE2/hiddenlabel/"
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01

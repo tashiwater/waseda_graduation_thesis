@@ -34,13 +34,7 @@ if __name__ == "__main__":
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
-        layer_size={
-            "in": in_size,
-            "out": in_size,
-            "io": 50,
-            "cf": cf_num,
-            "cs": 15,
-        },
+        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
     )
@@ -59,10 +53,7 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset,
-        batch_size=1,
-        shuffle=False,
-        num_workers=4,
+        dataset, batch_size=1, shuffle=False, num_workers=4,
     )
 
     net.eval()
@@ -121,3 +112,16 @@ if __name__ == "__main__":
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
         df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
+
+        df_output.iloc[:, :7].plot()
+        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.subplots_adjust(right=0.7)
+        # plt.show()
+        df_output.iloc[:, 41:48].plot()
+        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.subplots_adjust(right=0.7)
+        plt.show()
+        df_output.iloc[:, -3:].plot()
+        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.subplots_adjust(right=0.7)
+        plt.show()

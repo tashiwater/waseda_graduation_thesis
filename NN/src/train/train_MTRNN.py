@@ -33,28 +33,22 @@ if __name__ == "__main__":
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
-    MODEL_BASE = "/media/hdd_1tb/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = "/media/user/ボリューム/model/"
+    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1022/ReLU/"
+    MODEL_DIR = MODEL_BASE + "MTRNN/1022/normalized/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = MTRNN(
-        layer_size={
-            "in": in_size,
-            "out": in_size,
-            "io": 50,
-            "cf": cf_num,
-            "cs": 15,
-        },
+        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
-        activate=torch.nn.ReLU(),
+        activate=torch.nn.Tanh(),
     )
     param_dict = {
         "train_batch_size": len(trainset),

@@ -30,17 +30,19 @@ class AttentionCAE(torch.nn.Module):
         )
         self.get_attention_map = Cell(class_num, 1, 1, 1, 0, "sigmoid")
         self.get_class = torch.nn.Sequential(
-            # torch.nn.Dropout2d(p=0.3),
-            torch.nn.Conv2d(
-                class_num, class_num, 1, stride=1, padding=0
-            ),  # ->8*6*class_num
-            torch.nn.AvgPool2d(kernel_size=(6, 8)),
-            torch.nn.Sigmoid(),
+            # torch.nn.Conv2d(
+            #     class_num, class_num, 1, stride=1, padding=0
+            # ),  # ->8*6*class_num
+            # torch.nn.AvgPool2d(kernel_size=(6, 8)),
+            # torch.nn.Sigmoid(),
+            Cell(hidden_dim, 50, mode="linear"),
+            Cell(50, 50, mode="linear"),
+            Cell(50, class_num, mode="linear", activate="softmax"),
         )
         self.get_hidden = torch.nn.Sequential(
             torch.nn.Flatten(),
             Cell(8 * 6 * 256, 254, mode="linear"),
-            Cell(254, hidden_dim, activate="sigmoid", mode="linear"),
+            Cell(254, hidden_dim, activate="tanh", mode="linear"),
         )
         self.decoder = torch.nn.Sequential(
             Cell(hidden_dim, 254, mode="linear"),
@@ -58,13 +60,14 @@ class AttentionCAE(torch.nn.Module):
         feature_extracted = self.feature_extract(x)
         attention_extracted = self.attention_extract(feature_extracted)
         self.attention_map = self.get_attention_map(attention_extracted)
-        box_class = self.get_class(attention_extracted)  # GAP
+        # box_class = self.get_class(attention_extracted)  # GAP
         temp = feature_extracted * self.attention_map  # dot
         hidden = self.get_hidden(temp)  # flatten
-        return hidden, box_class.view(box_class.size(0), -1)
+        return hidden  # , box_class.view(box_class.size(0), -1)
 
     def forward(self, x):
-        hidden, box_class = self.encoder(x)
+        hidden = self.encoder(x)
+        box_class = self.get_class(hidden)
         x = self.decoder(hidden)
         return x, box_class
 
