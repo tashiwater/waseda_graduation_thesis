@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/2/"
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/3/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)

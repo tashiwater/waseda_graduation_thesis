@@ -11,7 +11,7 @@ from model.CAE import CAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
-DATA_PATH = DATA_DIR + "validate"
+DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = CURRENT_DIR + "/../../../../model/"
@@ -20,7 +20,7 @@ MODEL_DIR = MODEL_BASE + "CAE/theta0/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "20201024_163220_1500.pth"
+model_path = MODEL_DIR + "20201024_160933_1000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -36,6 +36,7 @@ device = torch.device("cuda:0")
 criterion = torch.nn.MSELoss()
 net = net.to(device)
 net.eval()
+count = 1
 for i, (inputs, labels) in enumerate(testloader):
     inputs = inputs.to(device)
     labels = [labels[i].to(device) for i in range(2)]
@@ -48,7 +49,8 @@ for i, (inputs, labels) in enumerate(testloader):
     # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
 
     for j, img in enumerate(outputs.cpu()):
-        MyDataSet.save_img(img, RESULT_DIR + "{}_{}.png".format(i, j))
+        MyDataSet.save_img(img, RESULT_DIR + "{:03d}.png".format(count))
+        count += 1
         # torchvision.utils.save_image(img, RESULT_DIR + "{}_{}.png".format(i, j))
 
 ###model output

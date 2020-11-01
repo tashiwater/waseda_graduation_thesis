@@ -7,6 +7,7 @@ import torch
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -27,14 +28,20 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/1/"
-    load_path = "20201031_090540_40000"  # input("?aa.pth:")
+    MODEL_DIR = MODEL_BASE + "GatedMTRNN4/2/"
+    load_path = "20201031_121651_7000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = GatedMTRNN(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
     )
@@ -53,7 +60,10 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, shuffle=False, num_workers=4,
+        dataset,
+        batch_size=1,
+        shuffle=False,
+        num_workers=4,
     )
 
     net.eval()

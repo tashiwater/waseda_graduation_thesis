@@ -25,7 +25,7 @@ class GatedMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
             torch.nn.Linear(100, 100),
             torch.nn.ReLU(),
             torch.nn.Linear(100, 3),
-            torch.nn.Softmax(dim=1),
+            torch.nn.Sigmoid(),
         )
 
     def init_state(self, batch_size):

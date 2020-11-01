@@ -17,25 +17,31 @@ from model.MTRNN import MTRNN as Net
 if __name__ == "__main__":
     cf_num = 100
     cs_tau = 50
-    open_rate = 0.1
+    open_rate = 0
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
     TEST_PATH = DATA_DIR + "test"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/1022/"
-    load_path = "normalized/20201031_135128_10000"  # input("?aa.pth:")
+    load_path = "normalCAE/20201101_181510_7500"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
@@ -55,7 +61,10 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, shuffle=False, num_workers=4,
+        dataset,
+        batch_size=1,
+        shuffle=False,
+        num_workers=4,
     )
 
     net.eval()
@@ -118,9 +127,11 @@ if __name__ == "__main__":
 
         df_output.iloc[:, :7].plot()
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.title("input")
         plt.subplots_adjust(right=0.7)
         # plt.show()
         df_output.iloc[:, 41:48].plot()
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.title("output")
         plt.subplots_adjust(right=0.7)
         plt.show()
