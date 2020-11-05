@@ -12,9 +12,8 @@ class ToImg(torch.nn.Module):
 
 
 class CAE(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, hidden_dim=15):
         super(CAE, self).__init__()
-        hidden_dim = 15  # 20
         self.encoder = torch.nn.Sequential(
             # 128*96*3
             Cell(3, 32),

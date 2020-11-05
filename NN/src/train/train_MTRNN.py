@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1022/normalCAE/"
+    MODEL_DIR = MODEL_BASE + "MTRNN/1022/mix/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
@@ -81,6 +81,7 @@ if __name__ == "__main__":
                 outputs = torch.zeros_like(labels_transposed)
                 self._optimizer.zero_grad()
                 for i, inputs_t in enumerate(inputs_transposed):
+                    inputs_t = inputs_t.to(self._device)
                     outputs[i] = self._net(inputs_t)
                     """
                 d1 = 0
@@ -110,6 +111,13 @@ if __name__ == "__main__":
             return mean_loss
 
     train_net = TrainNet(
-        net, criterion, trainset, testset, MODEL_DIR, param_dict, load_path
+        net,
+        criterion,
+        trainset,
+        testset,
+        MODEL_DIR,
+        param_dict,
+        load_path,
+        torch.device("cuda:0"),
     )
     train_net.run()

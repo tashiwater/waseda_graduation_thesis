@@ -46,16 +46,23 @@ class ImgPreprocess:
                     for output_dir in output_dirs:
                         image.save(output_dir + "/{:03d}.jpg".format(j))
 
-    def dump_resize_normal(self, size):
+    def dump_resize_normal(self, size, test_span, step_num):
         for i, img_dir in enumerate(self._img_dirs):
             img_paths = [str(p) for p in Path(img_dir).glob("./*")]
             img_paths.sort()
-            output_dir = self._output_dir + "{:03d}".format(i)
-            os.mkdir(output_dir)
-            for j, img_path in enumerate(img_paths):
-                image = Image.open(img_path)
-                image = image.resize(size)
-                image.save(output_dir + "/{:03d}.jpg".format(j))
+            if i % test_span == 0:
+                dir_names = self._test_dir
+            else:
+                dir_names = self._train_dir
+            output_dir = dir_names + "{:03d}".format(i)
+            os.makedirs(output_dir)
+
+            img_num = len(img_paths)
+            for i in range(step_num):
+                if i < img_num:
+                    image = Image.open(img_paths[i])
+                    image = image.resize(size)
+                image.save(output_dir + "/{:03d}.jpg".format(i))
 
 
 if __name__ == "__main__":
@@ -63,9 +70,8 @@ if __name__ == "__main__":
     DATA_DIR = CURRENT_DIR + "/../data/"
     IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1022_theta0/image_raw/"
     # OUTPUT_DIR = DATA_DIR + "image_compressed/"
-    OUTPUT_DIR = (
-        "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE/"
-    )
+    OUTPUT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CNNMTRNN/img/"
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
     # process.extract(50, 200)
-    process.dump_for_learn(size=(128 + 5, 96 + 5), test_span=4, class_num=6)
+    # process.dump_for_learn(size=(128 + 5, 96 + 5), test_span=4, class_num=6)
+    process.dump_resize_normal(size=(128, 96), test_span=4, step_num=185)

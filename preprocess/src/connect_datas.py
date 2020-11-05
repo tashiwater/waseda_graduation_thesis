@@ -101,14 +101,12 @@ if __name__ == "__main__":
         # )
         img_preprocessed = get_meaned_data(img, sequence_num, 1)
         img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
-        connected_data = np.block(
-            [motion_preprocessed, tactile_preprocessed, img_preprocessed]
-        )
+        connected_data = np.block([motion_preprocessed, tactile_preprocessed])
         header = (
             ["position{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["torque{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["tactile{}".format(i) for i in range(tactile_preprocessed.shape[1])]
-            + ["image{}".format(i) for i in range(img.shape[1])]
+            # + ["image{}".format(i) for i in range(img.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
         # test_span = 4

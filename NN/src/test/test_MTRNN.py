@@ -17,7 +17,7 @@ from model.MTRNN import MTRNN as Net
 if __name__ == "__main__":
     cf_num = 100
     cs_tau = 50
-    open_rate = 0
+    open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
@@ -107,6 +107,7 @@ if __name__ == "__main__":
                 np_output,
                 cf_pca,
                 cs_pca,
+                cs_states
                 # attention_map,
             ]  # , io_states, cf_states, cs_states
         )
@@ -120,7 +121,7 @@ if __name__ == "__main__":
             # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
             # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
             # + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
-            # + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
+            + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
         df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
