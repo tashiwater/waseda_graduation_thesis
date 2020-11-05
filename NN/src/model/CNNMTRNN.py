@@ -48,13 +48,13 @@ class CNNMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
         self.mtrnn.init_state(batch_size)
 
     def forward(self, x, img):
-        """
+
         if self.mtrnn.last_output is not None:
             x = x * self.open_rate + self.mtrnn.last_output[:, : -self._hidden_dim] * (
                 1 - self.open_rate
             )
             img = img * self.open_rate + self.last_img * (1 - self.open_rate)
-        """
+
         hidden = self.encoder(img)
         temp = torch.cat([x, hidden], axis=1)
         ret = self.mtrnn(temp)
