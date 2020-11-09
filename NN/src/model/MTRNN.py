@@ -13,7 +13,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         layer_size={"in": 1, "out": 1, "io": 3, "cf": 4, "cs": 5},
         tau={"tau_io": 2, "tau_cf": 5.0, "tau_cs": 70.0},
         open_rate=1,
-        activate=torch.nn.ReLU(),
+        activate=torch.nn.Tanh(),
     ):
         super(MTRNN, self).__init__()
         self.layer_size = layer_size
@@ -114,5 +114,5 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.cf_state = new_cf_state
         self.cs_state = new_cs_state
         y = self.activate(self.io2o(self.io_state))
-        self.last_output = y
+        self.last_output = y.detach()
         return y

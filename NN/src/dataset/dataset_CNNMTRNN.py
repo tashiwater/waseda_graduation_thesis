@@ -7,8 +7,6 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 import random
-from .CAE_utils.argments.crop import random_crop_image
-from .CAE_utils.argments.distort import color_argumentation
 
 
 class MyDataSet(torch.utils.data.Dataset):
@@ -63,17 +61,6 @@ class MyDataSet(torch.utils.data.Dataset):
         image = image.resize((128, 96))
         image = torchvision.transforms.ToTensor()(image)
         return image
-
-    def transform(self, img):
-        img = random_crop_image(img, self.size, test=self.test)
-
-        img_distort = img.copy()
-        if self.distort:
-            if random.randrange(2):  # add random at twice
-                img_distort = color_argumentation(img_distort, pil_range=[0.8, 1.2])
-        img_distort = torchvision.transforms.ToTensor()(img_distort)
-        img = torchvision.transforms.ToTensor()(img)
-        return img_distort, img
 
     @classmethod
     def save_img(self, tensor, filename):

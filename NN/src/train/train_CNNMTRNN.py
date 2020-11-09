@@ -62,7 +62,7 @@ if __name__ == "__main__":
         open_rate=open_rate,
     )
     param_dict = {
-        "train_batch_size": 6,  # len(trainset),
+        "train_batch_size": 9,  # len(trainset),
         "test_batch_size": len(testset),
         "epoch": None,
         "save_span": 50,

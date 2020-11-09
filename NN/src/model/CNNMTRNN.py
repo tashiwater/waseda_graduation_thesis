@@ -23,29 +23,37 @@ class CNNMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
     ):
         super(CNNMTRNN, self).__init__()
         self.open_rate = open_rate
-        self.mtrnn = MTRNN(layer_size, tau, 1)
+        self.mtrnn = MTRNN(layer_size, tau, 1, torch.nn.Tanh())
         self._hidden_dim = 15
 
         self.encoder = torch.nn.Sequential(
             # 128*96*3
-            Cell(3, 16),  # 64*48
-            Cell(16, 32),  # 32*i24
-            Cell(32, 64),  # 16*12
+            Cell(3, 16, on_batchnorm=False),  # 64*48
+            Cell(16, 32, on_batchnorm=False),  # 32*i24
+            Cell(32, 64, on_batchnorm=False),  # 16*12
             torch.nn.Flatten(),
-            Cell(16 * 12 * 64, 254, mode="linear"),
-            Cell(254, self._hidden_dim, activate="sigmoid", mode="linear"),
+            Cell(16 * 12 * 64, 254, mode="linear", on_batchnorm=False),
+            Cell(
+                254,
+                self._hidden_dim,
+                activate="tanh",
+                mode="linear",
+                on_batchnorm=False,
+            ),
         )
         self.decoder = torch.nn.Sequential(
-            Cell(self._hidden_dim, 254, mode="linear"),
-            Cell(254, 16 * 12 * 64, mode="linear"),
+            Cell(self._hidden_dim, 254, mode="linear", on_batchnorm=False),
+            Cell(254, 16 * 12 * 64, mode="linear", on_batchnorm=False),
             ToImg(),
-            Cell(64, 32, mode="conv_trans"),
-            Cell(32, 16, mode="conv_trans"),
+            Cell(64, 32, mode="conv_trans", on_batchnorm=False),
+            Cell(32, 16, mode="conv_trans", on_batchnorm=False),
             Cell(16, 3, mode="conv_trans", activate="relu", on_batchnorm=False),
         )
+        self.last_img = None
 
     def init_state(self, batch_size):
         self.mtrnn.init_state(batch_size)
+        self.last_img = None
 
     def forward(self, x, img):
 
@@ -58,6 +66,7 @@ class CNNMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
         hidden = self.encoder(img)
         temp = torch.cat([x, hidden], axis=1)
         ret = self.mtrnn(temp)
-        self.last_img = self.decoder(ret[:, -self._hidden_dim :])
-
-        return ret[:, : -self._hidden_dim], self.last_img
+        img = self.decoder(ret[:, -self._hidden_dim :])
+        # self.last_motor = ret[:, : -self._hidden_dim]
+        self.last_img = img.detach()
+        return ret[:, : -self._hidden_dim], img
