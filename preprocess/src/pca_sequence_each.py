@@ -22,7 +22,7 @@ datas = np.array(datas)
 imgs = datas[:, :, 26:]
 # imgs = np.vstack(imgs)
 imgs = imgs.reshape(-1, 15)
-components = 2
+components = 5
 pca = PCA(n_components=components).fit_transform(imgs)
 circle_num = 185 * 12
 circle = pca[:circle_num]
@@ -59,23 +59,31 @@ stack[5] = rectangle[one_num * 8 : one_num * 9]
 
 fig, ax = plt.subplots()
 colorlist = ["r", "g", "b", "c", "m", "y", "k", "w"]
-ims = []  # ここに1ステップごとのグラフを格納
 # for i in range(185):
-for k in range(stack_num):
-    ax.plot(
-        stack[k][:60, 0],
-        stack[k][:60, 1],
-        label="{}".format(k),
-        color=colorlist[k],
-        marker="o",
-    )
-    ax.plot(
-        stack[k][:1, 0],
-        stack[k][:1, 1],
-        # label="{}".format(k),
-        color=colorlist[k],
-        marker="x",
-    )
+for i in range(components):
+    axis1 = i
+    for j in range(components - i - 1):
+        axis2 = 1 + j + i
+        for k in range(stack_num):
+            ax.plot(
+                stack[k][:30, axis1],
+                stack[k][:30, axis2],
+                label="{}".format(k),
+                color=colorlist[k],
+                marker="o",
+            )
+
+            ax.plot(
+                stack[k][:1, axis1],
+                stack[k][:1, axis2],
+                # label="{}".format(k),
+                color=colorlist[k],
+                marker="x",
+            )
+        plt.xlabel("pca{}".format(axis1))
+        plt.ylabel("pca{}".format(axis2))
+        plt.legend()
+        plt.show()
 #     p = ax.plot(
 #         stack[5][i, 0],
 #         stack[5][i, 1],
@@ -85,10 +93,9 @@ for k in range(stack_num):
 #     )
 #     ims.append(p)
 # ani = animation.ArtistAnimation(fig, ims, interval=100)  # ArtistAnimationでアニメーションを作成する。
-plt.legend()
-plt.show()
 
-ani.save("animate.gif", writer="imagemagick", dpi=300)  # gifで保存
+
+# ani.save("animate.gif", writer="imagemagick", dpi=300)  # gifで保存
 # data5 = circle
 # data6 = rectangle
 # colorlist = ["r", "g", "b", "c", "m", "y", "k", "w"]
