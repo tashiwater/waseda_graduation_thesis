@@ -29,12 +29,12 @@ if __name__ == "__main__":
     RESULT_DIR = DATA_DIR + "result/motor/"
     img_RESULT_DIR = DATA_DIR + "result/img/"
     MODEL_BASE = "/media/user/ボリューム/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "CNNMTRNN/"
-    load_path = "1022/20201107_085638_4000"  # input("?aa.pth:")
+    load_path = "open1/20201110_042645_1500"  # input("?aa.pth:")
 
     dataset = MyDataSet(
         TEST_PATH, img_TEST_PATH, img_size=(128, 96), is_test=True, dsize=5
@@ -42,7 +42,13 @@ if __name__ == "__main__":
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
     )
@@ -62,7 +68,10 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, shuffle=False, num_workers=4,
+        dataset,
+        batch_size=1,
+        shuffle=False,
+        num_workers=4,
     )
 
     net.eval()

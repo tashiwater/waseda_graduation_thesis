@@ -27,7 +27,7 @@ if __name__ == "__main__":
     #     raise Exception("Fail arg num")
     cf_num = 100
     cs_tau = 50
-    open_rate = 0.1
+    open_rate = 0.9
 
     load_path = input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,11 +38,11 @@ if __name__ == "__main__":
     img_TEST_PATH = DATA_DIR + "img/test"
 
     MODEL_BASE = "/media/user/ボリューム/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "CNNMTRNN/1022/"
+    MODEL_DIR = MODEL_BASE + "CNNMTRNN/open1/"
 
     trainset = MyDataSet(
         TRAIN_PATH,
@@ -57,12 +57,18 @@ if __name__ == "__main__":
     )
     in_size = 41
     net = Net(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
     )
     param_dict = {
-        "train_batch_size": 9,  # len(trainset),
+        "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
         "epoch": None,
         "save_span": 50,

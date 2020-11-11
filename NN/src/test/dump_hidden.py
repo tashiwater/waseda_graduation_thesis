@@ -22,7 +22,7 @@ HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_featur
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "theta0_mix/20201103_161859_500.pth"
+model_path = MODEL_DIR + "transfer/20201111_010150_2000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
