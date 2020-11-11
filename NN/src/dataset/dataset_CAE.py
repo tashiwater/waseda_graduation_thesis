@@ -36,6 +36,7 @@ class MyDataSet(torch.utils.data.Dataset):
             for p in files:
                 img_path = [str(p) for p in Path(p).glob("./*.jpg")][0]
                 img_paths.append(img_path)
+            img_paths *=30
             ###
             """
             img_paths.sort()

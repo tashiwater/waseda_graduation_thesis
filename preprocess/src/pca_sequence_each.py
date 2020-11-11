@@ -57,7 +57,7 @@ stack[5] = rectangle[one_num * 8 : one_num * 9]
 #     data[i] = np.vstack(stack[i])  # [3:]
 # data2 = np.vstack(stack2)
 
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
 colorlist = ["r", "g", "b", "c", "m", "y", "k", "w"]
 # for i in range(185):
 for i in range(components):
@@ -65,23 +65,23 @@ for i in range(components):
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
-            ax.plot(
+            plt.plot(
                 stack[k][:30, axis1],
                 stack[k][:30, axis2],
                 label="{}".format(k),
                 color=colorlist[k],
-                marker="o",
+                # marker="o",
             )
 
-            ax.plot(
+            plt.plot(
                 stack[k][:1, axis1],
                 stack[k][:1, axis2],
                 # label="{}".format(k),
                 color=colorlist[k],
                 marker="x",
             )
-        plt.xlabel("pca{}".format(axis1))
-        plt.ylabel("pca{}".format(axis2))
+        plt.xlabel("pca{}".format(axis1 + 1))
+        plt.ylabel("pca{}".format(axis2 + 1))
         plt.legend()
         plt.show()
 #     p = ax.plot(
