@@ -15,12 +15,12 @@ DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
 MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-MODEL_DIR = MODEL_BASE + "CAE/transfer/"
+MODEL_DIR = MODEL_BASE + "CAE/theta0_mix/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "20201111_010150_2000.pth"
+model_path = MODEL_DIR + "20201103_161859_500.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

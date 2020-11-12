@@ -62,20 +62,21 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k", "w"]
 # for i in range(185):
 for i in range(components):
     axis1 = i
+    start = 120
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
             plt.plot(
-                stack[k][:30, axis1],
-                stack[k][:30, axis2],
+                stack[k][start:, axis1],
+                stack[k][start:, axis2],
                 label="{}".format(k),
                 color=colorlist[k],
                 # marker="o",
             )
 
             plt.plot(
-                stack[k][:1, axis1],
-                stack[k][:1, axis2],
+                stack[k][start : start + 1, axis1],
+                stack[k][start : start + 1, axis2],
                 # label="{}".format(k),
                 color=colorlist[k],
                 marker="x",

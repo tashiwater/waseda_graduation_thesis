@@ -68,10 +68,12 @@ class ImgPreprocess:
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
-    IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1022_theta0/image_raw/"
+    IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1112/image_raw/"
     # OUTPUT_DIR = DATA_DIR + "image_compressed/"
-    OUTPUT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CNNMTRNN/img/"
+    OUTPUT_DIR = (
+        "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE/"
+    )
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
     # process.extract(50, 200)
-    # process.dump_for_learn(size=(128 + 5, 96 + 5), test_span=4, class_num=6)
-    process.dump_resize_normal(size=(128, 96), test_span=4, step_num=185)
+    process.dump_for_learn(size=(128 + 5, 96 + 5), test_span=4, class_num=6)
+    # process.dump_resize_normal(size=(128, 96), test_span=4, step_num=185)
