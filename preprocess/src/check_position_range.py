@@ -7,11 +7,13 @@ import numpy as np
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-dir_path = DATA_DIR + "connect_input/motion_csv/"
+dir_path = DATA_DIR + "connect_input/tactile_raw/"
 paths = [str(p) for p in Path(dir_path).glob("./*.csv")]
 paths.sort()
-dfs = [pd.read_csv(path, header=None).iloc[:, 7:] for path in paths]
+dfs = [pd.read_csv(path, header=None).iloc[:, :] for path in paths]
 df = pd.concat(dfs)
+
+pd.set_option("display.max_columns", 100)
 print(df.describe())
 # for d in dfs:
 #     print(d.head(1))

@@ -13,16 +13,21 @@ def read_csvs(folder_name):
     return ret
 
 
-def get_meaned_data(data, sequence_num, each_sample):
+def get_meaned_data(data, first_step, sequence_num, each_sample):
     can_change_num = min(sequence_num, int(len(data) / each_sample))
-    if each_sample == 1:
-        ret = list(data[:can_change_num])
-    else:
-        ret = [
-            data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
-            for i in range(can_change_num)
-        ]
-    for i in range(sequence_num - len(ret)):
+    ret = [data[0] for _ in range(first_step)]
+
+    for i in range(can_change_num):
+        meaned = data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
+        ret.append(meaned)
+    # if each_sample == 1:
+    #     ret = list(data[:can_change_num])
+    # else:
+    #     ret = [
+    #         data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
+    #         for i in range(can_change_num)
+    #     ]
+    for i in range(first_step + sequence_num - len(ret)):
         ret.append(ret[-1])
     ret = np.array(ret)
     return ret
@@ -50,14 +55,14 @@ if __name__ == "__main__":
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
-
+    first_step = 10
     sequence_num = 160  # len(image_feature_datas[0])
     motion_before_scale = [
-        [1.8, 2.2],
-        [-0.7, 0.140],
+        [1.5, 2],
+        [-1, 0],
         [-0.5, 0],
-        [-0.524, 2.269],
-        [0, 0.6],
+        [0.5, 1.5],
+        [0, 0.5],
         [-0.5, 0.5],
         [-1.396, 0.087],
         [20, 50],
@@ -86,21 +91,25 @@ if __name__ == "__main__":
     #     [-5, 5],
     # ]
     tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
-    image_before_scale = [[0.2, 0.8] for _ in range(image_feature_datas[0].shape[1])]
+    image_before_scale = [[-0.25, 0.25] for _ in range(image_feature_datas[0].shape[1])]
     # image_before_scale = [[0,1] for _ in range(image_feature_data.shape[1])]
     for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
     ):
-        motion_preprocessed = get_meaned_data(motion_data, sequence_num, EACH_SAMPLE)
+        motion_preprocessed = get_meaned_data(
+            motion_data, first_step, sequence_num, EACH_SAMPLE
+        )
         motion_preprocessed = sigmoid_normalize(
             motion_preprocessed, motion_before_scale
         )
-        tactile_preprocessed = get_meaned_data(tactile_data, sequence_num, EACH_SAMPLE)
-        # tactile_preprocessed = sigmoid_normalize(
-        #     tactile_preprocessed, tactile_before_scale
-        # )
-        img_preprocessed = get_meaned_data(img, sequence_num, 1)
-        # img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
+        tactile_preprocessed = get_meaned_data(
+            tactile_data, first_step, sequence_num, EACH_SAMPLE
+        )
+        tactile_preprocessed = sigmoid_normalize(
+            tactile_preprocessed, tactile_before_scale
+        )
+        img_preprocessed = get_meaned_data(img, first_step, sequence_num, 1)
+        img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
         connected_data = np.block(
             [motion_preprocessed, tactile_preprocessed, img_preprocessed]
         )

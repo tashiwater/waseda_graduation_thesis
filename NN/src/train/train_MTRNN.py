@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # else:
     #     raise Exception("Fail arg num")
     cf_num = 100
-    cs_tau = 50
+    cs_tau = 30
     open_rate = 0.1
 
     load_path = input("?.pth:")
@@ -45,7 +45,13 @@ if __name__ == "__main__":
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = MTRNN(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),

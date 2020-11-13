@@ -15,9 +15,10 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
+    is_print = False
     cf_num = 100
     cs_tau = 50
-    open_rate = 1
+    open_rate = 0.1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
@@ -25,6 +26,7 @@ if __name__ == "__main__":
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
     # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = DATA_DIR + "../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
@@ -35,13 +37,19 @@ if __name__ == "__main__":
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
-        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
+        layer_size={
+            "in": in_size,
+            "out": in_size,
+            "io": 50,
+            "cf": cf_num,
+            "cs": 15,
+        },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
     model_path = MODEL_DIR + load_path + ".pth"
-    checkpoint = torch.load(model_path)
+    checkpoint = torch.load(model_path, map_location=torch.device("cpu"))
     net.load_state_dict(checkpoint["model"])
 
     criterion = torch.nn.MSELoss()
@@ -55,7 +63,10 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, shuffle=False, num_workers=4,
+        dataset,
+        batch_size=1,
+        shuffle=False,
+        num_workers=4,
     )
 
     net.eval()
@@ -118,12 +129,13 @@ if __name__ == "__main__":
         df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
 
         df_output.iloc[:, :7].plot()
-        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-        plt.title("input")
-        plt.subplots_adjust(right=0.7)
-        # plt.show()
-        df_output.iloc[:, 41:48].plot()
-        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-        plt.title("output")
-        plt.subplots_adjust(right=0.7)
-        plt.show()
+        if is_print:
+            plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            plt.title("input")
+            plt.subplots_adjust(right=0.7)
+            # plt.show()
+            df_output.iloc[:, 41:48].plot()
+            plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            plt.title("output")
+            plt.subplots_adjust(right=0.7)
+            plt.show()
