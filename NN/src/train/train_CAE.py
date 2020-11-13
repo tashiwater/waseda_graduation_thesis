@@ -17,9 +17,9 @@ if __name__ == "__main__":
     DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
-    MODEL_BASE = "/media/hdd_1tb/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "CAE/1112_transfer/"
+    MODEL_BASE = "/media/user/ボリューム/model/"
+    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_DIR = MODEL_BASE + "CAE/1112_notransfer/"
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01
@@ -27,8 +27,8 @@ if __name__ == "__main__":
     testset = MyDataSet(TEST_PATH, img_size=(128, 96), is_test=True, dsize=5)
     net = Model()
     param_dict = {
-        "train_batch_size": 1000,
-        "test_batch_size": 1000,
+        "train_batch_size": 500,
+        "test_batch_size": 500,
         "epoch": None,
         "save_span": 50,
         "graph_span": 5,

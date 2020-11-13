@@ -24,13 +24,13 @@ imgs = datas[:, :, 26:]
 imgs = imgs.reshape(-1, 15)
 components = 5
 pca = PCA(n_components=components).fit_transform(imgs)
-circle_num = 185 * 12
+circle_num = 160 * 12
 circle = pca[:circle_num]
 rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
-one_num = 185
+one_num = 160
 container_num = 6
 stack_num = 6
 stack = [0 for i in range(stack_num)]
@@ -62,13 +62,14 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k", "w"]
 # for i in range(185):
 for i in range(components):
     axis1 = i
-    start = 120
+    start = 0
+    end = 40
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
             plt.plot(
-                stack[k][start:, axis1],
-                stack[k][start:, axis2],
+                stack[k][start:end, axis1],
+                stack[k][start:end, axis2],
                 label="{}".format(k),
                 color=colorlist[k],
                 # marker="o",

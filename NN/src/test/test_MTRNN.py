@@ -24,24 +24,18 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1022/"
-    load_path = "normalCAE/20201101_181510_7500"  # input("?aa.pth:")
+    MODEL_DIR = MODEL_BASE + "MTRNN/"
+    load_path = "1112/20201112_231444_20000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
-        layer_size={
-            "in": in_size,
-            "out": in_size,
-            "io": 50,
-            "cf": cf_num,
-            "cs": 15,
-        },
+        layer_size={"in": in_size, "out": in_size, "io": 50, "cf": cf_num, "cs": 15,},
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
@@ -61,10 +55,7 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset,
-        batch_size=1,
-        shuffle=False,
-        num_workers=4,
+        dataset, batch_size=1, shuffle=False, num_workers=4,
     )
 
     net.eval()

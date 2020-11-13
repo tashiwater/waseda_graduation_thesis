@@ -51,19 +51,19 @@ if __name__ == "__main__":
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
 
-    sequence_num = 185  # len(image_feature_datas[0])
+    sequence_num = 160  # len(image_feature_datas[0])
     motion_before_scale = [
-        [1.5, 3],
-        [-1, 0.140],
-        [-2, 0],
+        [1.8, 2.2],
+        [-0.7, 0.140],
+        [-0.5, 0],
         [-0.524, 2.269],
-        [-0.5, 2],
-        [-1, 0.5],
+        [0, 0.6],
+        [-0.5, 0.5],
         [-1.396, 0.087],
-        [10, 60],
-        [-10, 30],
-        [-15, 15],
-        [-15, 40],
+        [20, 50],
+        [-10, 20],
+        [-5, 10],
+        [-10, 15],
         [-5, 5],
         [-5, 5],
         [-5, 5],

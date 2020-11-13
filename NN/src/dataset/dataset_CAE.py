@@ -26,7 +26,8 @@ class MyDataSet(torch.utils.data.Dataset):
         self._class_id = []
         class_id = 0
         for class_dir in class_dirs:
-            # img_paths = [str(p) for p in Path(class_dir).glob("./*/*.jpg")]
+            img_paths = [str(p) for p in Path(class_dir).glob("./*/*.jpg")]
+            """
             ### add for trans learning
             files = [str(p) for p in Path(class_dir).glob("./*")]
             files.sort()
@@ -35,13 +36,14 @@ class MyDataSet(torch.utils.data.Dataset):
                 img_path = [str(p) for p in Path(p).glob("./*.jpg")][0]
                 img_paths.append(img_path)
             ###
+            """
             img_paths.sort()
             self._class_id += [class_id for _ in range(len(img_paths))]
             class_id += 1
             self._image_paths += img_paths
-        # self._imgs = [self.get_img(str(p)) for p in self._image_paths]
-        self._imgs = [self.get_img(str(p)) for p in self._image_paths] * 40
-        self._class_id = self._class_id * 40
+        self._imgs = [self.get_img(str(p)) for p in self._image_paths]
+        # self._imgs = [self.get_img(str(p)) for p in self._image_paths] * 40
+        # self._class_id = self._class_id * 40
         self._len = len(self._imgs)
 
     def __len__(self):
