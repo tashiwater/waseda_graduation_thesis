@@ -6,3 +6,4 @@ CAE/data/datacheck
 MTRNN/data/result
 .DS_Store
 NN/data/*/result
+.vscode/*

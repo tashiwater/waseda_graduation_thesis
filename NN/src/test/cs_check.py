@@ -6,11 +6,11 @@ import numpy as np
 from sklearn.decomposition import PCA
 from pathlib import Path
 import matplotlib.pyplot as plt
-from matplotlib import animation
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
 INPUT_PATH = DATA_DIR + "train_output/"
+output_fig_path = DATA_DIR + "fig/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.xlsx")]
 paths.sort()
@@ -18,7 +18,7 @@ datas = []
 for path in paths:
     df = pd.read_excel(path)
     # print(df.shape)
-    datas.append(df)
+    datas.append(df.values)
 datas = np.array(datas)
 cs = datas[:, :, 86:]
 # imgs = np.vstack(imgs)
@@ -45,40 +45,39 @@ stack = [0 for i in range(stack_num)]
 
 
 stack[0] = circle[: one_num * each_container]
-stack[1] = circle[one_num * each_container : one_num * each_container * 2]
-stack[2] = circle[one_num * each_container * 2 : one_num * each_container * 3]
+stack[1] = circle[one_num * each_container: one_num * each_container * 2]
+stack[2] = circle[one_num * each_container * 2: one_num * each_container * 3]
 
 stack[3] = rectangle[: one_num * each_container]
-stack[4] = rectangle[one_num * each_container : one_num * each_container * 2]
-stack[5] = rectangle[one_num * each_container * 2 : one_num * each_container * 3]
+stack[4] = rectangle[one_num * each_container: one_num * each_container * 2]
+stack[5] = rectangle[one_num * each_container * 2: one_num * each_container * 3]
 
-# stack[0] = circle
-# stack[1] = rectangle
 
-# data = [0 for i in range(stack_num)]
-# for i in range(stack_num):
-#     data[i] = np.vstack(stack[i])  # [3:]
-# data2 = np.vstack(stack2)
+# test_dir = DATA_DIR + "result/"
+# paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
+test_dir = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/log/output/"
+paths = [test_dir + "20201114_142506open08cs.csv"]
 
-# fig, ax = plt.subplots()
-test_dir = DATA_DIR + "result/"
-paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 paths.sort()
 datas = []
 for path in paths:
-    df = pd.read_excel(path)
+    # df = pd.read_excel(path)
+    df = pd.read_csv(path)
     # print(df.shape)
-    datas.append(df)
+    datas.append(df.values)
 datas = np.array(datas)
-test_np = datas[:, :, 86:]
+# test_np = datas[:, :, 86:]
+test_np = datas
 test_np = test_np.reshape(-1, 15)
 test_pca = pca_base.transform(test_np)
 
-test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
+test_stack = [test_pca[one_num * i: one_num *
+                       (i + 1)] for i in range(stack_num)]
 
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 # for i in range(185):
+fig = plt.figure()
 for i in range(components):
     axis1 = i
     start = 0
@@ -108,10 +107,11 @@ for i in range(components):
                 test_stack[k][test_start:test_end, axis1],
                 test_stack[k][test_start:test_end, axis2],
                 # label="test{}".format(k),
-                color=colorlist[k],
+                color=colorlist[-1],
                 marker="D",
             )
         plt.xlabel("pca{}".format(axis1 + 1))
         plt.ylabel("pca{}".format(axis2 + 1))
         plt.legend()
         plt.show()
+        fig.savefig(paths[0]+".png")
