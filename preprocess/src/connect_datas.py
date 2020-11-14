@@ -55,7 +55,7 @@ if __name__ == "__main__":
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
-    first_step = 10
+    first_step = 20
     sequence_num = 160  # len(image_feature_datas[0])
     motion_before_scale = [
         [1.5, 2],

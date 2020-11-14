@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # else:
     #     raise Exception("Fail arg num")
     cf_num = 100
-    cs_tau = 30
+    cs_tau = 40
     open_rate = 0.1
 
     load_path = input("?.pth:")
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )

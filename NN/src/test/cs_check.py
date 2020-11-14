@@ -26,7 +26,7 @@ cs = cs.reshape(-1, 15)
 components = 2
 pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
-one_num = 159
+one_num = 179
 container_num = 6
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
@@ -102,12 +102,13 @@ for i in range(components):
             #     color=colorlist[k],
             #     marker="D",
             # )
-            test_start = 50
+            test_start = 0
+            test_end = 179
             plt.scatter(
-                test_stack[k][test_start : test_start + 1, axis1],
-                test_stack[k][test_start : test_start + 1, axis2],
+                test_stack[k][test_start:test_end, axis1],
+                test_stack[k][test_start:test_end, axis2],
                 # label="test{}".format(k),
-                color=colorlist[-1],
+                color=colorlist[k],
                 marker="D",
             )
         plt.xlabel("pca{}".format(axis1 + 1))

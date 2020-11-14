@@ -17,21 +17,21 @@ from model.MTRNN import MTRNN as Net
 if __name__ == "__main__":
     is_print = False
     cf_num = 100
-    cs_tau = 50
-    open_rate = 0.1
+    cs_tau = 40
+    open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
-    TEST_PATH = DATA_DIR + "test"
-    RESULT_DIR = DATA_DIR + "result/"
+    TEST_PATH = DATA_DIR + "train"
+    RESULT_DIR = DATA_DIR + "train_output/"
     MODEL_BASE = "/media/user/ボリューム/model/"
-    # MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_BASE = DATA_DIR + "../model/"
+    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
+    # MODEL_BASE = DATA_DIR + "../model/"
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1112/20201112_231444_20000"  # input("?aa.pth:")
+    load_path = "1112/20201114_100224_5000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
     in_size = 41  # trainset[0][0].shape[1]
