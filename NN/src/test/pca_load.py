@@ -6,29 +6,18 @@ import numpy as np
 from sklearn.decomposition import PCA
 from pathlib import Path
 import matplotlib.pyplot as plt
+import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
 INPUT_PATH = DATA_DIR + "train_output/"
 output_fig_path = DATA_DIR + "fig/"
-# INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
-paths = [str(p) for p in Path(INPUT_PATH).glob("./*.xlsx")]
-paths.sort()
-datas = []
-for path in paths:
-    df = pd.read_excel(path)
-    # print(df.shape)
-    datas.append(df.values)
-datas = np.array(datas)
-cs = datas[:, :, 86:]
-# imgs = np.vstack(imgs)
-cs = cs.reshape(-1, 15)
 
+with open(INPUT_PATH + 'pca.pkl', mode='rb') as f:
+    pca_base = pickle.load(f)
+with open(INPUT_PATH + 'pca_train.pickle', mode='rb') as f:
+    pca = pickle.load(f)
 components = 2
-pca_base = PCA(n_components=components)
-pca = pca_base.fit_transform(cs)
-pk.dump(pca, open(INPUT_PATH + "pca.pkl", "wb"))
-
 
 one_num = 179
 container_num = 6
@@ -60,7 +49,7 @@ stack[5] = rectangle[one_num * each_container * 2: one_num * each_container * 3]
 # test_dir = DATA_DIR + "result/"
 # paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 test_dir = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/log/output/"
-paths = [test_dir + "20201114_142506open08cs.csv"]
+paths = [test_dir + "20201115_171316_type0_open03.csv"]
 
 paths.sort()
 datas = []
@@ -70,8 +59,7 @@ for path in paths:
     # print(df.shape)
     datas.append(df.values)
 datas = np.array(datas)
-# test_np = datas[:, :, 86:]
-test_np = datas
+test_np = datas[:, :, 82:]
 test_np = test_np.reshape(-1, 15)
 test_pca = pca_base.transform(test_np)
 
@@ -106,7 +94,7 @@ for i in range(components):
             #     marker="D",
             # )
             test_start = 0
-            test_end = 179
+            test_end = 220
             plt.scatter(
                 test_stack[k][test_start:test_end, axis1],
                 test_stack[k][test_start:test_end, axis2],
