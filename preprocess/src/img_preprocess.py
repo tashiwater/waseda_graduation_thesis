@@ -68,7 +68,7 @@ class ImgPreprocess:
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
-    IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1112/image_raw/"
+    IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1116/image_raw/"
     # OUTPUT_DIR = DATA_DIR + "image_compressed/"
     OUTPUT_DIR = (
         "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE/"

@@ -21,16 +21,16 @@ for path in paths:
     # print(df.shape)
     datas.append(df.values)
 datas = np.array(datas)
-cs = datas[:, :, 86:]
+cs = datas[:, :, 94:]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, 15)
 
 components = 2
 pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
-with open(INPUT_PATH + 'pca.pkl', mode='wb') as f:
+with open(INPUT_PATH + "pca.pkl", mode="wb") as f:
     pickle.dump(pca_base, f, protocol=4)
-with open(INPUT_PATH + 'pca_train.pickle', mode='wb') as f:
+with open(INPUT_PATH + "pca_train.pickle", mode="wb") as f:
     pickle.dump(pca, f, protocol=4)
 
 # one_num = 179

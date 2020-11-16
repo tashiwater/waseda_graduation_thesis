@@ -13,12 +13,14 @@ def read_csvs(folder_name):
     return ret
 
 
-def get_meaned_data(data, first_step, sequence_num, each_sample):
-    can_change_num = min(sequence_num, int(len(data) / each_sample))
+def get_meaned_data(data, first_step, sequence_num, each_sample, start_index):
+    can_change_num = min(sequence_num, int(len(data[start_index:]) / each_sample))
     ret = [data[0] for _ in range(first_step)]
 
     for i in range(can_change_num):
-        meaned = data[i * each_sample : i * each_sample + each_sample].mean(axis=0)
+        meaned = data[
+            start_index + i * each_sample : start_index + i * each_sample + each_sample
+        ].mean(axis=0)
         ret.append(meaned)
     # if each_sample == 1:
     #     ret = list(data[:can_change_num])
@@ -55,14 +57,16 @@ if __name__ == "__main__":
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
-    first_step = 20
-    sequence_num = 160  # len(image_feature_datas[0])
+    start_index = 132
+    first_step = 0
+    sequence_num = 100  # len(image_feature_datas[0])
+
     motion_before_scale = [
         [1.5, 2],
         [-1, 0],
         [-0.5, 0],
         [0.5, 1.5],
-        [0, 0.5],
+        [0, 1],
         [-0.5, 0.5],
         [-1.396, 0.087],
         [20, 50],
@@ -91,33 +95,36 @@ if __name__ == "__main__":
     #     [-5, 5],
     # ]
     tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
-    image_before_scale = [[-0.25, 0.25] for _ in range(image_feature_datas[0].shape[1])]
+    # image_before_scale = [[-0.25, 0.25] for _ in range(image_feature_datas[0].shape[1])]
     # image_before_scale = [[0,1] for _ in range(image_feature_data.shape[1])]
     for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
     ):
         motion_preprocessed = get_meaned_data(
-            motion_data, first_step, sequence_num, EACH_SAMPLE
+            motion_data, first_step, sequence_num, EACH_SAMPLE, start_index
         )
         motion_preprocessed = sigmoid_normalize(
             motion_preprocessed, motion_before_scale
         )
         tactile_preprocessed = get_meaned_data(
-            tactile_data, first_step, sequence_num, EACH_SAMPLE
+            tactile_data, first_step, sequence_num, EACH_SAMPLE, start_index
         )
         tactile_preprocessed = sigmoid_normalize(
             tactile_preprocessed, tactile_before_scale
         )
-        img_preprocessed = get_meaned_data(img, first_step, sequence_num, 1)
-        img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
+        # img_preprocessed = get_meaned_data(
+        #     img, first_step, sequence_num, 1, start_index
+        # )
+        # img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
         connected_data = np.block(
-            [motion_preprocessed, tactile_preprocessed, img_preprocessed]
+            # [motion_preprocessed, tactile_preprocessed, img_preprocessed]
+            [motion_preprocessed, tactile_preprocessed]
         )
         header = (
             ["position{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["torque{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["tactile{}".format(i) for i in range(tactile_preprocessed.shape[1])]
-            + ["image{}".format(i) for i in range(img.shape[1])]
+            # + ["image{}".format(i) for i in range(img.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
         # test_span = 4

@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # else:
     #     raise Exception("Fail arg num")
     cf_num = 100
-    cs_tau = 40
+    cs_tau = 30
     open_rate = 0.1
 
     load_path = input("?.pth:")
@@ -38,11 +38,11 @@ if __name__ == "__main__":
     # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
     #     int(open_rate * 10), name
     # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1112/"
+    MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
-    in_size = 41  # trainset[0][0].shape[1]
+    in_size = 45  # trainset[0][0].shape[1]
     position_dims = 7
     net = MTRNN(
         layer_size={
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
-        "dims": [41],
+        "dims": [45],
         "loss_rates": [1],
         # "learn_rate": 0.01,
         # "betas": (0.999, 0.999),
@@ -118,6 +118,6 @@ if __name__ == "__main__":
         MODEL_DIR,
         param_dict,
         load_path,
-        torch.device("cuda:0"),
+        # torch.device("cuda:0"),
     )
     train_net.run()

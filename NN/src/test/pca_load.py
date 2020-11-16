@@ -13,13 +13,13 @@ DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
 INPUT_PATH = DATA_DIR + "train_output/"
 output_fig_path = DATA_DIR + "fig/"
 
-with open(INPUT_PATH + 'pca.pkl', mode='rb') as f:
+with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
     pca_base = pickle.load(f)
-with open(INPUT_PATH + 'pca_train.pickle', mode='rb') as f:
+with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
 components = 2
 
-one_num = 179
+one_num = 149
 container_num = 6
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
@@ -38,33 +38,33 @@ stack = [0 for i in range(stack_num)]
 
 
 stack[0] = circle[: one_num * each_container]
-stack[1] = circle[one_num * each_container: one_num * each_container * 2]
-stack[2] = circle[one_num * each_container * 2: one_num * each_container * 3]
+stack[1] = circle[one_num * each_container : one_num * each_container * 2]
+stack[2] = circle[one_num * each_container * 2 : one_num * each_container * 3]
 
 stack[3] = rectangle[: one_num * each_container]
-stack[4] = rectangle[one_num * each_container: one_num * each_container * 2]
-stack[5] = rectangle[one_num * each_container * 2: one_num * each_container * 3]
+stack[4] = rectangle[one_num * each_container : one_num * each_container * 2]
+stack[5] = rectangle[one_num * each_container * 2 : one_num * each_container * 3]
 
 
-# test_dir = DATA_DIR + "result/"
-# paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
-test_dir = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/log/output/"
-paths = [test_dir + "20201115_171316_type0_open03.csv"]
+test_dir = DATA_DIR + "result/"
+paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
+# test_dir = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/log/output/"
+# paths = [test_dir + "20201115_171316_type0_open03.csv"]
 
 paths.sort()
 datas = []
 for path in paths:
-    # df = pd.read_excel(path)
-    df = pd.read_csv(path)
+    df = pd.read_excel(path)
+    # df = pd.read_csv(path)
     # print(df.shape)
     datas.append(df.values)
 datas = np.array(datas)
-test_np = datas[:, :, 82:]
+# test_np = datas[:, :, 82:]
+test_np = datas[:, :, 94:]
 test_np = test_np.reshape(-1, 15)
 test_pca = pca_base.transform(test_np)
 
-test_stack = [test_pca[one_num * i: one_num *
-                       (i + 1)] for i in range(stack_num)]
+test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
 
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
@@ -73,7 +73,7 @@ fig = plt.figure()
 for i in range(components):
     axis1 = i
     start = 0
-    end = 159 * 3
+    end = one_num * each_container
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
@@ -99,11 +99,11 @@ for i in range(components):
                 test_stack[k][test_start:test_end, axis1],
                 test_stack[k][test_start:test_end, axis2],
                 # label="test{}".format(k),
-                color=colorlist[-1],
+                color=colorlist[k],
                 marker="D",
             )
         plt.xlabel("pca{}".format(axis1 + 1))
         plt.ylabel("pca{}".format(axis2 + 1))
         plt.legend()
         plt.show()
-        fig.savefig(paths[0]+".png")
+        fig.savefig(paths[0] + ".png")

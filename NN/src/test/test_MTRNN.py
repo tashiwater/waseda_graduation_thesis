@@ -17,13 +17,13 @@ from model.MTRNN import MTRNN as Net
 if __name__ == "__main__":
     is_print = False
     cf_num = 100
-    cs_tau = 40
+    cs_tau = 30
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
-    TEST_PATH = DATA_DIR + "train"
-    RESULT_DIR = DATA_DIR + "train_output/"
+    TEST_PATH = DATA_DIR + "test"
+    RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     # MODEL_BASE = DATA_DIR + "../model/"
@@ -31,10 +31,10 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1112/20201114_100224_5000"  # input("?aa.pth:")
+    load_path = "1116/20201116_193034_5000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
-    in_size = 41  # trainset[0][0].shape[1]
+    in_size = 45  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         layer_size={
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         return (
             [add_word + "position{}".format(i) for i in range(7)]
             + [add_word + "torque{}".format(i) for i in range(7)]
-            + [add_word + "tactile{}".format(i) for i in range(12)]
+            + [add_word + "tactile{}".format(i) for i in range(16)]
             + [add_word + "image{}".format(i) for i in range(15)]
         )
 
