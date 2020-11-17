@@ -21,7 +21,7 @@ for path in paths:
     # print(df.shape)
     datas.append(df.values)
 datas = np.array(datas)
-cs = datas[:, :, 94:]
+cs = datas[:, :, 64:]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, 15)
 

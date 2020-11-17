@@ -18,7 +18,7 @@ if __name__ == "__main__":
     is_print = False
     cf_num = 100
     cs_tau = 30
-    open_rate = 1
+    open_rate = 0.1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
@@ -31,10 +31,10 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1116/20201116_193034_5000"  # input("?aa.pth:")
+    load_path = "1116_noimg/20201116_224325_5000"  # input("?aa.pth:")
 
     dataset = MyDataSet(TEST_PATH)
-    in_size = 45  # trainset[0][0].shape[1]
+    in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         layer_size={
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             [add_word + "position{}".format(i) for i in range(7)]
             + [add_word + "torque{}".format(i) for i in range(7)]
             + [add_word + "tactile{}".format(i) for i in range(16)]
-            + [add_word + "image{}".format(i) for i in range(15)]
+            # + [add_word + "image{}".format(i) for i in range(15)]
         )
 
     dataloader = torch.utils.data.DataLoader(

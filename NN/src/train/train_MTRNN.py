@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
-    in_size = 45  # trainset[0][0].shape[1]
+    in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
     net = MTRNN(
         layer_size={

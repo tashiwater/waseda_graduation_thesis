@@ -19,7 +19,7 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
 components = 2
 
-one_num = 149
+one_num = 99
 container_num = 6
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
@@ -60,7 +60,7 @@ for path in paths:
     datas.append(df.values)
 datas = np.array(datas)
 # test_np = datas[:, :, 82:]
-test_np = datas[:, :, 94:]
+test_np = datas[:, :, 64:]
 test_np = test_np.reshape(-1, 15)
 test_pca = pca_base.transform(test_np)
 
@@ -93,8 +93,9 @@ for i in range(components):
             #     color=colorlist[k],
             #     marker="D",
             # )
+
             test_start = 0
-            test_end = 220
+            test_end = 200
             plt.scatter(
                 test_stack[k][test_start:test_end, axis1],
                 test_stack[k][test_start:test_end, axis2],
