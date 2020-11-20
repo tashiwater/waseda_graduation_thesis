@@ -12,33 +12,25 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN import MTRNN
 
 if __name__ == "__main__":
-    # argnum = len(sys.argv)
-    # if argnum == 1:
-    #     name = input("file name :")
-    #     cf_num = int(input("cf_num (default = 200):"))
-    #     cs_tau = int(input("cs_tau (default = 50):"))
-    # elif argnum == 5:
-    #     _, name, cf_num, cs_tau, open_rate = sys.argv
-    #     cf_num = int(cf_num)
-    #     cs_tau = int(cs_tau)
-    #     open_rate = float(open_rate)
-    # else:
-    #     raise Exception("Fail arg num")
-    cf_num = 100
-    cs_tau = 30
+    argnum = len(sys.argv)
+    if argnum == 3:
+        _, cf_num, cs_num = sys.argv
+        cf_num = int(cf_num)
+        cs_num = int(cs_num)
+    else:
+        raise Exception("Fail arg num")
     open_rate = 0.1
 
-    load_path = input("?.pth:")
+    load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
-    #     int(open_rate * 10), name
-    # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg/"
+    MODEL_DIR = MODEL_BASE + "MTRNN/1119_{}_{}/".format(cf_num, cs_num)
+    os.makedirs(MODEL_DIR)
+    # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
     trainset = MyDataSet(TRAIN_PATH)
     testset = MyDataSet(TEST_PATH)
@@ -49,17 +41,17 @@ if __name__ == "__main__":
             "in": in_size,
             "out": in_size,
             "io": 50,
-            "cf": cf_num,
-            "cs": 15,
+            "cf": cf_num,  # 70,80,90,100
+            "cs": cs_num,  # 8,10,12,15
         },
-        tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
+        tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
     param_dict = {
         "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
-        "epoch": None,
+        "epoch": 10000,
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,

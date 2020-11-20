@@ -8,6 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
+cs_num = 8
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
 INPUT_PATH = DATA_DIR + "train_output/"
@@ -23,7 +24,7 @@ for path in paths:
 datas = np.array(datas)
 cs = datas[:, :, 64:]
 # imgs = np.vstack(imgs)
-cs = cs.reshape(-1, 15)
+cs = cs.reshape(-1, cs_num)
 
 components = 2
 pca_base = PCA(n_components=components)

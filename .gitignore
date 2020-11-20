@@ -6,4 +6,5 @@ CAE/data/datacheck
 MTRNN/data/result
 .DS_Store
 NN/data/*/result
+NN/data/GatedMTRNN/train_output/*
 .vscode/*

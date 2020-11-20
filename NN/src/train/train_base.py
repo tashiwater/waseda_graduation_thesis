@@ -5,6 +5,7 @@ import torch
 import matplotlib.pyplot as plt
 import datetime
 import pandas as pd
+import os
 
 
 class TrainBase:
@@ -42,13 +43,13 @@ class TrainBase:
             trainset,
             batch_size=self._param_dict["train_batch_size"],
             shuffle=True,
-            num_workers=12,
+            num_workers=os.cpu_count(),
         )
         self._testloader = torch.utils.data.DataLoader(
             testset,
             batch_size=self._param_dict["test_batch_size"],
             shuffle=False,
-            num_workers=12,
+            num_workers=os.cpu_count(),
         )
         self._criterion = criterion
         self._optimizer = torch.optim.Adam(
@@ -64,6 +65,8 @@ class TrainBase:
 
         if load_path != "":
             self.load_model(load_path)
+
+        torch.backends.cudnn.benchmark = True
 
     def load_model(self, filename):
 

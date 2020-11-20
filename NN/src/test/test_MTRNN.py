@@ -16,9 +16,9 @@ from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = False
-    cf_num = 100
-    cs_tau = 30
-    open_rate = 0.1
+    cf_num = 70
+    cs_num = 8
+    open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1116_noimg/20201116_224325_5000"  # input("?aa.pth:")
-
+    # load_path = "1116_10000/{}_{}".format(cf_num, cs_num)  # input("?aa.pth:")
+    load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
@@ -42,9 +42,9 @@ if __name__ == "__main__":
             "out": in_size,
             "io": 50,
             "cf": cf_num,
-            "cs": 15,
+            "cs": cs_num,
         },
-        tau={"tau_io": 2, "tau_cf": 5, "tau_cs": cs_tau},
+        tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
@@ -134,7 +134,7 @@ if __name__ == "__main__":
             plt.title("input")
             plt.subplots_adjust(right=0.7)
             # plt.show()
-            df_output.iloc[:, 41:48].plot()
+            df_output.iloc[:, 30:37].plot()
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
             plt.title("output")
             plt.subplots_adjust(right=0.7)

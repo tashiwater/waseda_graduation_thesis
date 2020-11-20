@@ -55,27 +55,28 @@ if __name__ == "__main__":
     # ~/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/"
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
-    image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
+    image_feature_datas = tactile_datas
+    # image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
-    start_index = 132
+    start_index = 0
     first_step = 0
-    sequence_num = 100  # len(image_feature_datas[0])
+    sequence_num = 160  # len(image_feature_datas[0])
 
     motion_before_scale = [
         [1.5, 2],
-        [-1, 0],
-        [-0.5, 0],
-        [0.5, 1.5],
+        [-1, 0.1],
+        [-0.5, 0.1],
+        [1, 2],
         [0, 1],
         [-0.5, 0.5],
-        [-1.396, 0.087],
+        [-1.396, -1],
         [20, 50],
         [-10, 20],
+        [-10, 10],
+        [-10, 10],
+        [-5, 5],
+        [-5, 5],
         [-5, 10],
-        [-10, 15],
-        [-5, 5],
-        [-5, 5],
-        [-5, 5],
     ]
 
     # motion_before_scale = [
