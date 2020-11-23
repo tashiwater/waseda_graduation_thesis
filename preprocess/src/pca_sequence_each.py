@@ -19,18 +19,18 @@ for path in paths:
     df = pd.read_csv(path)
     datas.append(df)
 datas = np.array(datas)
-imgs = datas[:, :, 26:]
+one_num = 10
+imgs = datas[:, 0:one_num, 30:]
 # imgs = np.vstack(imgs)
 imgs = imgs.reshape(-1, 15)
 components = 5
 pca = PCA(n_components=components).fit_transform(imgs)
-circle_num = 160 * 12
-circle = pca[:circle_num]
-rectangle = pca[circle_num:]
+# circle_num = 160 * 12
+# circle = pca[:circle_num]
+# rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
-
-one_num = 160
+each_container = 4
 container_num = 6
 stack_num = 6
 stack = [0 for i in range(stack_num)]
@@ -41,14 +41,17 @@ stack = [0 for i in range(stack_num)]
 # stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
 
 
-stack[0] = circle[:one_num]
-stack[1] = circle[one_num * 4 : one_num * 5]
-stack[2] = circle[one_num * 8 : one_num * 9]
+# stack[0] = circle[:one_num]
+# stack[1] = circle[one_num * 4 : one_num * 5]
+# stack[2] = circle[one_num * 8 : one_num * 9]
 
-stack[3] = rectangle[:one_num]
-stack[4] = rectangle[one_num * 4 : one_num * 5]
-stack[5] = rectangle[one_num * 8 : one_num * 9]
-
+# stack[3] = rectangle[:one_num]
+# stack[4] = rectangle[one_num * 4 : one_num * 5]
+# stack[5] = rectangle[one_num * 8 : one_num * 9]
+stack = [
+    pca[one_num * i * each_container : one_num * (i + 1) * each_container]
+    for i in range(stack_num)
+]
 # stack[0] = circle
 # stack[1] = rectangle
 
@@ -63,16 +66,16 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k", "w"]
 for i in range(components):
     axis1 = i
     start = 0
-    end = 40
+    end = -1
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
-            plt.plot(
+            plt.scatter(
                 stack[k][start:end, axis1],
                 stack[k][start:end, axis2],
                 label="{}".format(k),
                 color=colorlist[k],
-                # marker="o",
+                marker="o",
             )
 
             plt.plot(
@@ -80,7 +83,7 @@ for i in range(components):
                 stack[k][start : start + 1, axis2],
                 # label="{}".format(k),
                 color=colorlist[k],
-                marker="x",
+                # marker="x",
             )
         plt.xlabel("pca{}".format(axis1 + 1))
         plt.ylabel("pca{}".format(axis2 + 1))

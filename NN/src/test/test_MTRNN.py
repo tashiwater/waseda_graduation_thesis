@@ -16,9 +16,9 @@ from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = False
-    cf_num = 70
-    cs_num = 8
-    open_rate = 1
+    cf_num = 80
+    cs_num = 10
+    open_rate = 0
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    # load_path = "1116_10000/{}_{}".format(cf_num, cs_num)  # input("?aa.pth:")
-    load_path = "1119_70_8/20201120_001102_10000finish"
+    load_path = "1119_10000/{}_{}".format(cf_num, cs_num)  # input("?aa.pth:")
+    # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
