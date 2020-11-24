@@ -23,11 +23,12 @@ HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_featur
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1119/"
+model_path = MODEL_DIR + "1123/"
 paths = [str(p) for p in Path(model_path).glob("./*finish.pth")]
 if len(paths) != 1:
     raise FileExistsError("there are {} finish.pth".format(len(paths)))
 model_path = paths[0]
+print(model_path)
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -58,3 +59,4 @@ for j, img_dir in enumerate(img_dirs):  # deal with each file
             outputs.to("cpu").detach().numpy(),
             delimiter=",",
         )
+        print(HIDDEN_DIR + "{:03}.csv".format(j)
