@@ -15,12 +15,12 @@ class AttentionMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
         # self._position_dims = 7  # layer_size["out"]
         # sensor_dims = layer_size["in"] - self._position_dims
         self.attention = torch.nn.Sequential(
-            torch.nn.Linear(layer_size["cs"], 100),
+            torch.nn.Linear(layer_size["in"] + layer_size["cs"], 100),
             torch.nn.ReLU(),
             torch.nn.Linear(100, 100),
             torch.nn.ReLU(),
             torch.nn.Linear(100, 2),
-            torch.nn.ReLU(),
+            torch.nn.Softmax(dim=1),
         )
 
     def init_state(self, batch_size):
@@ -29,7 +29,8 @@ class AttentionMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
     def forward(self, x):
         if self.mtrnn.last_output is not None:  # start val is not changed by open_rate
             x = self.open_rate * x + self.mtrnn.last_output * (1 - self.open_rate)
-        temp = self.attention(self.mtrnn.cs_state)
+        attention_in = torch.cat([x, self.mtrnn.cs_state], axis=1)
+        temp = self.attention(attention_in)
         self.attention_map = torch.ones_like(x)
         self.attention_map[:, 7:30] = temp[:, 0].unsqueeze(1).repeat(1, 23)
         self.attention_map[:, 30:] = temp[:, 1].unsqueeze(1).repeat(1, 15)

@@ -33,7 +33,7 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1123/attention/"
+    MODEL_DIR = MODEL_BASE + "MTRNN/1123/attention_after_relu/"
     # os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
@@ -53,9 +53,9 @@ if __name__ == "__main__":
         activate=torch.nn.Tanh(),
     )
     param_dict = {
-        "train_batch_size": len(trainset),
-        "test_batch_size": len(testset),
-        "epoch": None,
+        "train_batch_size": 1,
+        "test_batch_size": 1,
+        "epoch": 10000,
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
@@ -73,15 +73,27 @@ if __name__ == "__main__":
                 labels_transposed = one_batch_labels.transpose(1, 0)
                 self._net.init_state(inputs_transposed.shape[1])
                 outputs = torch.zeros_like(labels_transposed)
-                label_attention = torch.zeros_like(labels_transposed)
+                # label_attention = torch.zeros_like(labels_transposed)
                 self._optimizer.zero_grad()
+                torch.autograd.set_detect_anomaly(True)
+                loss = []
                 for i, inputs_t in enumerate(inputs_transposed):
                     inputs_t = inputs_t.to(self._device)
                     outputs[i] = self._net(inputs_t)
-                    outputs[i] = outputs[i] * self._net.attention_map
-                    label_attention[i] = labels_transposed * self._net.attention_map
-                loss = self._criterion(outputs, label_attention)
-                # loss = sum(loss)
+                    attention_map = self._net.attention_map.detach()
+                    loss += [
+                        self._criterion(outputs[i, :, :7], labels_transposed[i, :, :7]),
+                        self._criterion(
+                            outputs[i, :, 7:30], labels_transposed[i, :, 7:30]
+                        )
+                        * attention_map[0, 7],
+                        self._criterion(
+                            outputs[i, :, 30:], labels_transposed[i, :, 30:]
+                        )
+                        * attention_map[0, 30],
+                    ]
+
+                loss = sum(loss)
                 if mode == "train":
                     # sum(loss).backward()
                     # pritn(self._net.cs2cs.parameters.grad)
