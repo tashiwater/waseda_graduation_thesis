@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from dataset.dataset_MTRNN import MyDataSet
-from model.AttentionMTRNN import AttentionMTRNN as Net
+from model.Takahashi2 import AttentionMTRNN as Net
 
 if __name__ == "__main__":
     is_print = True
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1123/attention/20201125_125102_5000"  # input("?aa.pth:")
+    load_path = "1123/attentions/takahashiplus_sigmoid_noloss/20201126_142614_5000finish"  # input("?aa.pth:")
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 45  # trainset[0][0].shape[1]
@@ -45,7 +45,8 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
-        activate=torch.nn.Tanh(),
+        # activate=torch.nn.Softmax(dim=1),
+        activate=torch.nn.Sigmoid(),
     )
     model_path = MODEL_DIR + load_path + ".pth"
     checkpoint = torch.load(model_path, map_location=torch.device("cpu"))
@@ -76,26 +77,36 @@ if __name__ == "__main__":
         net.init_state(inputs_transposed.shape[1])
         outputs = torch.zeros_like(labels_transposed)
         attention_map = torch.zeros_like(labels_transposed)
+        extracted = torch.zeros_like(labels_transposed)
         cs_states = []
         for i, inputs_t in enumerate(inputs_transposed):
             outputs[i] = net(inputs_t)
             attention_map[i] = net.attention_map
+            extracted[i] = net.extracted
             cs_states.append(net.mtrnn.cs_state.view(-1).detach().numpy())
             # attention_map.append(net.attention_map.view(-1).detach().numpy())
         posi_loss = criterion(outputs[:, :, :7], labels_transposed[:, :, :7])
+        tactile_loss = criterion(outputs[:, :, 7:30], labels_transposed[:, :, 7:30])
+        img_loss = criterion(outputs[:, :, 30:], labels_transposed[:, :, 30:])
         loss = criterion(outputs, labels_transposed)
-        print("loss={} / {}".format(posi_loss.item(), loss.item()))
+        print(
+            "loss={}, {}, {} / {}".format(
+                posi_loss.item(), tactile_loss.item(), img_loss.item(), loss.item()
+            )
+        )
 
         cs_states = np.array(cs_states)
         np_input = labels_transposed.view(-1, in_size).detach().numpy()
         np_output = outputs.view(-1, in_size).detach().numpy()
         attention_map = attention_map.view(-1, in_size).detach().numpy()
+        extracted = extracted.view(-1, in_size).detach().numpy()
         connected_data = np.hstack(
             [
                 np_input,
                 np_output,
                 attention_map,
-                cs_states
+                cs_states,
+                extracted
                 # attention_map,
             ]  # , io_states, cf_states, cs_states
         )
@@ -109,6 +120,7 @@ if __name__ == "__main__":
             # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
             # + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
             + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
+            + get_header("extracted ")
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
         df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
@@ -122,5 +134,16 @@ if __name__ == "__main__":
             df_output.iloc[:, 45:52].plot()
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
             plt.title("output")
+            plt.subplots_adjust(right=0.7)
+
+            df_output.iloc[:, 119:121].plot()
+            plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            plt.title("attention")
+            plt.subplots_adjust(right=0.7)
+            plt.show()
+
+            df_output.iloc[:, 152:175].plot()
+            plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            plt.title("extracted")
             plt.subplots_adjust(right=0.7)
             plt.show()

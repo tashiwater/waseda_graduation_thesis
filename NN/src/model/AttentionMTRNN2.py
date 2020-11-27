@@ -20,7 +20,7 @@ class AttentionMTRNN(torch.nn.Module):  # [TODO]cannot use GPU now
             torch.nn.Linear(100, 100),
             torch.nn.ReLU(),
             torch.nn.Linear(100, 2),
-            torch.nn.Softmax(dim=1),
+            activate,
         )
 
     def init_state(self, batch_size):

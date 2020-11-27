@@ -31,13 +31,17 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.cs2cs = nn.Linear(self.layer_size["cs"], self.layer_size["cs"])
         self.activate = activate
 
-    def init_state(self, batch_size):
+    def init_state(self, batch_size, cs0=None):
         device = next(self.parameters()).device
         self.last_output = None
         self.io_state = torch.zeros(size=(batch_size, self.layer_size["io"])).to(device)
         self.cf_state = torch.zeros(size=(batch_size, self.layer_size["cf"])).to(device)
-        self.cs_state = torch.zeros(size=(batch_size, self.layer_size["cs"])).to(device)
-
+        if cs0 is None:
+            self.cs_state = torch.zeros(size=(batch_size, self.layer_size["cs"])).to(
+                device
+            )
+        else:
+            self.cs_state = cs0
         # fill_value = 0
         # self.last_output = torch.full(
         #     size=(batch_size, self.layer_size["out"]), fill_value=fill_value,

@@ -48,11 +48,14 @@ def sigmoid_normalize(data, before_scale):
 
 
 if __name__ == "__main__":
+    dump_directly = False
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
-    # ~/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/"
+    if dump_directly:
+        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/MTRNN_cs/"
+
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = tactile_datas
@@ -133,7 +136,15 @@ if __name__ == "__main__":
         #     file_path = RESULT_DIR + "test/{:03}.csv".format(i)
         # else:
         #     file_path = RESULT_DIR + "train/{:03}.csv".format(i)
-        file_path = RESULT_DIR + "{:03}.csv".format(i)
+        if dump_directly:
+            test_span = 4
+            if i % test_span == 0:
+                file_path = RESULT_DIR + "test/{:03}.csv".format(i)
+            else:
+                file_path = RESULT_DIR + "train/{:03}.csv".format(i)
+        else:
+            file_path = RESULT_DIR + "{:03}.csv".format(i)
+        # file_path = RESULT_DIR + "{:03}.csv".format(i)
         df.to_csv(file_path, index=False)
         #     connected_datas.append(connected_data)
         # connected_datas = np.ndarray(connected_datas)

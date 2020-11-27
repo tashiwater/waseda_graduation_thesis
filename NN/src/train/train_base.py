@@ -67,6 +67,10 @@ class TrainBase:
             self.load_model(load_path)
 
         torch.backends.cudnn.benchmark = True
+        self.init()
+
+    def init(self):
+        pass
 
     def load_model(self, filename):
 
@@ -180,6 +184,7 @@ class TrainBase:
         plt.legend(["train loss", "test loss"])
         plt.title("loss")
         plt.savefig(self._model_dir + "loss_image.png")
+        plt.clf()
 
     def _log_loss(self, epoch, train_mean_loss, test_mean_loss):
         self._graph_epoch.append(epoch)

@@ -26,7 +26,7 @@ if __name__ == "__main__":
     #     raise Exception("Fail arg num")
     open_rate = 0.1
     cf_num, cs_num = 80, 10
-    load_path = ""  # input("?.pth:")
+    load_path = input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_all/"
     TRAIN_PATH = DATA_DIR + "train"
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
-        activate=torch.nn.Tanh(),
+        activate=torch.nn.ReLU(),
     )
     param_dict = {
         "train_batch_size": len(trainset),
@@ -75,7 +75,7 @@ if __name__ == "__main__":
                 outputs = torch.zeros_like(labels_transposed)
                 label_attention = torch.zeros_like(labels_transposed)
                 self._optimizer.zero_grad()
-                torch.autograd.set_detect_anomaly(True)
+                # torch.autograd.set_detect_anomaly(True)
                 for i, inputs_t in enumerate(inputs_transposed):
                     inputs_t = inputs_t.to(self._device)
                     outputs[i] = self._net(inputs_t)

@@ -1,0 +1,3 @@
+python train_AttentionMTRNN_sqrt.py takahashi_extract_sigmoid 20201126_132850_1300
+python train_AttentionMTRNN_noloss.py attention_takahashi_extract_sigmoid_noloss sigmoid &
+python train_AttentionMTRNN_sqrt2.py takahashi_cs_small &

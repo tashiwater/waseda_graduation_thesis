@@ -79,19 +79,14 @@ if __name__ == "__main__":
                 loss = []
                 for i, inputs_t in enumerate(inputs_transposed):
                     inputs_t = inputs_t.to(self._device)
-                    outputs[i] = self._net(inputs_t)
+                    output = self._net(inputs_t)
                     attention_map = self._net.attention_map.detach()
                     loss += [
-                        self._criterion(outputs[i, :, :7], labels_transposed[i, :, :7]),
-                        self._criterion(
-                            outputs[i, :, 7:30], labels_transposed[i, :, 7:30]
-                        )
-                        * attention_map[0, 7],
-                        self._criterion(
-                            outputs[i, :, 30:], labels_transposed[i, :, 30:]
-                        )
-                        * attention_map[0, 30],
+                        self._criterion(output[:, :7], labels_transposed[i, :, :7]),
+                        self._criterion(output[:, 7:30], labels_transposed[i, :, 7:30]),
+                        self._criterion(output[:, 30:], labels_transposed[i, :, 30:]),
                     ]
+                    outputs[i] = output
 
                 loss = sum(loss)
                 if mode == "train":
