@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from train_base import TrainBase
 from dataset.dataset_MTRNN import MyDataSet
-from model.MTRNN_nosubtask import MTRNN
+from model.MTRNN import MTRNN
 
 if __name__ == "__main__":
     argnum = len(sys.argv)
@@ -28,12 +28,12 @@ if __name__ == "__main__":
     cf_num, cs_num = 80, 10
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_onlyimg/"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_noimg/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1123/img_{}/".format(name)
+    MODEL_DIR = MODEL_BASE + "MTRNN/1127/{}/".format(name)
     # os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 

@@ -4,6 +4,7 @@
 import os
 from PIL import Image
 from pathlib import Path
+import sys
 
 
 class ImgPreprocess:
@@ -28,9 +29,10 @@ class ImgPreprocess:
     def dump_for_learn(self, size, test_span, class_num):
         dir_num = len(self._img_dirs)
         one_class_num = dir_num // class_num
-        for k in range(6):
+        for k in range(class_num):
             one_class_dirs = self._img_dirs[k * one_class_num : (k + 1) * one_class_num]
             for i, img_dir in enumerate(one_class_dirs):
+                print(img_dir)
                 img_paths = [str(p) for p in Path(img_dir).glob("./*")]
                 img_paths.sort()
                 if i % test_span == 0:
@@ -45,6 +47,31 @@ class ImgPreprocess:
                     image = image.resize(size)
                     for output_dir in output_dirs:
                         image.save(output_dir + "/{:03d}.jpg".format(j))
+
+    def dump_finish_same(self, size, test_span, class_num, finish_count):
+        dir_num = len(self._img_dirs)
+        one_class_num = dir_num // class_num
+        for k in range(class_num):
+            one_class_dirs = self._img_dirs[k * one_class_num : (k + 1) * one_class_num]
+            for i, img_dir in enumerate(one_class_dirs):
+                print(img_dir)
+                img_paths = [str(p) for p in Path(img_dir).glob("./*")]
+                img_paths.sort()
+                if i % test_span == 0:
+                    dir_names = [self._all_dir, self._test_dir]
+                else:
+                    dir_names = [self._all_dir, self._train_dir]
+                output_dirs = [temp + "{}/{:03d}".format(k, i) for temp in dir_names]
+                for output_dir in output_dirs:
+                    os.makedirs(output_dir)
+                for j, img_path in enumerate(img_paths):
+                    image = Image.open(img_path)
+                    image = image.resize(size)
+                    for output_dir in output_dirs:
+                        image.save(output_dir + "/{:03d}.jpg".format(j))
+                image = Image.open(img_paths[0])
+                image = image.resize(size)
+                image.save(output_dirs[0] + "/{:03d}.jpg".format(finish_count))
 
     def dump_resize_normal(self, size, test_span, step_num):
         for i, img_dir in enumerate(self._img_dirs):
@@ -66,14 +93,21 @@ class ImgPreprocess:
 
 
 if __name__ == "__main__":
+    argnum = len(sys.argv)
+
+    if argnum == 3:
+        _, name, finish_count = sys.argv
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
-    IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/1123/image_raw/"
+    IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/{}/image_raw/".format(name)
     # OUTPUT_DIR = DATA_DIR + "image_compressed/"
-    OUTPUT_DIR = (
-        "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE/"
-    )
+    OUTPUT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE_finish_same/"
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
     # process.extract(50, 200)
-    process.dump_for_learn(size=(128 + 5, 96 + 5), test_span=4, class_num=6)
+    process.dump_finish_same(
+        size=(128 + 5, 96 + 5),
+        test_span=4,
+        class_num=12,
+        finish_count=int(finish_count),
+    )
     # process.dump_resize_normal(size=(128, 96), test_span=4, step_num=185)

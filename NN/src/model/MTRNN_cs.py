@@ -31,9 +31,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.cs2cf = nn.Linear(self.layer_size["cs"], self.layer_size["cf"])
         self.cs2cs = nn.Linear(self.layer_size["cs"], self.layer_size["cs"])
         self.activate = activate
-        self.cs0 = torch.zeros(
-            size=(batch_size, self.layer_size["cs"]), requires_grad=True
-        )
+        self.cs0 = nn.Parameter(torch.zeros(size=(batch_size, self.layer_size["cs"])))
 
     def init_state(self, batch_size, cs0=None):
         device = next(self.parameters()).device
@@ -41,7 +39,7 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
         self.io_state = torch.zeros(size=(batch_size, self.layer_size["io"])).to(device)
         self.cf_state = torch.zeros(size=(batch_size, self.layer_size["cf"])).to(device)
         if cs0 is None:
-            self.cs_state = self.cs0
+            self.cs_state = self.cs0 * 1
         else:
             self.cs_state = cs0
         # fill_value = 0

@@ -12,7 +12,7 @@ from model.CAE import CAE as Net
 
 #
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
+DATA_DIR = CURRENT_DIR + "/../../data/CAE_finish_same/"
 IMAGE_PATH = DATA_DIR + "all/"
 MODEL_BASE = "/media/user/ボリューム/model/"
 MODEL_BASE = CURRENT_DIR + "/../../../../model/"
@@ -23,11 +23,11 @@ HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_featur
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1123/"
-paths = [str(p) for p in Path(model_path).glob("./*finish.pth")]
-if len(paths) != 1:
-    raise FileExistsError("there are {} finish.pth".format(len(paths)))
-model_path = paths[0]
+model_path = MODEL_DIR + "1129/20201129_223040_2000.pth"
+# paths = [str(p) for p in Path(model_path).glob("./*finish.pth")]
+# if len(paths) != 1:
+#     raise FileExistsError("there are {} finish.pth".format(len(paths)))
+# model_path = paths[0]
 print(model_path)
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
@@ -59,4 +59,4 @@ for j, img_dir in enumerate(img_dirs):  # deal with each file
             outputs.to("cpu").detach().numpy(),
             delimiter=",",
         )
-        print(HIDDEN_DIR + "{:03}.csv".format(j)
+        print(HIDDEN_DIR + "{:03}.csv".format(j))

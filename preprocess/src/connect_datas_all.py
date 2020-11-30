@@ -43,7 +43,7 @@ def min_max_normalization(data, indataRange, outdataRange):
 
 def sigmoid_normalize(data, before_scale):
     for i, scale in enumerate(before_scale):
-        data[:, i] = min_max_normalization(data[:, i], scale, [-0.9, 0.9])
+        data[:, i] = min_max_normalization(data[:, i], scale, [0.1, 0.9])
     return data
 
 
@@ -54,33 +54,31 @@ if __name__ == "__main__":
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     if dump_directly:
-        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/MTRNN_all/"
+        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/MTRNN_cs/"
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
-    image_feature_datas = tactile_datas
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
     start_index = 0
     first_step = 0
-    sequence_num = 160  # len(image_feature_datas[0])
+    sequence_num = 210  # len(image_feature_datas[0])
 
     motion_before_scale = [
-        [1.5, 2],
-        [-1, 0.1],
-        [-0.5, 0.1],
-        [1, 2],
-        [0, 1],
-        [-0.5, 0.5],
-        [-1.396, -1],
-        [20, 50],
-        [-10, 20],
-        [-10, 10],
-        [-10, 10],
-        [-5, 5],
-        [-5, 5],
-        [-5, 10],
+        [1.6117068753543122, 2.1200514637028007],
+        [-0.6368531630633356, 0.11388273535710568],
+        [-0.5634097049436209, 0.19519762380936195],
+        [0.7681368847920997, 1.688274487748799],
+        [0.16900022467955014, 0.9541540264022268],
+        [-0.8862432854471518, 0.29183651594388066],
+        [-1.2531987873105703, -0.5639856801083778],
+        [20.052000045776367, 58.91999435424805],
+        [-29.796001434326172, 13.532999992370605],
+        [-5.3279995918273935, 25.24799728393555],
+        [-9.5, 18.227333068847656],
+        [-3.86133337020874, 2.5339999198913574],
+        [-9.450000762939453, 4.800000190734863],
+        [-2.119333267211914, 8.414999961853027],
     ]
-
     # motion_before_scale = [
     #     [-1.309, 4.451],
     #     [-2.094, 0.140],
@@ -97,9 +95,43 @@ if __name__ == "__main__":
     #     [-5, 5],
     #     [-5, 5],
     # ]
-    tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
+    # tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
+    tactile_before_scale = [
+        [0.0, 0.7548387050628662],
+        [0.0, 0.72258061170578],
+        [0.0, 0.6354838609695435],
+        [0.0, 0.7935483455657959],
+        [0.0, 0.6645161509513855],
+        [0.0, 0.7064515948295593],
+        [0.0, 0.6419354677200317],
+        [0.0, 0.6870967745780945],
+        [0.0, 0.7161290049552917],
+        [0.0, 0.6580645442008972],
+        [0.0, 0.5193548202514648],
+        [0.0, 0.7161290049552917],
+        [0.0, 0.79677414894104],
+        [0.0, 0.8129032254219055],
+        [0.0, 0.6451613306999207],
+        [0.0, 0.5903225541114807],
+    ]
     # image_before_scale = [[-0.25, 0.25] for _ in range(image_feature_datas[0].shape[1])]
-    # image_before_scale = [[0,1] for _ in range(image_feature_data.shape[1])]
+    image_before_scale = [
+        [0.0, 0.4972033500671387],
+        [0.0, 0.4519493579864502],
+        [0.0, 0.4811547100543976],
+        [0.0, 0.40289184451103205],
+        [0.0, 0.4973227083683014],
+        [0.008948994800448418, 0.44961935281753534],
+        [0.0035407552495598797, 0.4977116882801056],
+        [0.0, 0.5266909599304199],
+        [0.0, 0.4620552659034728],
+        [0.0, 0.4891946613788604],
+        [0.0, 0.3642278611660004],
+        [0.0, 0.4532333612442017],
+        [0.0, 0.5029321908950806],
+        [0.05297283828258514, 0.3900356590747833],
+        [0.0, 0.4649696946144104],
+    ]
     for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
     ):
@@ -118,7 +150,7 @@ if __name__ == "__main__":
         img_preprocessed = get_meaned_data(
             img, first_step, sequence_num, 1, start_index
         )
-        # img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
+        img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
         connected_data = np.block(
             [motion_preprocessed, tactile_preprocessed, img_preprocessed]
             # [motion_preprocessed, tactile_preprocessed]

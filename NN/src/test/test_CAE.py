@@ -20,7 +20,7 @@ MODEL_DIR = MODEL_BASE + "CAE/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1119/20201120_231742_2000finish.pth"
+model_path = MODEL_DIR + "1127/20201128_035011_3000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

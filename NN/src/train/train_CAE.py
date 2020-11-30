@@ -19,7 +19,7 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "CAE/1123/"
+    MODEL_DIR = MODEL_BASE + "CAE/1129/"
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     param_dict = {
         "train_batch_size": 500,
         "test_batch_size": 500,
-        "epoch": 3000,
+        "epoch": 5000,
         "save_span": 50,
         "graph_span": 5,
         "weight_decay": 0.00001,
