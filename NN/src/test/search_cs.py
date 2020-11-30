@@ -63,10 +63,7 @@ if __name__ == "__main__":
         )
 
     dataloader = torch.utils.data.DataLoader(
-        dataset,
-        batch_size=1,
-        shuffle=False,
-        num_workers=4,
+        dataset, batch_size=1, shuffle=False, num_workers=4,
     )
 
     net.eval()
@@ -74,20 +71,18 @@ if __name__ == "__main__":
         inputs_transposed = one_batch_inputs.transpose(1, 0)
         labels_transposed = one_batch_labels.transpose(1, 0)
         batch_size = inputs_transposed.shape[1]
-        cs0 = torch.nn.Parameter(torch.zeros(size=(batch_size,cs_num))
+        cs0 = torch.nn.Parameter(torch.zeros(size=(batch_size, cs_num)))
         optimizer = torch.optim.Adam(
-            cs0,
-            lr=0.001,,
-            betas=(0.9, 0.999),,
-            weight_decay= 0.00001,
+            cs0, lr=0.001, betas=(0.9, 0.999), weight_decay=0.00001,
         )
-        net.init_state(batch_size, cs0)
         outputs = torch.zeros_like(labels_transposed)
+
+        net.init_state(batch_size, cs0)
         for i, inputs_t in enumerate(inputs_transposed):
             outputs[i] = net(inputs_t)
-        loss = criterion(outputs[:, -1, 30:], labels_transposed[:,0, 30:])
-
-
+        loss = criterion(outputs[:, -1, 30:], labels_transposed[:, 0, 30:])
+        loss.backward()
+        optimizer.step()
 
     alltype_cs = []
     for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
