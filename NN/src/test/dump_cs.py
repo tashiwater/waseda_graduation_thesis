@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_cs/"
-    TEST_PATH = DATA_DIR + "test"
+    TEST_PATH = DATA_DIR + "train"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
@@ -31,13 +31,13 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1127/cs_noimg/20201127_235121_10000finish"
+    load_path = "1129/tuning/1_1_1_1_/20201130_144522_5000finish"
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
-    in_size = 30  # trainset[0][0].shape[1]
+    in_size = 45  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
-        48,
+        36,
         layer_size={
             "in": in_size,
             "out": in_size,
@@ -47,14 +47,14 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
-        activate=torch.nn.Tanh(),
+        activate=torch.nn.ReLU(),
     )
     model_path = MODEL_DIR + load_path + ".pth"
     checkpoint = torch.load(model_path, map_location=torch.device("cpu"))
     net.load_state_dict(checkpoint["model"])
 
     cs0 = net.cs0.detach().numpy().copy()
-    print(cs0)
+    # print(cs0)
     np.savetxt(RESULT_DIR + "out.csv", cs0, delimiter=",")
 
     criterion = torch.nn.MSELoss()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
             [add_word + "position{}".format(i) for i in range(7)]
             + [add_word + "torque{}".format(i) for i in range(7)]
             + [add_word + "tactile{}".format(i) for i in range(16)]
-            # + [add_word + "image{}".format(i) for i in range(15)]
+            + [add_word + "image{}".format(i) for i in range(15)]
         )
 
     dataloader = torch.utils.data.DataLoader(
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
         inputs_transposed = one_batch_inputs.transpose(1, 0)
         labels_transposed = one_batch_labels.transpose(1, 0)
-        net.init_state(inputs_transposed.shape[1], net.cs0[j * 4])
+        net.init_state(inputs_transposed.shape[1], net.cs0[j])
         outputs = torch.zeros_like(labels_transposed)
         io_states = []
         cf_states = []
@@ -133,14 +133,16 @@ if __name__ == "__main__":
         df_output = pd.DataFrame(data=connected_data, columns=header)
         df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
 
-        df_output.iloc[:, :7].plot()
         if is_print:
-            plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-            plt.title("input")
-            plt.subplots_adjust(right=0.7)
+            ax = df_output.iloc[:, :7].plot(colormap="Accent", linestyle="--")
+            # plt.plot(df_output.iloc[:, :7])
+            # plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            # plt.title("input")
+            # plt.subplots_adjust(right=0.7)
             # plt.show()
-            df_output.iloc[:, 30:37].plot()
+            df_output.iloc[:, in_size : in_size + 7].plot(colormap="Accent", ax=ax)
+            # plt.plot(df_output.iloc[:, in_size : in_size + 7], linestyle="-")
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-            plt.title("output")
+            # plt.title("output")
             plt.subplots_adjust(right=0.7)
             plt.show()

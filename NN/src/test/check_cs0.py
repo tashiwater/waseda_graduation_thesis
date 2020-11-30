@@ -16,7 +16,7 @@ pca_base = PCA(n_components=components)
 pca_cs = pca_base.fit_transform(df)
 
 container_num = 6
-each_container = 4
+each_container = 3
 theta_num = 2
 
 stack = [pca_cs[i * each_container : (i + 1) * each_container] for i in range(6 * 2)]
@@ -30,19 +30,19 @@ for i in range(components):
         axis2 = 1 + j + i
         for k in range(container_num):
             plt.scatter(
-                stack[k][:, axis1],
-                stack[k][:, axis2],
-                label="{}".format(k),
+                stack[2 * k][:, axis1],
+                stack[2 * k][:, axis2],
+                label="{} theta0".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
                 marker="o",
             )
 
-            n = k + container_num
+            n = 2 * k + 1
             plt.scatter(
                 stack[n][:, axis1],
                 stack[n][:, axis2],
-                label="{}".format(n),
+                label="{} theta30".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
                 marker="D",
@@ -50,6 +50,8 @@ for i in range(components):
 
         plt.xlabel("pca{}".format(axis1 + 1))
         plt.ylabel("pca{}".format(axis2 + 1))
-        plt.legend()
+        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.title("cs0")
+        plt.subplots_adjust(right=0.7)
         plt.show()
         # fig.savefig(paths[0] + ".png")
