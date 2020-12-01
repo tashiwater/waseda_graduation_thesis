@@ -7,7 +7,7 @@ import numpy as np
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-dir_path = DATA_DIR + "connect_input/tactile_raw/"
+dir_path = DATA_DIR + "connect_input/motion_csv/"
 paths = [str(p) for p in Path(dir_path).glob("./*.csv")]
 paths.sort()
 # dfs = [pd.read_csv(path, header=None).iloc[:, :] for path in paths]

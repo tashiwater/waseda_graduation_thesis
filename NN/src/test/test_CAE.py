@@ -10,7 +10,7 @@ from dataset.dataset_CAE import MyDataSet
 from model.CAE import CAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/CAE/"
+DATA_DIR = CURRENT_DIR + "/../../data/CAE_finish_same/"
 DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
@@ -20,7 +20,7 @@ MODEL_DIR = MODEL_BASE + "CAE/"
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1127/20201128_035011_3000.pth"
+model_path = MODEL_DIR + "1129/20201129_223040_2000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
@@ -29,7 +29,7 @@ testloader = torch.utils.data.DataLoader(
     dataset,
     batch_size=500,
     shuffle=False,
-    num_workers=4,
+    num_workers=1,
 )
 
 device = torch.device("cuda:0")

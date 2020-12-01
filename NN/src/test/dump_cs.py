@@ -16,13 +16,13 @@ from model.MTRNN_cs import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = True
-    cf_num = 80
-    cs_num = 10
+    cf_num = 90
+    cs_num = 8
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_cs/"
-    TEST_PATH = DATA_DIR + "train"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_noimg/"
+    TEST_PATH = DATA_DIR + "test"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
@@ -31,10 +31,10 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1129/tuning/1_1_1_1_/20201130_144522_5000finish"
+    load_path = "1127/cs_noimg_tanh/5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
-    in_size = 45  # trainset[0][0].shape[1]
+    in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         36,
@@ -47,13 +47,14 @@ if __name__ == "__main__":
         },
         tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
-        activate=torch.nn.ReLU(),
+        activate=torch.nn.Tanh(),
     )
     model_path = MODEL_DIR + load_path + ".pth"
     checkpoint = torch.load(model_path, map_location=torch.device("cpu"))
     net.load_state_dict(checkpoint["model"])
 
     cs0 = net.cs0.detach().numpy().copy()
+
     # print(cs0)
     np.savetxt(RESULT_DIR + "out.csv", cs0, delimiter=",")
 
@@ -64,7 +65,7 @@ if __name__ == "__main__":
             [add_word + "position{}".format(i) for i in range(7)]
             + [add_word + "torque{}".format(i) for i in range(7)]
             + [add_word + "tactile{}".format(i) for i in range(16)]
-            + [add_word + "image{}".format(i) for i in range(15)]
+            # + [add_word + "image{}".format(i) for i in range(15)]
         )
 
     dataloader = torch.utils.data.DataLoader(
@@ -146,3 +147,49 @@ if __name__ == "__main__":
             # plt.title("output")
             plt.subplots_adjust(right=0.7)
             plt.show()
+            components = 4
+            pca_base = PCA(n_components=components)
+            pca_cs = pca_base.fit_transform(cs0)
+
+            container_num = 6
+            each_container = 3
+            theta_num = 2
+
+            stack = [
+                pca_cs[i * each_container : (i + 1) * each_container]
+                for i in range(6 * 2)
+            ]
+
+            colorlist = ["r", "g", "b", "c", "m", "y", "k"]
+            # for i in range(185):
+            fig = plt.figure()
+            for i in range(components):
+                axis1 = i
+                for j in range(components - i - 1):
+                    axis2 = 1 + j + i
+                    for k in range(container_num):
+                        plt.scatter(
+                            stack[k][:, axis1],
+                            stack[k][:, axis2],
+                            label="{} theta0".format(k),
+                            edgecolors=colorlist[k],
+                            facecolor="None",
+                            marker="o",
+                        )
+
+                        n = k + 6
+                        plt.scatter(
+                            stack[n][:, axis1],
+                            stack[n][:, axis2],
+                            label="{} theta30".format(k),
+                            edgecolors=colorlist[k],
+                            facecolor="None",
+                            marker="D",
+                        )
+
+                    plt.xlabel("pca{}".format(axis1 + 1))
+                    plt.ylabel("pca{}".format(axis2 + 1))
+                    plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+                    plt.title("cs0")
+                    plt.subplots_adjust(right=0.7)
+                    plt.show()

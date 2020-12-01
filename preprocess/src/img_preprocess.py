@@ -61,7 +61,9 @@ class ImgPreprocess:
                     dir_names = [self._all_dir, self._test_dir]
                 else:
                     dir_names = [self._all_dir, self._train_dir]
-                output_dirs = [temp + "{}/{:03d}".format(k, i) for temp in dir_names]
+                output_dirs = [
+                    temp + "{:02d}/{:03d}".format(k, i) for temp in dir_names
+                ]
                 for output_dir in output_dirs:
                     os.makedirs(output_dir)
                 for j, img_path in enumerate(img_paths):
