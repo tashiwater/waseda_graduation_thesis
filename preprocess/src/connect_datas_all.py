@@ -43,7 +43,7 @@ def min_max_normalization(data, indataRange, outdataRange):
 
 def sigmoid_normalize(data, before_scale):
     for i, scale in enumerate(before_scale):
-        data[:, i] = min_max_normalization(data[:, i], scale, [0.1, 0.9])
+        data[:, i] = min_max_normalization(data[:, i], scale, [-0.9, 0.9])
     return data
 
 

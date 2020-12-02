@@ -16,12 +16,12 @@ from model.MTRNN_cs import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = True
-    cf_num = 90
-    cs_num = 8
+    cf_num = 80
+    cs_num = 10
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_noimg/"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_cs/"
     TEST_PATH = DATA_DIR + "test"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
@@ -31,10 +31,10 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1127/cs_noimg_tanh/5000/{}_{}".format(cf_num, cs_num)
+    load_path = "1129/cs_all_tanh/5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
-    in_size = 30  # trainset[0][0].shape[1]
+    in_size = 45  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         36,
@@ -65,7 +65,7 @@ if __name__ == "__main__":
             [add_word + "position{}".format(i) for i in range(7)]
             + [add_word + "torque{}".format(i) for i in range(7)]
             + [add_word + "tactile{}".format(i) for i in range(16)]
-            # + [add_word + "image{}".format(i) for i in range(15)]
+            + [add_word + "image{}".format(i) for i in range(15)]
         )
 
     dataloader = torch.utils.data.DataLoader(
@@ -78,9 +78,11 @@ if __name__ == "__main__":
     net.eval()
     alltype_cs = []
     for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
+        # if j < 11:
+        #     continue
         inputs_transposed = one_batch_inputs.transpose(1, 0)
         labels_transposed = one_batch_labels.transpose(1, 0)
-        net.init_state(inputs_transposed.shape[1], net.cs0[j])
+        net.init_state(inputs_transposed.shape[1], net.cs0[j * 3])
         outputs = torch.zeros_like(labels_transposed)
         io_states = []
         cf_states = []
@@ -169,15 +171,15 @@ if __name__ == "__main__":
                     axis2 = 1 + j + i
                     for k in range(container_num):
                         plt.scatter(
-                            stack[k][:, axis1],
-                            stack[k][:, axis2],
+                            stack[k * 2][:, axis1],
+                            stack[k * 2][:, axis2],
                             label="{} theta0".format(k),
                             edgecolors=colorlist[k],
                             facecolor="None",
                             marker="o",
                         )
 
-                        n = k + 6
+                        n = 2 * k + 1
                         plt.scatter(
                             stack[n][:, axis1],
                             stack[n][:, axis2],
