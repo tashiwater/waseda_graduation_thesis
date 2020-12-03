@@ -31,17 +31,17 @@ if __name__ == "__main__":
     # loss_rate = list(map(float, loss_rate))
     # print(loss_rate)
 
-    in_size, out_size = 45, 45
+    in_size, out_size = 30, 30
     open_rate = 0.1
 
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_cs/"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_noimg/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1129/firstshot/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + "MTRNN/1203/cs/{}_{}/".format(cf_num, cs_num)
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 

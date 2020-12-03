@@ -1,16 +1,10 @@
-python train_MTRNN_cs.py 100 8 &
-python train_MTRNN_cs.py 100 10 &
-wait
-python train_MTRNN_cs.py 100 12 &
-python train_MTRNN_cs.py 100 15 &
-
 for cf_num in 80 90 100
 do
-python train_PBMTRNN.py $cf_num 8 &
-python train_PBMTRNN.py $cf_num 10 &
+python train_MTRNN_cs.py $cf_num 8 &
+python train_MTRNN_cs.py $cf_num 10 &
 wait
-python train_PBMTRNN.py $cf_num 12 &
-python train_PBMTRNN.py $cf_num 15 &
+python train_MTRNN_cs.py $cf_num 12 &
+python train_MTRNN_cs.py $cf_num 15 &
 wait
 done
 # python train_MTRNN_cs.py 1 1 1 1 &
