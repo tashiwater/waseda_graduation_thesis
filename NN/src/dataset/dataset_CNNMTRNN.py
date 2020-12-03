@@ -46,6 +46,7 @@ class MyDataSet(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         # print(self._datas[index][1:].shape)
+
         return (
             (
                 self._datas[index][0:-1],

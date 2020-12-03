@@ -5,8 +5,8 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1129/cs_all_tanh/"
-cf_list = [70, 80, 90, 100]
+model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1127/pb/"
+cf_list = [80, 90, 100]
 cs_list = [8, 10, 12, 15]
 
 for cf in cf_list:

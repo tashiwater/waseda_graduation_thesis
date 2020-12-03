@@ -41,7 +41,7 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1129/cs_all_tanh/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + "MTRNN/1129/firstshot/{}_{}/".format(cf_num, cs_num)
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 

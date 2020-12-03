@@ -23,7 +23,7 @@ HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_featur
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1129/20201129_223040_2000.pth"
+model_path = MODEL_DIR + "1129_firstshot/20201202_160605_2000.pth"
 # paths = [str(p) for p in Path(model_path).glob("./*finish.pth")]
 # if len(paths) != 1:
 #     raise FileExistsError("there are {} finish.pth".format(len(paths)))

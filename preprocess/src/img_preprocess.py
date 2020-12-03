@@ -32,8 +32,8 @@ class ImgPreprocess:
         for k in range(class_num):
             one_class_dirs = self._img_dirs[k * one_class_num : (k + 1) * one_class_num]
             for i, img_dir in enumerate(one_class_dirs):
-                print(img_dir)
-                img_paths = [str(p) for p in Path(img_dir).glob("./*")]
+
+                img_paths = [str(p) for p in Path(img_dir).glob("./*.jpg")]
                 img_paths.sort()
                 if i % test_span == 0:
                     dir_names = [self._all_dir, self._test_dir]
@@ -43,6 +43,7 @@ class ImgPreprocess:
                 for output_dir in output_dirs:
                     os.makedirs(output_dir)
                 for j, img_path in enumerate(img_paths):
+                    print(img_path)
                     image = Image.open(img_path)
                     image = image.resize(size)
                     for output_dir in output_dirs:
@@ -97,19 +98,20 @@ class ImgPreprocess:
 if __name__ == "__main__":
     argnum = len(sys.argv)
 
-    if argnum == 3:
-        _, name, finish_count = sys.argv
+    if argnum == 2:
+        _, name = sys.argv
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
     IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping/data/{}/image_raw/".format(name)
     # OUTPUT_DIR = DATA_DIR + "image_compressed/"
-    OUTPUT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE_finish_same/"
+    OUTPUT_DIR = (
+        "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/CAE/"
+    )
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
     # process.extract(50, 200)
-    process.dump_finish_same(
+    process.dump_for_learn(
         size=(128 + 5, 96 + 5),
         test_span=4,
         class_num=12,
-        finish_count=int(finish_count),
     )
     # process.dump_resize_normal(size=(128, 96), test_span=4, step_num=185)
