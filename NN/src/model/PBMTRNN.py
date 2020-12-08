@@ -11,7 +11,7 @@ from .cell import Cell
 class ToImg(torch.nn.Module):
     def forward(self, x):
         n, _ = x.shape
-        return x.reshape(n, 64, 12, 16)
+        return x.reshape(n, 32, 6, 8)
 
 
 class PBMTRNN(MTRNN):  # [TODO]cannot use GPU now
@@ -25,13 +25,14 @@ class PBMTRNN(MTRNN):  # [TODO]cannot use GPU now
         self._pb_dim = 5
         self.encoder = torch.nn.Sequential(
             # 128*96*3
-            Cell(3, 16, on_batchnorm=False),  # 64*48
-            Cell(16, 32, on_batchnorm=False),  # 32*i24
-            Cell(32, 64, on_batchnorm=False),  # 16*12
+            Cell(3, 4, on_batchnorm=False),  # 64*48
+            Cell(4, 8, on_batchnorm=False),  # 32*i24
+            Cell(8, 16, on_batchnorm=False),  # 16*12
+            Cell(16, 32, on_batchnorm=False),  # 8*6
             torch.nn.Flatten(),
-            Cell(16 * 12 * 64, 254, mode="linear", on_batchnorm=False),
+            Cell(8 * 6 * 32, 256, mode="linear", on_batchnorm=False),
             Cell(
-                254,
+                256,
                 self._pb_dim,
                 mode="linear",
                 on_batchnorm=False,

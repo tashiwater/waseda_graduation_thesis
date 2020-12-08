@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/GatedMTRNN/"
-INPUT_PATH = DATA_DIR + "train_output/"
-output_fig_path = DATA_DIR + "fig/"
+DATA_DIR = CURRENT_DIR + "/../../data/1123_MTRNN_size/"
+INPUT_PATH = DATA_DIR + "result/"
+output_fig_path = DATA_DIR + "result/"
 
 with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
     pca_base = pickle.load(f)
@@ -28,24 +28,18 @@ rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
-stack_num = 6
-stack = [0 for i in range(stack_num)]
-
+stack_num = container_num
 # stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
 # stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
 # stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
 # stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
 
+stack = [
+    pca[one_num * each_container * i : one_num * each_container * (i + 1)]
+    for i in range(container_num)
+]
 
-stack[0] = circle[: one_num * each_container]
-stack[1] = circle[one_num * each_container : one_num * each_container * 2]
-stack[2] = circle[one_num * each_container * 2 : one_num * each_container * 3]
-
-stack[3] = rectangle[: one_num * each_container]
-stack[4] = rectangle[one_num * each_container : one_num * each_container * 2]
-stack[5] = rectangle[one_num * each_container * 2 : one_num * each_container * 3]
-
-
+"""
 test_dir = DATA_DIR + "result/"
 paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 # test_dir = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/log/output/"
@@ -65,26 +59,34 @@ test_np = test_np.reshape(-1, 10)
 test_pca = pca_base.transform(test_np)
 
 test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
-
+"""
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 # for i in range(185):
 fig = plt.figure()
 for i in range(components):
     axis1 = i
-    start = 0
-    end = one_num * each_container
+    start = 80
+    end = one_num  # * each_container
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
             plt.scatter(
                 stack[k][start:end, axis1],
                 stack[k][start:end, axis2],
-                label="{}".format(k),
+                label="{}_theta0".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
-                marker=".",
+                marker="o",
             )
+            # plt.scatter(
+            #     stack[k + stack_num // 2][start:end, axis1],
+            #     stack[k + stack_num // 2][start:end, axis2],
+            #     label="{}_theta30".format(k),
+            #     edgecolors=colorlist[k],
+            #     facecolor="None",
+            #     marker="D",
+            # )
 
             # plt.plot(
             #     stack[k][start : start + 1, axis1],
@@ -94,15 +96,15 @@ for i in range(components):
             #     marker="D",
             # )
 
-            test_start = 0
-            test_end = 159
-            plt.scatter(
-                test_stack[k][test_start:test_end, axis1],
-                test_stack[k][test_start:test_end, axis2],
-                # label="test{}".format(k),
-                color=colorlist[k],
-                marker="D",
-            )
+            # test_start = 0
+            # test_end = 159
+            # plt.scatter(
+            #     test_stack[k][test_start:test_end, axis1],
+            #     test_stack[k][test_start:test_end, axis2],
+            #     # label="test{}".format(k),
+            #     color=colorlist[k],
+            #     marker="D",
+            # )
         plt.xlabel("pca{}".format(axis1 + 1))
         plt.ylabel("pca{}".format(axis2 + 1))
         plt.legend()

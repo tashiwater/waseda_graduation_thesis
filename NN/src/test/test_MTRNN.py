@@ -12,16 +12,16 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from dataset.dataset_MTRNN import MyDataSet
-from model.MTRNN import MTRNN as Net
+from model.MTRNN_size import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = True
     cf_num = 80
     cs_num = 10
-    open_rate = 1
+    open_rate = 0.1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_all/"
+    DATA_DIR = CURRENT_DIR + "/../../data/1123_MTRNN_size/"
     TEST_PATH = DATA_DIR + "test"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
@@ -31,15 +31,15 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1119_all/20201121_093402_10000finish"
+    load_path = "1123/size_old/80_10/20201207_185123_5600"
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
-    in_size = 45  # trainset[0][0].shape[1]
+    in_size, out_size = 30, 33  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         layer_size={
             "in": in_size,
-            "out": in_size,
+            "out": out_size,
             "io": 50,
             "cf": cf_num,
             "cs": cs_num,
@@ -59,7 +59,8 @@ if __name__ == "__main__":
             [add_word + "position{}".format(i) for i in range(7)]
             + [add_word + "torque{}".format(i) for i in range(7)]
             + [add_word + "tactile{}".format(i) for i in range(16)]
-            + [add_word + "image{}".format(i) for i in range(15)]
+            # + [add_word + "image{}".format(i) for i in range(15)]
+            + [add_word + "size{}".format(i) for i in range(3)]
         )
 
     dataloader = torch.utils.data.DataLoader(
@@ -72,8 +73,8 @@ if __name__ == "__main__":
     net.eval()
     alltype_cs = []
     for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
-        inputs_transposed = one_batch_inputs.transpose(1, 0)
-        labels_transposed = one_batch_labels.transpose(1, 0)
+        inputs_transposed = one_batch_inputs.transpose(1, 0)[:, :, :in_size]
+        labels_transposed = one_batch_labels.transpose(1, 0)[:, :, :out_size]
         net.init_state(inputs_transposed.shape[1])
         outputs = torch.zeros_like(labels_transposed)
         io_states = []
@@ -99,8 +100,8 @@ if __name__ == "__main__":
         cs_states = np.array(cs_states)
         # attention_map = np.array(attention_map)
 
-        np_input = labels_transposed.view(-1, in_size).detach().numpy()
-        np_output = outputs.view(-1, in_size).detach().numpy()
+        np_input = labels_transposed.view(-1, out_size).detach().numpy()
+        np_output = outputs.view(-1, out_size).detach().numpy()
         cs_pca = PCA(n_components=2).fit_transform(cs_states)
         cf_pca = PCA(n_components=2).fit_transform(cf_states)
         connected_data = np.hstack(
@@ -127,15 +128,16 @@ if __name__ == "__main__":
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
         df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
-
-        df_output.iloc[:, :7].plot()
         if is_print:
-            plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-            plt.title("input")
-            plt.subplots_adjust(right=0.7)
+            ax = df_output.iloc[:, :7].plot(colormap="Accent", linestyle="--")
+            # plt.plot(df_output.iloc[:, :7])
+            # plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            # plt.title("input")
+            # plt.subplots_adjust(right=0.7)
             # plt.show()
-            df_output.iloc[:, 45:52].plot()
+            df_output.iloc[:, out_size : out_size + 7].plot(colormap="Accent", ax=ax)
+            # plt.plot(df_output.iloc[:, in_size : in_size + 7], linestyle="-")
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-            plt.title("output")
+            # plt.title("output")
             plt.subplots_adjust(right=0.7)
             plt.show()

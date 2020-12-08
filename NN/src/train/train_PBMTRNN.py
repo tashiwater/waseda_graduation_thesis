@@ -37,12 +37,12 @@ if __name__ == "__main__":
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_noimg/"
-    img_TRAIN_PATH = CURRENT_DIR + "/../../data/CAE/train"
+    img_TRAIN_PATH = CURRENT_DIR + "/../../data/CAE_firstshot/train"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1127/pb/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + "MTRNN/1203/pb/{}_{}/".format(cf_num, cs_num)
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
