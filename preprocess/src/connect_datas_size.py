@@ -153,6 +153,11 @@ if __name__ == "__main__":
             target_size, first_step, sequence_num, 1, start_index
         )
         size_preprocessed = sigmoid_normalize(size_preprocessed, size_before_scale)
+
+        cs_num = 30
+        for k in range(cs_num):
+            size_preprocessed[k] = [0, 0, 0]
+
         connected_data = np.block(
             # [motion_preprocessed, tactile_preprocessed, img_preprocessed]
             [motion_preprocessed, tactile_preprocessed, size_preprocessed]

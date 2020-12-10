@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 10
+cs_num = 8
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/1123_MTRNN_size/"
 INPUT_PATH = DATA_DIR + "result/"

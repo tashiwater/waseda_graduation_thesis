@@ -33,7 +33,7 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1123/size/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + "MTRNN/1123/size_30/{}_{}/".format(cf_num, cs_num)
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
@@ -49,14 +49,14 @@ if __name__ == "__main__":
             "cf": cf_num,  # 70,80,90,100
             "cs": cs_num,  # 8,10,12,15
         },
-        tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
+        tau={"tau_io": 2, "tau_cf": 10, "tau_cs": 30},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
     param_dict = {
         "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
-        "epoch": 5000,
+        "epoch": 10000,
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
@@ -93,15 +93,7 @@ if __name__ == "__main__":
                     loss.append(one_loss * rate)
                     d1 = d2
                     """
-                step_half = inputs_transposed.shape[0] // 2
-                loss = [
-                    self._criterion(
-                        outputs[:step_half, :, :in_size],
-                        labels_transposed[:step_half, :, :in_size],
-                    ),
-                    self._criterion(outputs[step_half:], labels_transposed[step_half:]),
-                ]
-                loss = sum(loss)
+                loss = self._criterion(outputs, labels_transposed)
                 if mode == "train":
                     # sum(loss).backward()
                     # pritn(self._net.cs2cs.parameters.grad)

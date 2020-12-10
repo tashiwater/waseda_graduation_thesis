@@ -5,9 +5,9 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1123/size/"
-cf_list = [80, 90, 100]
-cs_list = [8, 10, 12, 15]
+model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1210/noimg/cf10/"
+cf_list = [70, 80, 90, 100]
+cs_list = [6, 8, 10, 12]
 
 for cf in cf_list:
     for cs in cs_list:
@@ -17,4 +17,9 @@ for cf in cf_list:
         if len(paths) != 1:
             raise FileExistsError("there are {} finish.pth".format(len(paths)))
         shutil.copy(paths[0], output)
+        # output = model_dir + "2000/{}_{}.csv".format(cf, cs)
+        # paths = [str(p) for p in Path(model_path).glob("./*finish.csv")]
+        # if len(paths) != 1:
+        #     raise FileExistsError("there are {} finish.pth".format(len(paths)))
+        # shutil.copy(paths[0], output)
         print(paths[0])

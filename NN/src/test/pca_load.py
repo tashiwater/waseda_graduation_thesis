@@ -66,8 +66,8 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 fig = plt.figure()
 for i in range(components):
     axis1 = i
-    start = 80
-    end = one_num  # * each_container
+    start = 0
+    end = one_num * each_container
     for j in range(components - i - 1):
         axis2 = 1 + j + i
         for k in range(stack_num):
