@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/1123_MTRNN_size/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/noimg/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -19,8 +19,8 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
 components = 2
 
-one_num = 159
-container_num = 6
+one_num = 119
+container_num = 4
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
 circle = pca[:circle_num]

@@ -48,13 +48,13 @@ def sigmoid_normalize(data, before_scale):
 
 
 if __name__ == "__main__":
-    dump_directly = False
+    dump_directly = True
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../data/"
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     if dump_directly:
-        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/1210_MTRNN_noimg/"
+        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/MTRNN/1210/size/"
 
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
@@ -64,6 +64,7 @@ if __name__ == "__main__":
     start_index = 0
     first_step = 0
     sequence_num = 120  # len(image_feature_datas[0])
+    test_span = 4
 
     motion_before_scale = [
         [1.7310524448645783, 1.892041598024304],
@@ -101,6 +102,14 @@ if __name__ == "__main__":
     tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
     # image_before_scale = [[-0.25, 0.25] for _ in range(image_feature_datas[0].shape[1])]
     # image_before_scale = [[0,1] for _ in range(image_feature_data.shape[1])]
+    size_list = [
+        [160, 115],
+        [110, 75],
+        [115, 160],
+        [75, 110],
+    ]
+    size_list = np.array(size_list)
+    size_before_scale = [[75, 160], [75, 160]]
     for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
     ):
@@ -120,14 +129,25 @@ if __name__ == "__main__":
         #     img, first_step, sequence_num, 1, start_index
         # )
         # img_preprocessed = sigmoid_normalize(img_preprocessed, image_before_scale)
+        target_size = size_list[i // test_span].reshape(1, -1)
+        size_preprocessed = get_meaned_data(
+            target_size, first_step, sequence_num, 1, start_index
+        )
+        size_preprocessed = sigmoid_normalize(size_preprocessed, size_before_scale)
+
+        cs_num = 30
+        for k in range(cs_num):
+            size_preprocessed[k] = [0, 0]
+
         connected_data = np.block(
             # [motion_preprocessed, tactile_preprocessed, img_preprocessed]
-            [motion_preprocessed, tactile_preprocessed]
+            [motion_preprocessed, tactile_preprocessed, size_preprocessed]
         )
         header = (
             ["position{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["torque{}".format(i) for i in range(motion_preprocessed.shape[1] // 2)]
             + ["tactile{}".format(i) for i in range(tactile_preprocessed.shape[1])]
+            + ["size{}".format(i) for i in range(size_preprocessed.shape[1])]
             # + ["image{}".format(i) for i in range(img.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
@@ -137,7 +157,7 @@ if __name__ == "__main__":
         # else:
         #     file_path = RESULT_DIR + "train/{:03}.csv".format(i)
         if dump_directly:
-            test_span = 4
+
             if i % test_span == 0:
                 file_path = RESULT_DIR + "test/{:03}.csv".format(i)
             else:

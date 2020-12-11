@@ -8,9 +8,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 8
+cs_num = 10
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/1123_MTRNN_size/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/noimg/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
@@ -23,7 +23,7 @@ for path in paths:
     datas.append(df.values)
 datas = np.array(datas)
 # cs = datas[:, :, 64:72]
-cs = datas[:, :, 70:]
+cs = datas[:, :, 64:]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, cs_num)
 
