@@ -18,7 +18,7 @@ if __name__ == "__main__":
     is_print = False
     cf_num = 90
     cs_num = 10
-    open_rate = 1
+    open_rate = 0.1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
