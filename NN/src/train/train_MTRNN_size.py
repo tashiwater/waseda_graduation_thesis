@@ -14,26 +14,29 @@ from model.MTRNN_size import MTRNN
 if __name__ == "__main__":
     argnum = len(sys.argv)
 
-    if argnum == 3:
+    if argnum == 4:
         # _, name, in_size, outsize = sys.argv
         # name = str(name)
         # in_size = int(in_size)
         # out_size = int(outsize)
-        _, cf_num, cs_num = sys.argv
+        _, cf_num, cs_num, open_rate = sys.argv
         cf_num = int(cf_num)
         cs_num = int(cs_num)
+        open_rate = float(open_rate)
     else:
         raise Exception("Fail arg num")
-    open_rate = 0.1
-    in_size, out_size = 30, 33
+    # open_rate = 0.1
+    in_size, out_size = 30, 32
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/1123_MTRNN_size/"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "MTRNN/1123/size_30/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + "MTRNN/1210/size2/open_{:02d}/{}_{}/".format(
+        int(open_rate * 10), cf_num, cs_num
+    )
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
@@ -56,7 +59,7 @@ if __name__ == "__main__":
     param_dict = {
         "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
-        "epoch": 10000,
+        "epoch": 1000,
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,

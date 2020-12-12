@@ -5,16 +5,18 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1210/noimg/cf10/"
-cf_list = [70, 80, 90, 100]
-cs_list = [6, 8, 10, 12]
+model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1210/size/open_03/"
+cf_list = [60, 70, 80, 90, 100]
+cs_list = [6, 8, 10]
 
 for cf in cf_list:
     for cs in cs_list:
         model_path = model_dir + "{}_{}/".format(cf, cs)
-        output = model_dir + "5000/{}_{}.pth".format(cf, cs)
-        paths = [str(p) for p in Path(model_path).glob("./*finish.pth")]
+        output = model_dir + "1000/{}_{}.pth".format(cf, cs)
+        paths = [str(p) for p in Path(model_path).glob("./*1000.pth")]
         if len(paths) != 1:
+            print("there are {} finish.pth".format(len(paths)))
+            continue
             raise FileExistsError("there are {} finish.pth".format(len(paths)))
         shutil.copy(paths[0], output)
         # output = model_dir + "2000/{}_{}.csv".format(cf, cs)

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/noimg/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 

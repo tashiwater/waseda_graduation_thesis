@@ -15,13 +15,13 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN_size import MTRNN as Net
 
 if __name__ == "__main__":
-    is_print = True
-    cf_num = 80
+    is_print = False
+    cf_num = 90
     cs_num = 10
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/noimg/"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
     TEST_PATH = DATA_DIR + "train"
     RESULT_DIR = DATA_DIR + "result/"
     MODEL_BASE = "/media/user/ボリューム/model/"
@@ -31,10 +31,10 @@ if __name__ == "__main__":
     #     int(open_rate * 10), name
     # )
     MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1210/noimg/cf10/5000/{}_{}".format(cf_num, cs_num)
+    load_path = "1210/size/open_01/1000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
-    in_size, out_size = 30, 30  # trainset[0][0].shape[1]
+    in_size, out_size = 30, 32  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         layer_size={
@@ -60,7 +60,7 @@ if __name__ == "__main__":
             + [add_word + "torque{}".format(i) for i in range(7)]
             + [add_word + "tactile{}".format(i) for i in range(16)]
             # + [add_word + "image{}".format(i) for i in range(15)]
-            # + [add_word + "size{}".format(i) for i in range(3)]
+            + [add_word + "size{}".format(i) for i in range(2)]
         )
 
     dataloader = torch.utils.data.DataLoader(

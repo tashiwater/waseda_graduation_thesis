@@ -55,7 +55,7 @@ if __name__ == "__main__":
     param_dict = {
         "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
-        "epoch": 5000,
+        "epoch": 1000,
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,
