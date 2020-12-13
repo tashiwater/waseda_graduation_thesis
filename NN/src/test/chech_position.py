@@ -2,37 +2,14 @@
 # coding: utf-8
 
 import os
-import sys
-import torch
 import pandas as pd
 import numpy as np
-from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-from dataset.dataset_MTRNN import MyDataSet
-from model.MTRNN_size import MTRNN as Net
-
 if __name__ == "__main__":
-    is_print = False
-    cf_num = 90
-    cs_num = 10
-    open_rate = 0.1
-
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
-    TEST_PATH = DATA_DIR + "test"
-    RESULT_DIR = DATA_DIR + "test_result2/"
-    MODEL_BASE = "/media/user/ボリューム/model/"
-    MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    # MODEL_BASE = DATA_DIR + "../model/"
-    # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
-    #     int(open_rate * 10), name
-    # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1210/size/open_01/1000/{}_{}".format(cf_num, cs_num)
-    # load_path = "1119_70_8/20201120_001102_10000finish"
+    TEST_PATH = DATA_DIR + "train"
     dataset = MyDataSet(TEST_PATH)
     in_size, out_size = 30, 32  # trainset[0][0].shape[1]
     position_dims = 7
@@ -110,7 +87,6 @@ if __name__ == "__main__":
                 np_output,
                 cf_pca,
                 cs_pca,
-                cf_states,
                 cs_states
                 # attention_map,
             ]  # , io_states, cf_states, cs_states
@@ -124,7 +100,7 @@ if __name__ == "__main__":
             + ["cs_pca{}".format(i) for i in range(cs_pca.shape[1])]
             # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
             # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
-            + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
+            # + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
             + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
