@@ -17,7 +17,7 @@ with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
     pca_base = pickle.load(f)
 with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
-components = 4
+components = 2
 
 one_num = 119
 container_num = 4
@@ -39,7 +39,7 @@ stack = [
     for i in range(container_num)
 ]
 
-mode = "test"
+mode = "online"
 cs_num = 90
 
 if mode == "test":
@@ -47,7 +47,7 @@ if mode == "test":
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
     test_dir = CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/log/output/"
-    paths = [test_dir + "20201212_145526_cf90_cs10_type1_open01.csv"]
+    paths = [test_dir + "20201213_144140_cf90_cs10_type0_open01.csv"]
 
 paths.sort()
 datas = []
@@ -64,7 +64,8 @@ if mode == "test":
     cs_start = 68
     test_np = datas[:, :, cs_start : cs_num + cs_start]
 else:
-    test_np = datas[:, :, 62:]
+    cs_start = 62
+    test_np = datas[:, :, cs_start:cs_start + cs_num]
 test_np = test_np.reshape(-1, cs_num)
 test_pca = pca_base.transform(test_np)
 
@@ -108,24 +109,24 @@ for i in range(components):
             #     marker="D",
             # )
 
-        #     test_start = 0
-        #     test_end = 119
-        #     if mode == "test":
-        #         plt.scatter(
-        #             test_stack[k][test_start:test_end, axis1],
-        #             test_stack[k][test_start:test_end, axis2],
-        #             label="test{}".format(k),
-        #             color=colorlist[k],
-        #             marker="D",
-        #         )
-        # if mode == "online":
-        #     plt.scatter(
-        #         test_pca[test_start:test_end, axis1],
-        #         test_pca[test_start:test_end, axis2],
-        #         # label="test{}".format(k),
-        #         color=colorlist[-1],
-        #         marker="D",
-        #     )
+            test_start = 0
+            test_end = 119
+            if mode == "test":
+                plt.scatter(
+                    test_stack[k][test_start:test_end, axis1],
+                    test_stack[k][test_start:test_end, axis2],
+                    label="test{}".format(k),
+                    color=colorlist[k],
+                    marker="D",
+                )
+        if mode == "online":
+            plt.scatter(
+                test_pca[test_start:test_end, axis1],
+                test_pca[test_start:test_end, axis2],
+                # label="test{}".format(k),
+                color=colorlist[-1],
+                marker="D",
+            )
         plt.xlabel("pca{}".format(axis1 + 1))
         plt.ylabel("pca{}".format(axis2 + 1))
         plt.legend()

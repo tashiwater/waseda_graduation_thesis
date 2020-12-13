@@ -27,12 +27,12 @@ cs = datas[:, :, cs_start : cs_start + cs_num]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, cs_num)
 
-components = 4
+components = 2
 pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
 # one_num = 119
 # pca2 = pca.reshape(one_num, -1)
-# np.savetxt(INPUT_PATH + "out.csv", pca[:119], delimiter=",")
+np.savetxt(INPUT_PATH + "out.csv", pca[:119], delimiter=",")
 
 with open(INPUT_PATH + "pca.pkl", mode="wb") as f:
     pickle.dump(pca_base, f, protocol=4)
