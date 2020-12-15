@@ -6,11 +6,12 @@ import numpy as np
 from sklearn.decomposition import PCA
 from pathlib import Path
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/noimg/"
-INPUT_PATH = DATA_DIR + "result/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
+INPUT_PATH = DATA_DIR + "train_result/"
 output_fig_path = DATA_DIR + "result/"
 
 with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
@@ -77,6 +78,7 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 
 # for i in range(185):
 fig = plt.figure()
+ax = Axes3D(fig)
 for i in range(components):
     axis1 = i
     start = 0
@@ -127,8 +129,12 @@ for i in range(components):
         #         color=colorlist[-1],
         #         marker="D",
         #     )
-        plt.xlabel("pca{}".format(axis1 + 1))
-        plt.ylabel("pca{}".format(axis2 + 1))
+        plt.xlabel(
+            "pca{} ({:.2})".format(axis1 + 1, pca_base.explained_variance_ratio_[axis1])
+        )
+        plt.ylabel(
+            "pca{} ({:.2})".format(axis2 + 1, pca_base.explained_variance_ratio_[axis2])
+        )
         plt.legend()
         plt.show()
         fig.savefig(paths[0] + ".png")

@@ -5,15 +5,15 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1210/size/open_03/"
+model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1127/noimg/"
 cf_list = [60, 70, 80, 90, 100]
-cs_list = [6, 8, 10]
+cs_list = [6, 8, 10, 12]
 
 for cf in cf_list:
     for cs in cs_list:
         model_path = model_dir + "{}_{}/".format(cf, cs)
-        output = model_dir + "1000/{}_{}.pth".format(cf, cs)
-        paths = [str(p) for p in Path(model_path).glob("./*1000.pth")]
+        output = model_dir + "5000/{}_{}.pth".format(cf, cs)
+        paths = [str(p) for p in Path(model_path).glob("./*5000.pth")]
         if len(paths) != 1:
             print("there are {} finish.pth".format(len(paths)))
             continue

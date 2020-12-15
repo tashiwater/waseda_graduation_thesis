@@ -27,7 +27,7 @@ cs = datas[:, :, cs_start : cs_start + cs_num]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, cs_num)
 
-components = 2
+components = 3
 pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
 # one_num = 119

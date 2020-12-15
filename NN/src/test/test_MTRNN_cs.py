@@ -17,24 +17,21 @@ from model.MTRNN_cs import MTRNN as Net
 if __name__ == "__main__":
     is_print = True
     cf_num = 80
-    cs_num = 15
+    cs_num = 8
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN_noimg/"
-    TEST_PATH = DATA_DIR + "test"
+    my_dir = "MTRNN/1127/cs_noimg_tanh/"
+    DATA_DIR = CURRENT_DIR + "/../../data/1127_MTRNN_noimg/"
     RESULT_DIR = DATA_DIR + "result/"
+    TEST_PATH = DATA_DIR + "train"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    # MODEL_BASE = DATA_DIR + "../model/"
-    # MODEL_DIR = MODEL_BASE + "MTRNN/custom_loss/open_{:02}/{}/".format(
-    #     int(open_rate * 10), name
-    # )
-    MODEL_DIR = MODEL_BASE + "MTRNN/"
-    load_path = "1129/firstshot/5000/{}_{}".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + my_dir
+    load_path = "5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
-    in_size = 45  # trainset[0][0].shape[1]
+    in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
         36,
@@ -75,7 +72,7 @@ if __name__ == "__main__":
             for j in range(components - i - 1):
                 axis2 = 1 + j + i
                 for k in range(container_num):
-                    a = k * 2
+                    a = k
                     plt.scatter(
                         stack[a][:, axis1],
                         stack[a][:, axis2],
@@ -85,7 +82,7 @@ if __name__ == "__main__":
                         marker="o",
                     )
 
-                    n = 2 * k + 1  # container_num
+                    n = k + container_num
                     plt.scatter(
                         stack[n][:, axis1],
                         stack[n][:, axis2],
@@ -95,8 +92,16 @@ if __name__ == "__main__":
                         marker="D",
                     )
 
-                plt.xlabel("pca{}".format(axis1 + 1))
-                plt.ylabel("pca{}".format(axis2 + 1))
+                plt.xlabel(
+                    "pca{} ({:.2})".format(
+                        axis1 + 1, pca_base.explained_variance_ratio_[axis1]
+                    )
+                )
+                plt.ylabel(
+                    "pca{} ({:.2})".format(
+                        axis2 + 1, pca_base.explained_variance_ratio_[axis2]
+                    )
+                )
                 plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
                 plt.title("cs0")
                 plt.subplots_adjust(right=0.7)
@@ -164,6 +169,7 @@ if __name__ == "__main__":
                 np_output,
                 cf_pca,
                 cs_pca,
+                cf_states,
                 cs_states
                 # attention_map,
             ]  # , io_states, cf_states, cs_states
@@ -177,7 +183,7 @@ if __name__ == "__main__":
             + ["cs_pca{}".format(i) for i in range(cs_pca.shape[1])]
             # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
             # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
-            # + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
+            + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
             + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
