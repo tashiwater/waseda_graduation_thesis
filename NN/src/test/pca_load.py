@@ -18,7 +18,7 @@ with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
 with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
 
-components = pca_base.n_components
+components = 3  # pca_base.n_components
 
 one_num = 159
 container_num = 12
@@ -40,27 +40,36 @@ stack = [
     for i in range(container_num)
 ]
 
-"""
-test_dir = DATA_DIR + "result/"
-paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
-# test_dir = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/online/data/log/output/"
-# paths = [test_dir + "20201115_171316_type0_open03.csv"]
+
+mode = "online"
+if mode == "test":
+    test_dir = DATA_DIR + "result/"
+    paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
+else:
+    test_dir = (
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1215log_ok/output/"
+    )
+    paths = [test_dir + "20201215_182621_cf80_cs8_type5_open03.csv"]
 
 paths.sort()
 datas = []
 for path in paths:
-    df = pd.read_excel(path)
-    # df = pd.read_csv(path)
+    if mode == "test":
+        df = pd.read_excel(path)
+    else:
+        df = pd.read_csv(path)
     # print(df.shape)
     datas.append(df.values)
 datas = np.array(datas)
 # test_np = datas[:, :, 82:]
-test_np = datas[:, :, 64:]
-test_np = test_np.reshape(-1, 10)
+cs_num = 8
+cs_start = 140
+test_np = datas[:, :, cs_start : cs_start + cs_num]
+test_np = test_np.reshape(-1, cs_num)
 test_pca = pca_base.transform(test_np)
 
 test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
-"""
+
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 # for i in range(185):
@@ -69,8 +78,12 @@ for i in range(components):
     axis1 = i
     start = 0
     end = one_num * each_container
+    if axis1 != 0:
+        continue
     for j in range(components - i - 1):
         axis2 = 1 + j + i
+        if axis2 != 2:
+            continue
         for k in range(stack_num):
 
             plt.scatter(
@@ -81,16 +94,16 @@ for i in range(components):
                 facecolor="None",
                 marker="o",
             )
-            """
-            plt.scatter(
-                stack[k + stack_num][start:end, axis1],
-                stack[k + stack_num][start:end, axis2],
-                label="{}_theta30".format(k),
-                edgecolors=colorlist[k],
-                facecolor="None",
-                marker="D",
-            )
-            """
+
+            # plt.scatter(
+            #     stack[k + stack_num][start:end, axis1],
+            #     stack[k + stack_num][start:end, axis2],
+            #     label="{}_theta30".format(k),
+            #     edgecolors=colorlist[k],
+            #     facecolor="None",
+            #     marker="D",
+            # )
+
             # plt.plot(
             #     stack[k][start : start + 1, axis1],
             #     stack[k][start : start + 1, axis2],
@@ -98,16 +111,26 @@ for i in range(components):
             #     color=colorlist[k],
             #     marker="D",
             # )
-
-            # test_start = 0
-            # test_end = 159
-            # plt.scatter(
-            #     test_stack[k][test_start:test_end, axis1],
-            #     test_stack[k][test_start:test_end, axis2],
-            #     # label="test{}".format(k),
-            #     color=colorlist[k],
-            #     marker="D",
-            # )
+            if mode == "test":
+                test_start = 0
+                test_end = 159
+                plt.scatter(
+                    test_stack[k][test_start:test_end, axis1],
+                    test_stack[k][test_start:test_end, axis2],
+                    # label="test{}".format(k),
+                    color=colorlist[k],
+                    marker="D",
+                )
+        if mode == "online":
+            test_start = 0
+            test_end = -1
+            plt.scatter(
+                test_pca[test_start:test_end, axis1],
+                test_pca[test_start:test_end, axis2],
+                # label="test{}".format(k),
+                color=colorlist[-1],
+                marker="D",
+            )
         plt.xlabel(
             "pca{} ({:.2})".format(axis1 + 1, pca_base.explained_variance_ratio_[axis1])
         )
@@ -117,4 +140,4 @@ for i in range(components):
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
         plt.subplots_adjust(right=0.7)
         plt.show()
-        # fig.savefig(paths[0] + ".png")
+        fig.savefig(paths[0] + ".png")

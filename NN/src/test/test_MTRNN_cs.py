@@ -108,7 +108,7 @@ if __name__ == "__main__":
                 plt.show()
 
     # print(cs0)
-    np.savetxt(RESULT_DIR + "out.csv", cs0, delimiter=",")
+    np.savetxt(RESULT_DIR + "cs0.csv", cs0, delimiter=",")
 
     criterion = torch.nn.MSELoss()
 
