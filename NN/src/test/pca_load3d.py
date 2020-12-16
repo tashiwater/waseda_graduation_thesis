@@ -18,59 +18,52 @@ with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
     pca_base = pickle.load(f)
 with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
-components = 3
+components = pca_base.n_components
 
 one_num = 159
 container_num = 12
 each_container = 3
-circle_num = one_num * container_num * each_container // 2
-circle = pca[:circle_num]
-rectangle = pca[circle_num:]
-# circle = pca[:4500]
-# rectangle = pca[4500:]
-
 stack_num = 6
-# stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
-# stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
-# stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
-# stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
 
 stack = [
     pca[one_num * each_container * i : one_num * each_container * (i + 1)]
     for i in range(container_num)
 ]
 
-# mode = "test"
-# cs_num = 90
+mode = "online"
+theta = 0
+cs_num = 80
 
-# if mode == "test":
-#     test_dir = DATA_DIR + "test_result2/"
-#     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
-# elif mode == "online":
-#     test_dir = CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/log/output/"
-#     paths = [test_dir + "20201213_144140_cf90_cs10_type0_open01.csv"]
+if mode == "test":
+    test_dir = DATA_DIR + "test_result2/"
+    paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
+elif mode == "online":
+    test_dir = (
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1215log_ok/output/"
+    )
+    paths = [test_dir + "20201215_182803_cf80_cs8_type11_open03.csv"]
 
-# paths.sort()
-# datas = []
-# for path in paths:
-#     if mode == "test":
-#         df = pd.read_excel(path)
-#     else:
-#         df = pd.read_csv(path)
-#     # print(df.shape)
-#     datas.append(df.values)
-# datas = np.array(datas)
-# # test_np = datas[:, :, 82:]
-# if mode == "test":
-#     cs_start = 68
-#     test_np = datas[:, :, cs_start : cs_num + cs_start]
-# else:
-#     cs_start = 62
-#     test_np = datas[:, :, cs_start : cs_start + cs_num]
-# test_np = test_np.reshape(-1, cs_num)
-# test_pca = pca_base.transform(test_np)
+paths.sort()
+datas = []
+for path in paths:
+    if mode == "test":
+        df = pd.read_excel(path)
+    else:
+        df = pd.read_csv(path)
+    # print(df.shape)
+    datas.append(df.values)
+datas = np.array(datas)
+# test_np = datas[:, :, 82:]
+if mode == "test":
+    cs_start = 68
+    test_np = datas[:, :, cs_start : cs_num + cs_start]
+else:
+    cs_start = 140 - 80
+    test_np = datas[:, :, cs_start : cs_start + cs_num]
+test_np = test_np.reshape(-1, cs_num)
+test_pca = pca_base.transform(test_np)
 
-# test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
+test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
 
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
@@ -81,7 +74,7 @@ fig = plt.figure()
 ax = Axes3D(fig)
 for container in range(stack_num):
     for i in range(each_container):
-        start = ((container + stack_num) * each_container + i) * one_num
+        start = ((container) * each_container + i) * one_num
         datas = pca[start : start + one_num]
         ax.plot(
             datas[:, 0],
@@ -90,17 +83,24 @@ for container in range(stack_num):
             # label="{}".format(container),
             color=colorlist[container],
         )
-    """
-    start = container * each_container * one_num
-    datas = pca[start : start + one_num]
-    ax.plot(
-        datas[:, 0],
-        datas[:, 1],
-        datas[:, 2],
-        label="{}".format(container),
-        color=colorlist[container],
-    )
-    """
+        # start = ((container + stack_num) * each_container + i) * one_num
+        # datas = pca[start : start + one_num]
+        # ax.plot(
+        #     datas[:, 0],
+        #     datas[:, 1],
+        #     datas[:, 2],
+        #     # label="{}".format(container),
+        #     color=colorlist[container],
+        # )
+# start = 0
+# datas = test_pca[start : start + one_num]
+# ax.plot(
+#     datas[:, 0],
+#     datas[:, 1],
+#     datas[:, 2],
+#     # label="{}".format(container),
+#     color=colorlist[-1],
+# )
 plt.xlabel("pca{} ({:.2})".format(0 + 1, pca_base.explained_variance_ratio_[0]))
 plt.ylabel("pca{} ({:.2})".format(1 + 1, pca_base.explained_variance_ratio_[1]))
 ax.set_zlabel("pca{} ({:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))

@@ -54,7 +54,7 @@ if __name__ == "__main__":
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     if dump_directly:
-        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/MTRNN/1127/noimg/"
+        RESULT_DIR = CURRENT_DIR + "/../../NN/data/MTRNN/1127/noimg/"
 
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
@@ -110,6 +110,7 @@ if __name__ == "__main__":
         motion_preprocessed = sigmoid_normalize(
             motion_preprocessed, motion_before_scale
         )
+        tactile_data -= tactile_data[0]  # calibration
         tactile_preprocessed = get_meaned_data(
             tactile_data, first_step, sequence_num, EACH_SAMPLE, start_index
         )

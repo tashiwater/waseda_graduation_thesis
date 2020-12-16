@@ -8,8 +8,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 8
-cs_start = 140
+cs_num = 80
+cs_start = 144 - 80
 step_num = 159
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/"
@@ -34,7 +34,7 @@ pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
 # one_num = 119
 # pca2 = pca.reshape(one_num, -1)
-np.savetxt(INPUT_PATH + "out.csv", pca[:step_num], delimiter=",")
+# np.savetxt(INPUT_PATH + "out.csv", pca[:step_num], delimiter=",")
 
 with open(INPUT_PATH + "pca.pkl", mode="wb") as f:
     pickle.dump(pca_base, f, protocol=4)

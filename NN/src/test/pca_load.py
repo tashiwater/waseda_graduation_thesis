@@ -18,7 +18,7 @@ with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
 with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
 
-components = 3  # pca_base.n_components
+components = pca_base.n_components
 
 one_num = 159
 container_num = 12
@@ -49,7 +49,7 @@ else:
     test_dir = (
         CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1215log_ok/output/"
     )
-    paths = [test_dir + "20201215_182621_cf80_cs8_type5_open03.csv"]
+    paths = [test_dir + "20201215_181038_cf80_cs8_type1_open03.csv"]
 
 paths.sort()
 datas = []
@@ -62,8 +62,8 @@ for path in paths:
     datas.append(df.values)
 datas = np.array(datas)
 # test_np = datas[:, :, 82:]
-cs_num = 8
-cs_start = 140
+cs_num = 80
+cs_start = 140 - 80
 test_np = datas[:, :, cs_start : cs_start + cs_num]
 test_np = test_np.reshape(-1, cs_num)
 test_pca = pca_base.transform(test_np)
@@ -78,12 +78,12 @@ for i in range(components):
     axis1 = i
     start = 0
     end = one_num * each_container
-    if axis1 != 0:
-        continue
+    # if axis1 != 0:
+    #     continue
     for j in range(components - i - 1):
         axis2 = 1 + j + i
-        if axis2 != 2:
-            continue
+        # if axis2 != 2:
+        # continue
         for k in range(stack_num):
 
             plt.scatter(
