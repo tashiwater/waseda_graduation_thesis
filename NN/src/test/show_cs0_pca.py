@@ -15,7 +15,7 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN_cs import MTRNN as Net
 
 if __name__ == "__main__":
-    is_print = False
+    is_print = True
     cf_num = 80
     cs_num = 8
     open_rate = 1
@@ -42,7 +42,7 @@ if __name__ == "__main__":
             "cf": cf_num,
             "cs": cs_num,
         },
-        tau={"tau_io": 2, "tau_cf": 10, "tau_cs": 30},
+        tau={"tau_io": 2, "tau_cf": 5, "tau_cs": 30},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     cs0 = net.cs0.detach().numpy().copy()
     if is_print:
-        components = 3
+        components = 5
         pca_base = PCA(n_components=components)
         pca_cs = pca_base.fit_transform(cs0)
 
@@ -66,14 +66,19 @@ if __name__ == "__main__":
 
         colorlist = ["r", "g", "b", "c", "m", "y", "k"]
         # for i in range(185):
-        fig = plt.figure()
+        # fig = plt.figure()
+        n = components - 1
+        fig, axes = plt.subplots(nrows=n, ncols=n, sharex=True)
+        ax = []
         for i in range(components):
             axis1 = i
             for j in range(components - i - 1):
                 axis2 = 1 + j + i
+                ax = axes[axis2 - 1, axis1]
                 for k in range(container_num):
                     a = k
-                    plt.scatter(
+
+                    ax.scatter(
                         stack[a][:, axis1],
                         stack[a][:, axis2],
                         label="{} theta0".format(k),
@@ -83,7 +88,7 @@ if __name__ == "__main__":
                     )
 
                     n = k + container_num
-                    plt.scatter(
+                    ax.scatter(
                         stack[n][:, axis1],
                         stack[n][:, axis2],
                         label="{} theta30".format(k),
@@ -92,20 +97,20 @@ if __name__ == "__main__":
                         marker="D",
                     )
 
-                plt.xlabel(
+                ax.set_xlabel(
                     "pca{} ({:.2})".format(
                         axis1 + 1, pca_base.explained_variance_ratio_[axis1]
                     )
                 )
-                plt.ylabel(
+                ax.set_ylabel(
                     "pca{} ({:.2})".format(
                         axis2 + 1, pca_base.explained_variance_ratio_[axis2]
                     )
                 )
-                plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-                plt.title("cs0")
-                plt.subplots_adjust(right=0.7)
-                plt.show()
+                # ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+                # ax.set_title("cs0")
+                # ax.subplots_adjust(right=0.7)
+        plt.show()
 
     # print(cs0)
     np.savetxt(RESULT_DIR + "out.csv", cs0, delimiter=",")
@@ -130,11 +135,11 @@ if __name__ == "__main__":
     net.eval()
     alltype_cs = []
     for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
-        if j > 12:
-            break
+        # if j < 11:
+        #     continue
         inputs_transposed = one_batch_inputs.transpose(1, 0)
         labels_transposed = one_batch_labels.transpose(1, 0)
-        net.init_state(inputs_transposed.shape[1], net.cs0[j])
+        net.init_state(inputs_transposed.shape[1], net.cs0[j * 3])
         outputs = torch.zeros_like(labels_transposed)
         io_states = []
         cf_states = []
@@ -151,7 +156,7 @@ if __name__ == "__main__":
             # attention_map.append(net.attention_map.view(-1).detach().numpy())
         posi_loss = criterion(outputs[:, :, :7], labels_transposed[:, :, :7])
         loss = criterion(outputs, labels_transposed)
-        print("{} loss={} / {}".format(j, posi_loss.item(), loss.item()))
+        print("loss={} / {}".format(posi_loss.item(), loss.item()))
 
         alltype_cs += cs_states
         io_states = np.array(io_states)
@@ -199,5 +204,6 @@ if __name__ == "__main__":
             df_output.iloc[:, in_size : in_size + 7].plot(colormap="Accent", ax=ax)
             # plt.plot(df_output.iloc[:, in_size : in_size + 7], linestyle="-")
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+            # plt.title("output")
             plt.subplots_adjust(right=0.7)
             plt.show()

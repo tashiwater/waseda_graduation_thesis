@@ -8,10 +8,12 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 90
+cs_num = 8
+cs_start = 140
+step_num = 159
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
-INPUT_PATH = DATA_DIR + "train_result/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/"
+INPUT_PATH = DATA_DIR + "result/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.xlsx")]
 paths.sort()
@@ -22,17 +24,17 @@ for path in paths:
     datas.append(df.values)
 datas = np.array(datas)
 # cs = datas[:, :, 64:72]
-cs_start = 68
+
 cs = datas[:, :, cs_start : cs_start + cs_num]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, cs_num)
 
-components = 3
+components = 4
 pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
 # one_num = 119
 # pca2 = pca.reshape(one_num, -1)
-np.savetxt(INPUT_PATH + "out.csv", pca[:119], delimiter=",")
+np.savetxt(INPUT_PATH + "out.csv", pca[:step_num], delimiter=",")
 
 with open(INPUT_PATH + "pca.pkl", mode="wb") as f:
     pickle.dump(pca_base, f, protocol=4)

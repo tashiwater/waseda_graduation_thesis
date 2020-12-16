@@ -10,8 +10,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
-INPUT_PATH = DATA_DIR + "train_result/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/"
+INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
 with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
@@ -20,8 +20,8 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
     pca = pickle.load(f)
 components = 3
 
-one_num = 119
-container_num = 4
+one_num = 159
+container_num = 12
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
 circle = pca[:circle_num]
@@ -29,7 +29,7 @@ rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
-stack_num = container_num
+stack_num = 6
 # stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
 # stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
 # stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
@@ -79,21 +79,31 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 # for i in range(185):
 fig = plt.figure()
 ax = Axes3D(fig)
-for container in range(container_num):
+for container in range(stack_num):
     for i in range(each_container):
-        n = i + 1
-        start = container * (i + 1) * one_num
+        start = ((container + stack_num) * each_container + i) * one_num
         datas = pca[start : start + one_num]
         ax.plot(
             datas[:, 0],
             datas[:, 1],
             datas[:, 2],
-            label="{}".format(container),
+            # label="{}".format(container),
             color=colorlist[container],
         )
-plt.xlabel("pca{} (ratio:{:.2})".format(0 + 1, pca_base.explained_variance_ratio_[0]))
-plt.ylabel("pca{} (ratio:{:.2})".format(1 + 1, pca_base.explained_variance_ratio_[1]))
-plt.ylabel("pca{} (ratio:{:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))
+    """
+    start = container * each_container * one_num
+    datas = pca[start : start + one_num]
+    ax.plot(
+        datas[:, 0],
+        datas[:, 1],
+        datas[:, 2],
+        label="{}".format(container),
+        color=colorlist[container],
+    )
+    """
+plt.xlabel("pca{} ({:.2})".format(0 + 1, pca_base.explained_variance_ratio_[0]))
+plt.ylabel("pca{} ({:.2})".format(1 + 1, pca_base.explained_variance_ratio_[1]))
+ax.set_zlabel("pca{} ({:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))
 plt.legend()
 plt.show()
 # fig.savefig(paths[0] + ".png")
