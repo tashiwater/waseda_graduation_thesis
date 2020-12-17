@@ -22,7 +22,7 @@ if __name__ == "__main__":
         _, cf_num, cs_num = sys.argv
         cf_num = int(cf_num)
         cs_num = int(cs_num)
-    open_rate = 0.8
+    open_rate = 0.1
     in_size, out_size = 30, 30
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))

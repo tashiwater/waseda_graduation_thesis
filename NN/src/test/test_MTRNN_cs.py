@@ -16,8 +16,8 @@ from model.MTRNN_cs import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = False
-    cf_num = 80
-    cs_num = 8
+    cf_num = 90
+    cs_num = 12
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -130,11 +130,10 @@ if __name__ == "__main__":
     net.eval()
     alltype_cs = []
     for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
-        if j > 12:
-            break
         inputs_transposed = one_batch_inputs.transpose(1, 0)
         labels_transposed = one_batch_labels.transpose(1, 0)
-        net.init_state(inputs_transposed.shape[1], net.cs0[j])
+        cs0 = net.cs0[j : j + 1]
+        net.init_state(inputs_transposed.shape[1], cs0)
         outputs = torch.zeros_like(labels_transposed)
         io_states = []
         cf_states = []
