@@ -1,6 +1,6 @@
 py=train_MTRNN_cs
 pyname="${py}.py"
-for cf_num in 70 80 90
+for cf_num in 80 90 100
 do
 python $pyname $cf_num 6 &
 python $pyname $cf_num 8 &

@@ -10,13 +10,18 @@ DATA_DIR = CURRENT_DIR + "/../data/"
 dir_path = DATA_DIR + "connect_input/motion_csv/"
 paths = [str(p) for p in Path(dir_path).glob("./*.csv")]
 paths.sort()
+datas = [np.loadtxt(path, delimiter=",") for path in paths]
 # dfs = [pd.read_csv(path, header=None).iloc[:, :] for path in paths]
-dfs = [pd.read_csv(path, header=None).iloc[:, :] for path in paths]
-df = pd.concat(dfs)
+start0 = []
+for df in datas:
+    df -= df[0]
+    start0.append(df)
+start0 = np.concatenate(start0)
+# df = pd.concat(start0)
 
-pd.set_option("display.max_columns", 100)
-print(df.describe())
-for mi, ma in zip(df.min(), df.max()):
+# pd.set_option("display.max_columns", 100)
+# print(df.describe())
+for mi, ma in zip(start0.min(axis=0), start0.max(axis=0)):
     print("[{}, {}],".format(mi, ma))
 
 
