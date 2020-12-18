@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from pathlib import Path
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -41,39 +42,115 @@ stack = [
 ]
 
 
-mode = "online"
+mode = "online2"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
-else:
+elif mode == "online":
     test_dir = (
-        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1215log_ok/output/"
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1217log/output/"
     )
-    paths = [test_dir + "20201215_181038_cf80_cs8_type1_open03.csv"]
+    paths = [test_dir + "cf90_cs12_type0_open03_20201217_125509.csv"]
+elif mode == "online2":
+    test_dir = (
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1217log/output/"
+    )
+    paths = [str(p) for p in Path(test_dir).glob("./*.csv")]
 
-paths.sort()
-datas = []
-for path in paths:
-    if mode == "test":
-        df = pd.read_excel(path)
-    else:
-        df = pd.read_csv(path)
-    # print(df.shape)
-    datas.append(df.values)
-datas = np.array(datas)
-# test_np = datas[:, :, 82:]
-cs_num = 80
-cs_start = 140 - 80
-test_np = datas[:, :, cs_start : cs_start + cs_num]
-test_np = test_np.reshape(-1, cs_num)
-test_pca = pca_base.transform(test_np)
+if mode == "test" or mode == "online" or mode == "online2":
+    paths.sort()
+    datas = []
+    for path in paths:
+        if mode == "test":
+            df = pd.read_excel(path)
+        else:
+            df = pd.read_csv(path)
+        # print(df.shape)
+        datas.append(df.values)
+    datas = np.array(datas)
+    # test_np = datas[:, :, 82:]
+    cs_num = 12
+    cs_start = 150  # - 90
+    if mode != "online2":
+        test_np = datas[:, :, cs_start : cs_start + cs_num]
+        test_np = test_np.reshape(-1, cs_num)
+        test_pca = pca_base.transform(test_np)
 
-test_stack = [test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)]
+        test_stack = [
+            test_pca[one_num * i : one_num * (i + 1)] for i in range(stack_num)
+        ]
 
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 # for i in range(185):
 fig = plt.figure()
+
+show_3d = True
+start = 0
+end = one_num * each_container
+if show_3d:
+    ax = Axes3D(fig)
+    for container in range(stack_num):
+        n = container + stack_num
+        ax.scatter3D(
+            stack[n][start:end, 0],
+            stack[n][start:end, 1],
+            stack[n][start:end, 2],
+            label="{}_theta0".format(container),
+            color=colorlist[container],
+            s=1,
+            # edgecolors=colorlist[container],
+            # facecolor="None",
+            # marker="o",
+        )
+        if mode == "online2":
+            test_np = datas[n][:, cs_start : cs_start + cs_num]
+            test_np = test_np.reshape(-1, cs_num)
+            test_pca = pca_base.transform(test_np)
+            ax.scatter(
+                test_pca[:, 0],
+                test_pca[:, 1],
+                test_pca[:, 2],
+                label="online{}".format(container),
+                color=colorlist[container],
+                # edgecolors=colorlist[-1],
+                # s=3,
+                marker="D",
+            )
+        # for i in range(each_container):
+        # start = ((container) * each_container + i) * one_num
+        # datas = pca[start : start + one_num]
+        # ax.plot(
+        #     datas[:, 0],
+        #     datas[:, 1],
+        #     datas[:, 2],
+        #     # label="{}".format(container),
+        #     color=colorlist[container],
+        # )
+        # start = ((container + stack_num) * each_container + i) * one_num
+        # datas = pca[start : start + one_num]
+        # ax.plot(
+        #     datas[:, 0],
+        #     datas[:, 1],
+        #     datas[:, 2],
+        #     # label="{}".format(container),
+        #     color=colorlist[container],
+        # )
+    # start = 0
+    # datas = test_pca[start : start + one_num]
+    # ax.plot(
+    #     datas[:, 0],
+    #     datas[:, 1],
+    #     datas[:, 2],
+    #     # label="{}".format(container),
+    #     color=colorlist[-1],
+    # )
+    plt.xlabel("pca{} ({:.2})".format(0 + 1, pca_base.explained_variance_ratio_[0]))
+    plt.ylabel("pca{} ({:.2})".format(1 + 1, pca_base.explained_variance_ratio_[1]))
+    ax.set_zlabel("pca{} ({:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))
+    # plt.legend()
+    plt.show()
+
 for i in range(components):
     axis1 = i
     start = 0
@@ -85,10 +162,10 @@ for i in range(components):
         # if axis2 != 2:
         # continue
         for k in range(stack_num):
-
+            n = k
             plt.scatter(
-                stack[k][start:end, axis1],
-                stack[k][start:end, axis2],
+                stack[n][start:end, axis1],
+                stack[n][start:end, axis2],
                 label="{}_theta0".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
@@ -118,7 +195,22 @@ for i in range(components):
                     test_stack[k][test_start:test_end, axis1],
                     test_stack[k][test_start:test_end, axis2],
                     # label="test{}".format(k),
-                    color=colorlist[k],
+                    edgecolors=colorlist[k],
+                    facecolor="None",
+                    # color=colorlist[k],
+                    marker="D",
+                )
+            elif mode == "online2":
+                n = k + 6
+                test_np = datas[n][:, cs_start : cs_start + cs_num]
+                test_np = test_np.reshape(-1, cs_num)
+                test_pca = pca_base.transform(test_np)
+                plt.scatter(
+                    test_pca[:, axis1],
+                    test_pca[:, axis2],
+                    label="online{}".format(k),
+                    edgecolors=colorlist[-1],
+                    facecolor=colorlist[k],
                     marker="D",
                 )
         if mode == "online":

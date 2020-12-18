@@ -29,15 +29,24 @@ class Compare:
         CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
         offline_dir = (
             CURRENT_DIR
-            + "/../../../../wiping_ws/src/wiping/online/data/1215log_ok/output/"
+            + "/../../../../wiping_ws/src/wiping/online/data/1217log/output/"
         )
-        path = offline_dir + name + ".csv"
+        path = name  # offline_dir + name + ".csv"
         self._online_df = self.read_data(path, "online_")
 
-    def show(self, start, length):
+    def show(self, title):
+        if title == "position":
+            start = 0
+            length = 7
+        elif title == "force":
+            start = 7
+            length = 7
+        elif title == "tactile":
+            start = 14
+            length = 16
         end = start + length
 
-        step_end = self._online_df.shape[0] - 5
+        step_end = min(self._online_df.shape[0] - 5, self._offline_df.shape[0])
         colormap = "tab20"
         ax = self._offline_df.iloc[:step_end, start:end].plot(
             colormap=colormap, linestyle="--"
@@ -47,9 +56,12 @@ class Compare:
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
         plt.subplots_adjust(right=0.7)
         plt.xlabel("step")
-        png_path = self._result_dir + "{}start{}.jpg".format(self._container, start)
+        name = "{}{}".format(self._container, title)
+        png_path = self._result_dir + name + ".jpg"
         plt.savefig(png_path)
-        plt.show()
+        plt.title(name)
+        plt.close()
+        # plt.show()
 
     def init(self, container, name):
         self._container = container
@@ -58,7 +70,16 @@ class Compare:
 
 
 if __name__ == "__main__":
+    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+    online_dir = (
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1217log/output/"
+    )
+    paths = [str(p) for p in Path(online_dir).glob("./*.csv")]
+    paths.sort()
+
     main = Compare()
-    main.init(1, "20201215_181038_cf80_cs8_type1_open03")
-    main.show(0, 7)
-    main.show(14, 16)
+    for i, path in enumerate(paths):
+        main.init(i, path)
+        main.show("position")
+        # main.show("force")
+        main.show("tactile")

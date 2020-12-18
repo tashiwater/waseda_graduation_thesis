@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-path = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/result/out.csv"
+path = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/result/cs0.csv"
 df = pd.read_csv(path, header=None, index_col=None)
 
 components = 4
@@ -32,7 +32,7 @@ for i in range(components):
             plt.scatter(
                 stack[k][:, axis1],
                 stack[k][:, axis2],
-                label="{} theta0".format(k),
+                label="{} 0deg".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
                 marker="o",
@@ -42,7 +42,7 @@ for i in range(components):
             plt.scatter(
                 stack[n][:, axis1],
                 stack[n][:, axis2],
-                label="{} theta30".format(k),
+                label="{} 30deg".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
                 marker="D",

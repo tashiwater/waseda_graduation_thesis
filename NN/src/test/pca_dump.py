@@ -8,8 +8,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 80
-cs_start = 144 - 80
+cs_num = 12
+cs_start = 154
 step_num = 159
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/"
