@@ -32,11 +32,11 @@ if __name__ == "__main__":
     # print(loss_rate)
 
     in_size, out_size = 30, 30
-    open_rate = 0.1
+    open_rate = 0.01
 
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1127/noimg/"
+    my_dir = "MTRNN/1218/noimg/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"

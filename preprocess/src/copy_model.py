@@ -5,7 +5,7 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1127/noimg/"
+model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1218/noimg/"
 cf_list = [60, 70, 80, 90, 100]
 cs_list = [6, 8, 10, 12]
 

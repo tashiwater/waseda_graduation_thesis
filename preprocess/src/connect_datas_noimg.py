@@ -54,7 +54,7 @@ if __name__ == "__main__":
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     if dump_directly:
-        RESULT_DIR = CURRENT_DIR + "/../../NN/data/MTRNN/1127/noimg/"
+        RESULT_DIR = CURRENT_DIR + "/../../NN/data/MTRNN/1218/noimg/"
 
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
@@ -63,23 +63,23 @@ if __name__ == "__main__":
     EACH_SAMPLE = 4
     start_index = 0
     first_step = 0
-    sequence_num = 160  # len(image_feature_datas[0])
+    sequence_num = 140  # len(image_feature_datas[0])
 
     motion_before_scale = [
         [-0.2547831567492811, 0.3522597794941982],
         [-0.19786794214487075, 0.5512273242084056],
-        [-0.47539278851585526, 0.23994786809418345],
-        [-0.6276378933223615, 0.4227885409588754],
-        [-0.1361531453344059, 0.6384239953428051],
+        [-0.47539278851585526, 0.28305750527897533],
+        [-0.6276378933223615, 0.38781218109842874],
+        [-0.22455405630184733, 0.6033428733829775],
         [-0.9111142056498871, 0.2545039097448242],
-        [-0.29218565636279004, 0.6055594556477641],
+        [-0.17498679442820975, 0.6055594556477641],
         [-14.483999252319336, 24.43199920654297],
         [-20.572500705718994, 11.095499992370605],
-        [-6.2639994621276855, 13.763999283313751],
+        [-6.299999475479126, 13.763999283313751],
         [-13.971332907676697, 14.211999297142029],
         [-1.749666690826416, 2.956333249807358],
         [-6.40000057220459, 3.5500000715255737],
-        [-2.929666757583618, 5.298333764076233],
+        [-2.742666721343994, 5.298333764076233],
     ]
 
     # motion_before_scale = [
@@ -139,11 +139,11 @@ if __name__ == "__main__":
         # else:
         #     file_path = RESULT_DIR + "train/{:03}.csv".format(i)
         if dump_directly:
-            test_span = 4
-            if i % test_span == 0:
-                file_path = RESULT_DIR + "test/{:03}.csv".format(i)
-            else:
-                file_path = RESULT_DIR + "train/{:03}.csv".format(i)
+            # test_span = 4
+            # if i % test_span == 0:
+            #     file_path = RESULT_DIR + "test/{:03}.csv".format(i)
+            # else:
+            file_path = RESULT_DIR + "train/{:03}.csv".format(i)
         else:
             file_path = RESULT_DIR + "{:03}.csv".format(i)
         # file_path = RESULT_DIR + "{:03}.csv".format(i)

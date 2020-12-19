@@ -15,13 +15,13 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN_cs import MTRNN as Net
 
 if __name__ == "__main__":
-    is_print = False
-    cf_num = 90
-    cs_num = 12
+    is_print = True
+    cf_num = 80
+    cs_num = 8
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1127/noimg/"
+    my_dir = "MTRNN/1218/noimg/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     RESULT_DIR = DATA_DIR + "result/"
     TEST_PATH = DATA_DIR + "train"
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
     net = Net(
-        36,
+        48,
         layer_size={
             "in": in_size,
             "out": in_size,
@@ -57,7 +57,7 @@ if __name__ == "__main__":
         pca_cs = pca_base.fit_transform(cs0)
 
         container_num = 6
-        each_container = 3
+        each_container = 4
         theta_num = 2
 
         stack = [
