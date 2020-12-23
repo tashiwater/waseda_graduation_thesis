@@ -17,8 +17,8 @@ from model.MTRNN import MTRNN as Net
 if __name__ == "__main__":
     is_print = False
 
-    cf_num = 80
-    cs_num = 8
+    cf_num = 90
+    cs_num = 6
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
