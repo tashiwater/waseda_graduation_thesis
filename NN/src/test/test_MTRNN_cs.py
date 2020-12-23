@@ -16,12 +16,13 @@ from model.MTRNN_cs import MTRNN as Net
 
 if __name__ == "__main__":
     is_print = True
+
     cf_num = 80
     cs_num = 8
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1218/noimg/"
+    my_dir = "MTRNN/1218/theta0/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     RESULT_DIR = DATA_DIR + "result/"
     TEST_PATH = DATA_DIR + "train"

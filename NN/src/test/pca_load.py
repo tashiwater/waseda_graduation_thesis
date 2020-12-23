@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -21,7 +21,7 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
 
 components = pca_base.n_components
 
-one_num = 159
+one_num = 129
 container_num = 12
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
@@ -42,7 +42,7 @@ stack = [
 ]
 
 
-mode = "online2"
+mode = "online3"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
@@ -91,7 +91,7 @@ end = one_num * each_container
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
-        n = container + stack_num
+        n = container + stack_num - 6
         ax.scatter3D(
             stack[n][start:end, 0],
             stack[n][start:end, 1],

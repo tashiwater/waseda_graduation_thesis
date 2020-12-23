@@ -8,11 +8,11 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 12
-cs_start = 154
-step_num = 159
+cs_num = 80
+cs_start = 64  # + 80
+step_num = 129
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1127/noimg/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
 INPUT_PATH = DATA_DIR + "result/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.xlsx")]
