@@ -22,7 +22,7 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
 components = pca_base.n_components
 
 one_num = 129
-container_num = 12
+container_num = 5
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
 circle = pca[:circle_num]
@@ -30,7 +30,7 @@ rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
-stack_num = 6
+stack_num = 5
 # stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
 # stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
 # stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
@@ -42,18 +42,20 @@ stack = [
 ]
 
 
-mode = "online3"
+mode = "online"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
     test_dir = (
-        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1217log/output/"
+        CURRENT_DIR
+        + "/../../../../wiping_ws/src/wiping/online/data/1223log9006/output/"
     )
-    paths = [test_dir + "cf90_cs12_type0_open03_20201217_125509.csv"]
+    paths = [test_dir + "cf90_cs6_type00_open08_20201223_185834.csv"]
 elif mode == "online2":
     test_dir = (
-        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1217log/output/"
+        CURRENT_DIR
+        + "/../../../../wiping_ws/src/wiping/online/data/1223log9006/output/"
     )
     paths = [str(p) for p in Path(test_dir).glob("./*.csv")]
 
@@ -69,8 +71,8 @@ if mode == "test" or mode == "online" or mode == "online2":
         datas.append(df.values)
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
-    cs_num = 12
-    cs_start = 150  # - 90
+    cs_num = 6
+    cs_start = 60 + 90  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)
@@ -91,7 +93,7 @@ end = one_num * each_container
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
-        n = container + stack_num - 6
+        n = container
         ax.scatter3D(
             stack[n][start:end, 0],
             stack[n][start:end, 1],
@@ -136,15 +138,16 @@ if show_3d:
         #     # label="{}".format(container),
         #     color=colorlist[container],
         # )
-    # start = 0
-    # datas = test_pca[start : start + one_num]
-    # ax.plot(
-    #     datas[:, 0],
-    #     datas[:, 1],
-    #     datas[:, 2],
-    #     # label="{}".format(container),
-    #     color=colorlist[-1],
-    # )
+    if mode == "online":
+        start = 0
+        datas = test_pca[start : start + one_num]
+        ax.plot(
+            datas[:, 0],
+            datas[:, 1],
+            datas[:, 2],
+            # label="{}".format(container),
+            color=colorlist[-1],
+        )
     plt.xlabel("pca{} ({:.2})".format(0 + 1, pca_base.explained_variance_ratio_[0]))
     plt.ylabel("pca{} ({:.2})".format(1 + 1, pca_base.explained_variance_ratio_[1]))
     ax.set_zlabel("pca{} ({:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))
