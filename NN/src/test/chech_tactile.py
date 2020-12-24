@@ -13,9 +13,13 @@ import csv
 
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1210/size/"
-    input_dir = DATA_DIR + "test/"
-    result_path = DATA_DIR + "result/step_test.csv"
+    # DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
+    DATA_DIR = (
+        CURRENT_DIR
+        + "/../../../../wiping_ws/src/wiping/online/data/1223log9006/output/"
+    )
+    input_dir = DATA_DIR  # + "train/"
+    result_path = DATA_DIR + "/step_test.csv"
     paths = [str(p) for p in Path(input_dir).glob("./*.csv")]
     paths.sort()
     datas = []
@@ -35,6 +39,10 @@ if __name__ == "__main__":
         # print(df.shape)
         change_times.append(change_time)
     print(change_times)
+    titles = []
+    for i in range(5):
+        titles += ["{}start".format(i), "{}end".format(i)]
     with open(result_path, "w", encoding="Shift_jis") as f:
         writer = csv.writer(f, lineterminator="\n")
+        writer.writerow(titles)  # add
         writer.writerows(change_times)

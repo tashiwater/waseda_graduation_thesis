@@ -88,8 +88,8 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 fig = plt.figure()
 
 show_3d = True
-start = 0
-end = one_num * each_container
+start = 55
+end = 80  # one_num #* each_container
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
@@ -110,9 +110,9 @@ if show_3d:
             test_np = test_np.reshape(-1, cs_num)
             test_pca = pca_base.transform(test_np)
             ax.scatter(
-                test_pca[:, 0],
-                test_pca[:, 1],
-                test_pca[:, 2],
+                test_pca[start:end, 0],
+                test_pca[start:end, 1],
+                test_pca[start:end, 2],
                 label="online{}".format(container),
                 color=colorlist[container],
                 # edgecolors=colorlist[-1],
@@ -139,12 +139,11 @@ if show_3d:
         #     color=colorlist[container],
         # )
     if mode == "online":
-        start = 0
         datas = test_pca[start : start + one_num]
         ax.plot(
-            datas[:, 0],
-            datas[:, 1],
-            datas[:, 2],
+            datas[start:end, 0],
+            datas[start:end, 1],
+            datas[start:end, 2],
             # label="{}".format(container),
             color=colorlist[-1],
         )
@@ -156,8 +155,6 @@ if show_3d:
 
 for i in range(components):
     axis1 = i
-    start = 0
-    end = one_num * each_container
     # if axis1 != 0:
     #     continue
     for j in range(components - i - 1):
@@ -209,16 +206,16 @@ for i in range(components):
                 test_np = test_np.reshape(-1, cs_num)
                 test_pca = pca_base.transform(test_np)
                 plt.scatter(
-                    test_pca[:, axis1],
-                    test_pca[:, axis2],
+                    test_pca[start:end, axis1],
+                    test_pca[start:end, axis2],
                     label="online{}".format(k),
                     edgecolors=colorlist[-1],
                     facecolor=colorlist[k],
                     marker="D",
                 )
         if mode == "online":
-            test_start = 0
-            test_end = -1
+            test_start = 40
+            test_end = 60
             plt.scatter(
                 test_pca[test_start:test_end, axis1],
                 test_pca[test_start:test_end, axis2],
@@ -235,4 +232,4 @@ for i in range(components):
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
         plt.subplots_adjust(right=0.7)
         plt.show()
-        fig.savefig(paths[0] + ".png")
+        # fig.savefig(paths[0] + ".png")
