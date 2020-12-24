@@ -54,7 +54,7 @@ if __name__ == "__main__":
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     if dump_directly:
-        RESULT_DIR = CURRENT_DIR + "/../../NN/data/MTRNN/1223/noimg/"
+        RESULT_DIR = CURRENT_DIR + "/../../NN/data/MTRNN/1223/cs/"
 
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
@@ -144,6 +144,7 @@ if __name__ == "__main__":
                 file_path = RESULT_DIR + "test/{:03}.csv".format(i)
             else:
                 file_path = RESULT_DIR + "train/{:03}.csv".format(i)
+            file_path = RESULT_DIR + "train/{:03}.csv".format(i)
         else:
             file_path = RESULT_DIR + "{:03}.csv".format(i)
         # file_path = RESULT_DIR + "{:03}.csv".format(i)
