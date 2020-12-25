@@ -8,9 +8,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 6
-cs_start = 64 + 90
+cs_num = 90
+cs_start = 64  # + 90
 step_num = 129
+components = 4
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
 INPUT_PATH = DATA_DIR + "result/"
@@ -29,7 +30,7 @@ cs = datas[:, :, cs_start : cs_start + cs_num]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, cs_num)
 
-components = 4
+
 pca_base = PCA(n_components=components)
 pca = pca_base.fit_transform(cs)
 # one_num = 119

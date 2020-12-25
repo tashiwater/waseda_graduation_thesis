@@ -64,14 +64,11 @@ class MTRNN(nn.Module):  # [TODO]cannot use GPU now
             self.last_output is not None and self.open_rate != 1
         ):  # start val is not changed by open_rate
             nofeed = 7
-            mix1 = x[:, :nofeed] * self.open_rate[0] + self.last_output[:, :nofeed] * (
-                1 - self.open_rate[0]
+            mix = x[:, :nofeed] * self.open_rate + self.last_output[:, :nofeed] * (
+                1 - self.open_rate
             )
-            mix2 = x[:, nofeed:] * self.open_rate[1] + self.last_output[:, nofeed:] * (
-                1 - self.open_rate[1]
-            )
-            # no_mix = x[:, nofeed:]
-            x = torch.cat([mix1, mix2], axis=1)
+            no_mix = x[:, nofeed:]
+            x = torch.cat([mix, no_mix], axis=1)
 
         tau = self.tau["tau_io"]
         temp = (
