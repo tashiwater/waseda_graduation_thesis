@@ -9,20 +9,22 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from train_base import TrainBase
 from dataset.dataset_MTRNN import MyDataSet
-from model.MTRNN import MTRNN
+from model.MTRNN_select import MTRNN
 
 if __name__ == "__main__":
     argnum = len(sys.argv)
 
-    if argnum == 3:
+    if argnum == 4:
         # _, name, in_size, outsize = sys.argv
         # name = str(name)
         # in_size = int(in_size)
         # out_size = int(outsize)
-        _, cf_num, cs_num = sys.argv
+        _, cf_num, cs_num, open_val = sys.argv
         cf_num = int(cf_num)
         cs_num = int(cs_num)
-    open_rate = 0.1
+        open_val = float(open_val)
+
+    open_rate = [0.01, open_val]
     in_size, out_size = 30, 30
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -32,7 +34,11 @@ if __name__ == "__main__":
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + my_dir + "normal/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = (
+        MODEL_BASE
+        + my_dir
+        + "select/open{:02d}/{}_{}/".format(int(open_val * 10), cf_num, cs_num)
+    )
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
@@ -55,7 +61,7 @@ if __name__ == "__main__":
     param_dict = {
         "train_batch_size": len(trainset),
         "test_batch_size": len(testset),
-        "epoch": 5000,
+        "epoch": 3000,
         "save_span": 100,
         "graph_span": 5,
         "weight_decay": 0.00001,

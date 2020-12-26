@@ -8,8 +8,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 90
-cs_start = 64  # + 90
+cs_num = 6  # 90
+cs_start = 64 + 90
 step_num = 129
 components = 4
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))

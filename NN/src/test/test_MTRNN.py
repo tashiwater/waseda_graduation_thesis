@@ -22,14 +22,14 @@ if __name__ == "__main__":
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1223/cs/"
+    my_dir = "MTRNN/1223/noimg/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     RESULT_DIR = DATA_DIR + "result/"
     TEST_PATH = DATA_DIR + "train"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     MODEL_DIR = MODEL_BASE + my_dir
-    load_path = "open08/5000/{}_{}".format(cf_num, cs_num)
+    load_path = "open01/5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 30  # trainset[0][0].shape[1]
