@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/cs/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1226/normal/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -21,8 +21,8 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
 
 components = pca_base.n_components
 
-one_num = 129
-container_num = 5
+one_num = 114
+container_num = 6
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
 circle = pca[:circle_num]
@@ -30,7 +30,7 @@ rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
-stack_num = 5
+stack_num = container_num
 # stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
 # stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
 # stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
@@ -42,7 +42,7 @@ stack = [
 ]
 
 
-mode = "online"
+mode = "online3"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]

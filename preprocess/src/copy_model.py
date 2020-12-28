@@ -5,14 +5,14 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1225/select/open05/"
+model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1226/normal/"
 cf_list = [50, 60, 70, 80, 90, 100, 110]
 cs_list = [6, 8, 10, 12]
 
 for cf in cf_list:
     for cs in cs_list:
         model_path = model_dir + "{}_{}/".format(cf, cs)
-        num = 3000
+        num = 5000
         output = model_dir + "{}/{}_{}.pth".format(num, cf, cs)
         paths = [str(p) for p in Path(model_path).glob("./*{}.pth".format(num))]
         if len(paths) != 1:
