@@ -42,13 +42,15 @@ stack = [
 ]
 
 
-mode = "online3"
+mode = "online"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
-    test_dir = CURRENT_DIR + "/../../../../wiping/online/data/1225log/output/"
-    paths = [test_dir + "cf90_cs6_type01_open08_20201225_102338.csv"]
+    test_dir = (
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/1228log/output/"
+    )
+    paths = [test_dir + "cf80_cs12_type00_open08_20201228_145957.csv"]
 elif mode == "online2":
     test_dir = (
         CURRENT_DIR
@@ -68,8 +70,8 @@ if mode == "test" or mode == "online" or mode == "online2":
         datas.append(df.values)
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
-    cs_num = 90  # 6
-    cs_start = 60  # + 90  # - 90
+    cs_num = 12
+    cs_start = 60 + 80  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)

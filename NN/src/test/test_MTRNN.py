@@ -18,7 +18,7 @@ if __name__ == "__main__":
     is_print = False
 
     cf_num = 80
-    cs_num = 10
+    cs_num = 12
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))

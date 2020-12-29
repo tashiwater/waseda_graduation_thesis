@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pickle
 
-cs_num = 10
+cs_num = 12
 cs_start = 64 + 80
 step_num = 114
 components = 4
