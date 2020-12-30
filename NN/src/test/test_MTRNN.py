@@ -15,9 +15,9 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
-    is_print = False
+    is_print = True
 
-    cf_num = 90
+    cf_num = 80
     cs_num = 6
     open_rate = 1
 
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     MODEL_DIR = MODEL_BASE + my_dir
-    load_path = "open01/5000/{}_{}".format(cf_num, cs_num)
+    load_path = "io1cf5cs20/5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 30  # trainset[0][0].shape[1]
@@ -42,7 +42,7 @@ if __name__ == "__main__":
             "cf": cf_num,
             "cs": cs_num,
         },
-        tau={"tau_io": 2, "tau_cf": 10, "tau_cs": 30},
+        tau={"tau_io": 1, "tau_cf": 5, "tau_cs": 20},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
@@ -107,6 +107,7 @@ if __name__ == "__main__":
                 np_output,
                 cf_pca,
                 cs_pca,
+                io_states,
                 cf_states,
                 cs_states
                 # attention_map,
@@ -120,12 +121,13 @@ if __name__ == "__main__":
             + ["cf_pca{}".format(i) for i in range(cf_pca.shape[1])]
             + ["cs_pca{}".format(i) for i in range(cs_pca.shape[1])]
             # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
-            # + ["io_states{}".format(i) for i in range(io_states.shape[1])]
+            + ["io_states{}".format(i) for i in range(io_states.shape[1])]
             + ["cf_states{}".format(i) for i in range(cf_states.shape[1])]
             + ["cs_states{}".format(i) for i in range(cs_states.shape[1])]
         )
         df_output = pd.DataFrame(data=connected_data, columns=header)
-        df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
+        # df_output.to_excel(RESULT_DIR + "output{:02}.xlsx".format(j + 1), index=False)
+        df_output.to_csv(RESULT_DIR + "output{:02}.csv".format(j + 1), index=False)
 
         if is_print:
             ax = df_output.iloc[:, :7].plot(colormap="Accent", linestyle="--")
