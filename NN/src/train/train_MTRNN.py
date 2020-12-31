@@ -27,13 +27,13 @@ if __name__ == "__main__":
     in_size, out_size = 30, 30
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1223/noimg/"
+    my_dir = "MTRNN/1231/normal/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + my_dir + "io1cf5cs20/{}_{}/".format(cf_num, cs_num)
+    MODEL_DIR = MODEL_BASE + my_dir + "io2cf10cs30/{}_{}/".format(cf_num, cs_num)
     os.makedirs(MODEL_DIR)
     # MODEL_DIR = MODEL_BASE + "MTRNN/1116_noimg2/"
 
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             "cf": cf_num,  # 70,80,90,100
             "cs": cs_num,  # 8,10,12,15
         },
-        tau={"tau_io": 1, "tau_cf": 5, "tau_cs": 20},
+        tau={"tau_io": 2, "tau_cf": 10, "tau_cs": 30},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )

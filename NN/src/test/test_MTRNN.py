@@ -15,7 +15,7 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
-    is_print = True
+    is_print = False
 
     cf_num = 80
     cs_num = 6
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     MODEL_DIR = MODEL_BASE + my_dir
-    load_path = "io1cf5cs20/5000/{}_{}".format(cf_num, cs_num)
+    load_path = "io2cf5cs20/5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 30  # trainset[0][0].shape[1]

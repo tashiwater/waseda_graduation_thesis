@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../data/"
-IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/data/1228/image_raw/"
+IMG_DIR = "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/data/1231/image_raw/"
 img_dirs = [str(p) for p in Path(IMG_DIR).glob("./*")]
 img_dirs.sort()
 img_nums = []
