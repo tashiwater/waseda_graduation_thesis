@@ -9,18 +9,18 @@ import matplotlib.pyplot as plt
 import pickle
 
 cs_num = 6
-cs_start = 64 + 90
-step_num = 114
+cs_start = 64 + 50 + 80
+step_num = 129
 components = 4
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1231/normal/"
 INPUT_PATH = DATA_DIR + "result/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
-paths = [str(p) for p in Path(INPUT_PATH).glob("./*.xlsx")]
+paths = [str(p) for p in Path(INPUT_PATH).glob("./*.csv")]
 paths.sort()
 datas = []
 for path in paths:
-    df = pd.read_excel(path)
+    df = pd.read_csv(path)
     # print(df.shape)
     datas.append(df.values)
 datas = np.array(datas)

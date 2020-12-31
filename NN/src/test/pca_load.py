@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1231/normal/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -42,7 +42,7 @@ stack = [
 ]
 
 
-mode = "online"
+mode = "online3"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
@@ -88,8 +88,8 @@ colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 fig = plt.figure()
 
 show_3d = True
-start = one_num - 1
-end = one_num  # * each_container
+start = 0
+end = one_num * each_container
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):

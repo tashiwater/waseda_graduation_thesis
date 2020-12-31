@@ -1,4 +1,4 @@
-py=train_MTRNN
+py=train_MTRNN_SAM
 pyname="${py}.py"
 for cf_num in 80 90 100
 do

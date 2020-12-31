@@ -22,14 +22,14 @@ if __name__ == "__main__":
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1223/noimg/"
+    my_dir = "MTRNN/1231/normal/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     RESULT_DIR = DATA_DIR + "result/"
     TEST_PATH = DATA_DIR + "train"
     MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     MODEL_DIR = MODEL_BASE + my_dir
-    load_path = "io2cf5cs20/5000/{}_{}".format(cf_num, cs_num)
+    load_path = "io2cf10cs30/5000/{}_{}".format(cf_num, cs_num)
     # load_path = "1119_70_8/20201120_001102_10000finish"
     dataset = MyDataSet(TEST_PATH)
     in_size = 30  # trainset[0][0].shape[1]
@@ -42,7 +42,7 @@ if __name__ == "__main__":
             "cf": cf_num,
             "cs": cs_num,
         },
-        tau={"tau_io": 1, "tau_cf": 5, "tau_cs": 20},
+        tau={"tau_io": 2, "tau_cf": 10, "tau_cs": 30},
         open_rate=open_rate,
         activate=torch.nn.Tanh(),
     )
