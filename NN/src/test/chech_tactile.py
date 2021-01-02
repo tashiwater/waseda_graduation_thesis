@@ -13,12 +13,12 @@ import csv
 
 if __name__ == "__main__":
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    # DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/1223/noimg/"
-    DATA_DIR = (
-        CURRENT_DIR
-        + "/../../../../wiping_ws/src/wiping/online/data/1223log9006/output/"
-    )
-    input_dir = DATA_DIR  # + "train/"
+    DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0101/normal/"
+    # DATA_DIR = (
+    #     CURRENT_DIR
+    #     + "/../../../../wiping_ws/src/wiping/online/data/1223log9006/output/"
+    # )
+    input_dir = DATA_DIR + "train/"
     result_path = DATA_DIR + "/step_test.csv"
     paths = [str(p) for p in Path(input_dir).glob("./*.csv")]
     paths.sort()

@@ -1,12 +1,13 @@
 py=train_MTRNN
 pyname="${py}.py"
+pyen=python3
 for cf_num in 80 90 100
 do
-python $pyname $cf_num 6 &
-python $pyname $cf_num 8 &
+$pyen $pyname $cf_num 6 &
+$pyen $pyname $cf_num 8 &
 wait
-python $pyname $cf_num 10 &
-python $pyname $cf_num 12 &
+$pyen $pyname $cf_num 10 &
+$pyen $pyname $cf_num 12 &
 wait
 done
 # open_val=0.1

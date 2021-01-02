@@ -18,11 +18,11 @@ if __name__ == "__main__":
     is_print = False
 
     cf_num = 80
-    cs_num = 6
+    cs_num = 10
     open_rate = 1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/1231/normal/"
+    my_dir = "MTRNN/0101/normal/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     RESULT_DIR = DATA_DIR + "result/"
     TEST_PATH = DATA_DIR + "train"

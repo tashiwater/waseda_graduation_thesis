@@ -5,7 +5,8 @@ import os
 import shutil
 from pathlib import Path
 
-model_dir = "/home/assimilation/TAKUMI_SHIMIZU/model/MTRNN/1231/normal/sam_io2cf10cs30/"
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+model_dir = CURRENT_DIR + "/../../../model/MTRNN/0102/normal/io2cf10cs30/"
 cf_list = [50, 60, 70, 80, 90, 100, 110]
 cs_list = [6, 8, 10, 12]
 

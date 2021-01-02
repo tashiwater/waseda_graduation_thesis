@@ -27,7 +27,7 @@ if __name__ == "__main__":
     in_size, out_size = 30, 30
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/0101/normal/"
+    my_dir = "MTRNN/0102/normal/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
