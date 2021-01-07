@@ -10,8 +10,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0101/normal/"
-INPUT_PATH = DATA_DIR + "8012/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0102/normal/"
+INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
 with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
@@ -42,7 +42,7 @@ stack = [
 ]
 
 
-mode = "online"
+mode = "online3"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]

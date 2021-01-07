@@ -1,6 +1,6 @@
 py=train_MTRNN
 pyname="${py}.py"
-pyen=python3
+pyen=python
 for cf_num in 80 90 100
 do
 $pyen $pyname $cf_num 6 &
