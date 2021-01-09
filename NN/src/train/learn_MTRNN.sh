@@ -1,14 +1,18 @@
 py=train_MTRNN
 pyname="${py}.py"
 pyen=python
+cf_tau=5
+for cs_tau in 10 20
+do
 for cf_num in 80 90 100
 do
-$pyen $pyname $cf_num 6 &
-$pyen $pyname $cf_num 8 &
+$pyen $pyname $cf_num 6 $cf_tau $cs_tau &
+$pyen $pyname $cf_num 8 $cf_tau $cs_tau &
 wait
-$pyen $pyname $cf_num 10 &
-$pyen $pyname $cf_num 12 &
+$pyen $pyname $cf_num 10 $cf_tau $cs_tau &
+$pyen $pyname $cf_num 12 $cf_tau $cs_tau &
 wait
+done
 done
 # open_val=0.1
 # for cf_num in 80 90 100

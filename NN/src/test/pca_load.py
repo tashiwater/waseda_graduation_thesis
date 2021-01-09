@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0102/normal/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/normal/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -21,7 +21,7 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
 
 components = pca_base.n_components
 
-one_num = 129
+one_num = 139
 container_num = 4
 each_container = 3
 circle_num = one_num * container_num * each_container // 2
@@ -42,15 +42,15 @@ stack = [
 ]
 
 
-mode = "online3"
+mode = "online"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
     test_dir = (
-        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/0102log/output/"
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/0107log/output/"
     )
-    paths = [test_dir + "cf80_cs12_type00_open08_20210102_122324.csv"]
+    paths = [test_dir + "cf90_cs10_type03_open08_20210107_145151.csv"]
 elif mode == "online2":
     test_dir = (
         CURRENT_DIR
@@ -71,7 +71,7 @@ if mode == "test" or mode == "online" or mode == "online2":
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
     cs_num = pca_base.n_features_
-    cs_start = 60 + 80  # - 90
+    cs_start = 60 + 90  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)
