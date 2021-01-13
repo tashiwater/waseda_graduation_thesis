@@ -39,18 +39,7 @@ class TrainBase:
         if device is not None:
             self._net.to(device)
         print("num of (train,test)=({},{})".format(len(trainset), len(testset)))
-        self._trainloader = torch.utils.data.DataLoader(
-            trainset,
-            batch_size=self._param_dict["train_batch_size"],
-            shuffle=True,
-            num_workers=os.cpu_count(),
-        )
-        self._testloader = torch.utils.data.DataLoader(
-            testset,
-            batch_size=self._param_dict["test_batch_size"],
-            shuffle=False,
-            num_workers=os.cpu_count(),
-        )
+        self.set_data_loader(trainset, testset)
         self._criterion = criterion
         self._optimizer = torch.optim.Adam(
             self._net.parameters(),
@@ -68,6 +57,20 @@ class TrainBase:
 
         torch.backends.cudnn.benchmark = True
         self.init()
+
+    def set_data_loader(self, trainset, testset):
+        self._trainloader = torch.utils.data.DataLoader(
+            trainset,
+            batch_size=self._param_dict["train_batch_size"],
+            shuffle=True,
+            num_workers=os.cpu_count(),
+        )
+        self._testloader = torch.utils.data.DataLoader(
+            testset,
+            batch_size=self._param_dict["test_batch_size"],
+            shuffle=False,
+            num_workers=os.cpu_count(),
+        )
 
     def init(self):
         pass

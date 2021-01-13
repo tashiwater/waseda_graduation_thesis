@@ -14,12 +14,12 @@ from model.CAE import CAE as Model
 if __name__ == "__main__":
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = CURRENT_DIR + "/../../data/CAE_firstshot/"
+    my_dir = "CAE/0106/all/"
+    DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
-    MODEL_BASE = "/media/user/ボリューム/model/"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-    MODEL_DIR = MODEL_BASE + "CAE/1129_firstshot/"
+    MODEL_DIR = MODEL_BASE + my_dir
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01
