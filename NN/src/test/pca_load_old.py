@@ -14,21 +14,33 @@ DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/normal/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
-# step_df = pd.read_csv(DATA_DIR + "step_test.csv")
-
 with open(INPUT_PATH + "pca.pkl", mode="rb") as f:
     pca_base = pickle.load(f)
 with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
-    pca_train = pickle.load(f)
+    pca = pickle.load(f)
 
 components = pca_base.n_components
 
 one_num = 139
 container_num = 4
 each_container = 3
-stack_num = container_num
+circle_num = one_num * container_num * each_container // 2
+circle = pca[:circle_num]
+rectangle = pca[circle_num:]
+# circle = pca[:4500]
+# rectangle = pca[4500:]
 
-pca_train = pca_train.reshape(-1, one_num, components)
+stack_num = container_num
+# stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
+# stack[1] = tuple([pca[one_num * i + 3 : one_num * i + 6] for i in range(container_num)])
+# stack[2] = tuple([pca[one_num * i + 6 : one_num * i + 9] for i in range(container_num)])
+# stack4 = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(3)])
+
+stack = [
+    pca[one_num * each_container * i : one_num * each_container * (i + 1)]
+    for i in range(container_num)
+]
+
 
 mode = "online3"
 if mode == "test":
@@ -76,15 +88,15 @@ fig = plt.figure()
 
 show_3d = True
 start = 0
-end = one_num
+end = one_num * each_container
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
-        n = container * each_container
+        n = container
         ax.scatter3D(
-            pca_train[n : n + each_container, start:end, 0],
-            pca_train[n : n + each_container, start:end, 1],
-            pca_train[n : n + each_container, start:end, 2],
+            stack[n][start:end, 0],
+            stack[n][start:end, 1],
+            stack[n][start:end, 2],
             label="{}_theta0".format(container),
             color=colorlist[container],
             # s=1,

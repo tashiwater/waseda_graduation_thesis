@@ -29,7 +29,7 @@ if __name__ == "__main__":
     in_size, out_size = 30, 30
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/0106/normal/"
+    my_dir = "MTRNN/0106/cs/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
@@ -72,7 +72,18 @@ if __name__ == "__main__":
     criterion = torch.nn.MSELoss()
 
     class TrainNet(TrainBase):
+        def set_data_loader(self, trainset, testset):
+            self._trainloader = torch.utils.data.DataLoader(
+                trainset,
+                batch_size=self._param_dict["train_batch_size"],
+                shuffle=True,
+                num_workers=os.cpu_count(),
+            )
+            self._testloader = []
+
         def _each_epoch(self, mode, dataloader):
+            if mode == "test":
+                return 0
             calc_num = 0
             sum_loss = 0
             for (one_batch_inputs, one_batch_labels) in dataloader:
