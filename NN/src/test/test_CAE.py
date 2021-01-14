@@ -10,17 +10,18 @@ from dataset.dataset_CAE import MyDataSet
 from model.CAE import CAE as Net
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/CAE_finish_same/"
+my_dir = "CAE/0106/all/"
+DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
 DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 # CORRECT_DIR = DATA_DIR + "result_correct/"
-MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-MODEL_DIR = MODEL_BASE + "CAE/"
+model_path = (
+    CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_221042_5000finish.pth"
+)
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1129/20201129_223040_2000.pth"
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 

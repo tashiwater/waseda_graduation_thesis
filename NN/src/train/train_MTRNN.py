@@ -26,10 +26,10 @@ if __name__ == "__main__":
         cs_tau = int(cs_tau)
 
     open_rate = 0.1
-    in_size, out_size = 30, 30
+    in_size, out_size = 45, 45
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/0106/normal/"
+    my_dir = "MTRNN/0106/all/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"

@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from train_base import TrainBase
 from dataset.dataset_MTRNN import MyDataSet
-from model.MTRNN import MTRNN
+from model.MTRNN_cs import MTRNN
 
 if __name__ == "__main__":
     argnum = len(sys.argv)
@@ -46,6 +46,7 @@ if __name__ == "__main__":
     # in_size = 30  # trainset[0][0].shape[1]
     position_dims = 7
     net = MTRNN(
+        len(trainset),
         layer_size={
             "in": in_size,
             "out": out_size,

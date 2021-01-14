@@ -12,18 +12,19 @@ from model.CAE import CAE as Net
 
 #
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/CAE_finish_same/"
+my_dir = "CAE/0106/all/"
+DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
 IMAGE_PATH = DATA_DIR + "all/"
 MODEL_BASE = "/media/user/ボリューム/model/"
-MODEL_BASE = CURRENT_DIR + "/../../../../model/"
-MODEL_DIR = MODEL_BASE + "CAE/"
+model_path = (
+    CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_221042_5000finish.pth"
+)
 
 HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_feature/"
 
 net = Net()
 
 ### modelをロード
-model_path = MODEL_DIR + "1129_firstshot/20201202_160605_2000.pth"
 # paths = [str(p) for p in Path(model_path).glob("./*finish.pth")]
 # if len(paths) != 1:
 #     raise FileExistsError("there are {} finish.pth".format(len(paths)))

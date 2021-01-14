@@ -54,31 +54,33 @@ if __name__ == "__main__":
     INPUT_DIR = DATA_DIR + "connect_input/"
     RESULT_DIR = DATA_DIR + "connected/"
     if dump_directly:
-        RESULT_DIR = "/home/assimilation/TAKUMI_SHIMIZU/waseda_graduation_thesis/NN/data/MTRNN_cs/"
+        RESULT_DIR = CURRENT_DIR + "/../../NN/data/MTRNN/0106/all/"
+
     motion_datas = read_csvs(INPUT_DIR + "motion_csv/")
     tactile_datas = read_csvs(INPUT_DIR + "tactile_raw/")
     image_feature_datas = read_csvs(INPUT_DIR + "image_feature/")
     EACH_SAMPLE = 4
     start_index = 0
     first_step = 0
-    sequence_num = 210  # len(image_feature_datas[0])
+    sequence_num = 140  # len(image_feature_datas[0])
 
     motion_before_scale = [
-        [1.6117068753543122, 2.1200514637028007],
-        [-0.6368531630633356, 0.11388273535710568],
-        [-0.5634097049436209, 0.19519762380936195],
-        [0.7681368847920997, 1.688274487748799],
-        [0.16900022467955014, 0.9541540264022268],
-        [-0.8862432854471518, 0.29183651594388066],
-        [-1.2531987873105703, -0.5639856801083778],
-        [20.052000045776367, 58.91999435424805],
-        [-29.796001434326172, 13.532999992370605],
-        [-5.3279995918273935, 25.24799728393555],
-        [-9.5, 18.227333068847656],
-        [-3.86133337020874, 2.5339999198913574],
-        [-9.450000762939453, 4.800000190734863],
-        [-2.119333267211914, 8.414999961853027],
+        [-0.18788481648259991, 0.042219492235189726],
+        [-0.2643824543194445, 0.35691982870388905],
+        [-0.5818403877102672, 0.03354522767509434],
+        [-0.16716768688870987, 0.4605400478332392],
+        [-0.028553580969988945, 0.7077135546627552],
+        [-0.4690223324184392, 0.00034907383988214136],
+        [-0.08326965701475286, 0.2065073698791423],
+        [-9.911998748779297, 12.623998641967773],
+        [-13.767000198364258, 6.922499656677246],
+        [-2.783999979496002, 9.923999547958374],
+        [-10.93133282661438, 6.764000415802002],
+        [-1.6893332302570343, 1.7496666014194489],
+        [-3.9500001668930054, 2.849999964237213],
+        [-1.9946666955947876, 2.4310001134872437],
     ]
+
     # motion_before_scale = [
     #     [-1.309, 4.451],
     #     [-2.094, 0.140],
@@ -95,52 +97,38 @@ if __name__ == "__main__":
     #     [-5, 5],
     #     [-5, 5],
     # ]
-    # tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
-    tactile_before_scale = [
-        [0.0, 0.7548387050628662],
-        [0.0, 0.72258061170578],
-        [0.0, 0.6354838609695435],
-        [0.0, 0.7935483455657959],
-        [0.0, 0.6645161509513855],
-        [0.0, 0.7064515948295593],
-        [0.0, 0.6419354677200317],
-        [0.0, 0.6870967745780945],
-        [0.0, 0.7161290049552917],
-        [0.0, 0.6580645442008972],
-        [0.0, 0.5193548202514648],
-        [0.0, 0.7161290049552917],
-        [0.0, 0.79677414894104],
-        [0.0, 0.8129032254219055],
-        [0.0, 0.6451613306999207],
-        [0.0, 0.5903225541114807],
-    ]
+    # tactile_before_scale = [
+    #     [0.0, 0.7161290049552917],
+    #     [0.0, 0.6193548440933228],
+    #     [0.0, 0.5129032135009766],
+    #     [0.0, 0.7645161151885986],
+    #     [-0.029032262042164803, 0.6451613157987595],
+    #     [-0.03870967775583267, 0.6645161211490631],
+    #     [-0.029032256454229355, 0.5645161587744951],
+    #     [-0.03870967775583267, 0.6258064769208431],
+    #     [-0.43548389966599643, 0.43225806951522827],
+    #     [-0.6161290286108851, 0.24193552136421204],
+    #     [-0.4258064776659012, 0.23225805163383484],
+    #     [-0.48709677439182997, 0.4322580099105835],
+    #     [-0.10967742651700974, 0.7774193286895752],
+    #     [-0.08709677122533321, 0.7516129016876221],
+    #     [-0.06129032373428345, 0.5580645203590393],
+    #     [-0.032258064951747656, 0.5193548081442714],
+    # ]
+    tactile_before_scale = [[0, 1] for _ in range(tactile_datas[0].shape[1])]
     # image_before_scale = [[-0.25, 0.25] for _ in range(image_feature_datas[0].shape[1])]
-    image_before_scale = [
-        [0.0, 0.4972033500671387],
-        [0.0, 0.4519493579864502],
-        [0.0, 0.4811547100543976],
-        [0.0, 0.40289184451103205],
-        [0.0, 0.4973227083683014],
-        [0.008948994800448418, 0.44961935281753534],
-        [0.0035407552495598797, 0.4977116882801056],
-        [0.0, 0.5266909599304199],
-        [0.0, 0.4620552659034728],
-        [0.0, 0.4891946613788604],
-        [0.0, 0.3642278611660004],
-        [0.0, 0.4532333612442017],
-        [0.0, 0.5029321908950806],
-        [0.05297283828258514, 0.3900356590747833],
-        [0.0, 0.4649696946144104],
-    ]
+    image_before_scale = [[0, 1] for _ in range(image_feature_datas[0].shape[1])]
     for i, (motion_data, tactile_data, img) in enumerate(
         zip(motion_datas, tactile_datas, image_feature_datas)
     ):
+        motion_data -= motion_data[0]
         motion_preprocessed = get_meaned_data(
             motion_data, first_step, sequence_num, EACH_SAMPLE, start_index
         )
         motion_preprocessed = sigmoid_normalize(
             motion_preprocessed, motion_before_scale
         )
+        tactile_data -= tactile_data[0]  # calibration
         tactile_preprocessed = get_meaned_data(
             tactile_data, first_step, sequence_num, EACH_SAMPLE, start_index
         )
@@ -162,16 +150,26 @@ if __name__ == "__main__":
             + ["image{}".format(i) for i in range(img.shape[1])]
         )
         df = pd.DataFrame(data=connected_data, columns=header)
+        # test_span = 4
+        # if i % test_span == 0:
+        #     file_path = RESULT_DIR + "test/{:03}.csv".format(i)
+        # else:
+        #     file_path = RESULT_DIR + "train/{:03}.csv".format(i)
         if dump_directly:
             test_span = 4
             if i % test_span == 0:
                 file_path = RESULT_DIR + "test/{:03}.csv".format(i)
             else:
                 file_path = RESULT_DIR + "train/{:03}.csv".format(i)
+            # file_path = RESULT_DIR + "train/{:03}.csv".format(i)
         else:
             file_path = RESULT_DIR + "{:03}.csv".format(i)
-
+        # file_path = RESULT_DIR + "{:03}.csv".format(i)
         df.to_csv(file_path, index=False)
         print(file_path)
         #     connected_datas.append(connected_data)
         # connected_datas = np.ndarray(connected_datas)
+        # # [TODO] add title
+        # np.savetxt(
+        #     RESULT_DIR + "{:02}.csv".format(i + 1), connected_data, delimiter=",",
+        # )
