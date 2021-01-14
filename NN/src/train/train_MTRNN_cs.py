@@ -25,11 +25,11 @@ if __name__ == "__main__":
         cf_tau = int(cf_tau)
         cs_tau = int(cs_tau)
 
-    open_rate = 0.1
+    open_rate = 0.01
     in_size, out_size = 30, 30
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/0106/cs/"
+    my_dir = "MTRNN/0106/cs2/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
@@ -73,24 +73,27 @@ if __name__ == "__main__":
     criterion = torch.nn.MSELoss()
 
     class TrainNet(TrainBase):
-        def set_data_loader(self, trainset, testset):
-            self._trainloader = torch.utils.data.DataLoader(
-                trainset,
-                batch_size=self._param_dict["train_batch_size"],
-                shuffle=True,
-                num_workers=os.cpu_count(),
-            )
-            self._testloader = []
+        # def set_data_loader(self, trainset, testset):
+        #     self._trainloader = torch.utils.data.DataLoader(
+        #         trainset,
+        #         batch_size=self._param_dict["train_batch_size"],
+        #         shuffle=True,
+        #         num_workers=os.cpu_count(),
+        #     )
+        #     self._testloader = []
 
         def _each_epoch(self, mode, dataloader):
-            if mode == "test":
-                return 0
             calc_num = 0
             sum_loss = 0
-            for (one_batch_inputs, one_batch_labels) in dataloader:
+            for j, (one_batch_inputs, one_batch_labels) in enumerate(dataloader):
                 inputs_transposed = one_batch_inputs.transpose(1, 0)
                 labels_transposed = one_batch_labels.transpose(1, 0)[:, :, :out_size]
-                self._net.init_state(inputs_transposed.shape[1])
+                if mode == "test":
+                    each_container = 3
+                    cs0 = self._netnet.cs0[::each_container]
+                    self._net.init_state(inputs_transposed.shape[1], cs0)
+                else:
+                    self._net.init_state(inputs_transposed.shape[1])
                 outputs = torch.zeros_like(labels_transposed)
                 self._optimizer.zero_grad()
                 for i, inputs_t in enumerate(inputs_transposed):

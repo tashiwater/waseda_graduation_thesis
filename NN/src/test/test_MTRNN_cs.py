@@ -17,9 +17,9 @@ from model.MTRNN_cs import MTRNN as Net
 if __name__ == "__main__":
     is_print = True
 
-    cf_num = 90
-    cs_num = 10
-    open_rate = 1
+    cf_num = 100
+    cs_num = 12
+    open_rate = 0.1
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     my_dir = "MTRNN/0106/cs/"
@@ -57,9 +57,9 @@ if __name__ == "__main__":
         pca_base = PCA(n_components=components)
         pca_cs = pca_base.fit_transform(cs0)
 
-        container_num = 5
+        container_num = 4
         each_container = 4
-        theta_num = 2
+        theta_num = 1
 
         stack = [
             pca_cs[i * each_container : (i + 1) * each_container] for i in range(6 * 2)
