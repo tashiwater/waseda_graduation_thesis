@@ -73,14 +73,19 @@ if __name__ == "__main__":
     criterion = torch.nn.MSELoss()
 
     class TrainNet(TrainBase):
-        # def set_data_loader(self, trainset, testset):
-        #     self._trainloader = torch.utils.data.DataLoader(
-        #         trainset,
-        #         batch_size=self._param_dict["train_batch_size"],
-        #         shuffle=True,
-        #         num_workers=os.cpu_count(),
-        #     )
-        #     self._testloader = []
+        def set_data_loader(self, trainset, testset):
+            self._trainloader = torch.utils.data.DataLoader(
+                trainset,
+                batch_size=self._param_dict["train_batch_size"],
+                shuffle=False,
+                num_workers=os.cpu_count(),
+            )
+            self._testloader = torch.utils.data.DataLoader(
+                testset,
+                batch_size=self._param_dict["test_batch_size"],
+                shuffle=False,
+                num_workers=os.cpu_count(),
+            )
 
         def _each_epoch(self, mode, dataloader):
             calc_num = 0

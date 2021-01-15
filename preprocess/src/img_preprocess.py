@@ -33,7 +33,7 @@ class ImgPreprocess:
             one_class_dirs = self._img_dirs[k * one_class_num : (k + 1) * one_class_num]
             for i, img_dir in enumerate(one_class_dirs):
 
-                img_paths = [str(p) for p in Path(img_dir).glob("./*.jpg")]
+                img_paths = [str(p) for p in Path(img_dir).glob("./000.jpg")]
                 img_paths.sort()
                 if i % test_span == 0:
                     dir_names = [self._all_dir, self._test_dir]
@@ -107,7 +107,7 @@ if __name__ == "__main__":
         "/home/assimilation/TAKUMI_SHIMIZU/wiping_ws/src/wiping/data/0106/image_raw/"
     )
     # OUTPUT_DIR = DATA_DIR + "image_compressed/"
-    OUTPUT_DIR = CURRENT_DIR + "/../../NN/data/CAE/0106/all/"
+    OUTPUT_DIR = CURRENT_DIR + "/../../NN/data/CAE/0106/cs0maker/"
     process = ImgPreprocess(IMG_DIR, OUTPUT_DIR)
     # process.extract(50, 200)
     process.dump_for_learn(
