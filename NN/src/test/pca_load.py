@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/cs2/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/pca/cs0/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -23,12 +23,12 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
 
 components = pca_base.n_components
 
-one_num = 139
+one_num = 120
 container_num = 4
-each_container = 3
+each_container = 5
 stack_num = container_num
 
-pca_train = pca_train.reshape(-1, one_num, components)
+pca_train = pca_train.reshape(container_num, each_container, one_num, components)
 
 mode = "online3"
 if mode == "test":
@@ -71,20 +71,21 @@ if mode == "test" or mode == "online" or mode == "online2":
 
 
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
+# colorlist = plt.get_cmap("tab10").colors
 # for i in range(185):
 fig = plt.figure()
 
 show_3d = True
 start = 0
-end = one_num
+end = one_num - 110
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
         n = container * each_container
         ax.scatter3D(
-            pca_train[n : n + each_container, start:end, 0],
-            pca_train[n : n + each_container, start:end, 1],
-            pca_train[n : n + each_container, start:end, 2],
+            pca_train[container, :, start:end, 0],
+            pca_train[container, :, start:end, 1],
+            pca_train[container, :, start:end, 2],
             label="{}_theta0".format(container),
             color=colorlist[container],
             # s=1,
@@ -148,12 +149,12 @@ for i in range(components):
         axis2 = 1 + j + i
         # if axis2 != 2:
         # continue
-        for k in range(stack_num):
-            n = k
+        for container in range(stack_num):
+            k = container
             plt.scatter(
-                stack[n][start:end, axis1],
-                stack[n][start:end, axis2],
-                label="{}_theta0".format(k),
+                pca_train[container, :, start:end, axis1],
+                pca_train[container, :, start:end, axis2],
+                label="{}".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
                 marker="o",

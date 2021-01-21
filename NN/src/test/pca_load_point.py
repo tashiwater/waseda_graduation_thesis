@@ -83,8 +83,8 @@ for i, container in enumerate(test_pca):
     test_point_list.append(container[test_step_np[i]])
 test_point_np = np.array(test_point_list)
 
-colorlist = plt.get_cmap("tab10").colors
-# colorlist = ["r", "g", "b", "c", "m", "y", "k"]
+# colorlist = plt.get_cmap("tab10").colors
+colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 fig = plt.figure()
 
 show_3d = True
@@ -111,9 +111,9 @@ if show_3d:
             point_np[start:end, point, 1],
             point_np[start:end, point, 2],
             label="surface" + step_title[point] + "(offline)",
-            color=colorlist[point],
-            # s=1,
-            edgecolors=colorlist[-1],
+            color=colorlist[-1],
+            s=50,
+            # edgecolors=colorlist[-1],
             # facecolor="None",
             # marker="o",
         )
@@ -145,7 +145,7 @@ if show_3d:
     plt.xlabel("pca{} ({:.2})".format(0 + 1, pca_base.explained_variance_ratio_[0]))
     plt.ylabel("pca{} ({:.2})".format(1 + 1, pca_base.explained_variance_ratio_[1]))
     ax.set_zlabel("pca{} ({:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))
-    plt.legend()
+    # plt.legend()
     plt.show()
 
 for i in range(components):
@@ -161,7 +161,9 @@ for i in range(components):
                 point_np[start:end, point, axis1],
                 point_np[start:end, point, axis2],
                 label="surface" + step_title[point] + "(offline)",
-                color=colorlist[point + 5],
+                # color=colorlist[point + 5],
+                facecolors="None",
+                edgecolors=colorlist[point],
                 marker="o",
             )
             if mode == "online2":
@@ -169,9 +171,9 @@ for i in range(components):
                     test_point_np[:, point, axis1],
                     test_point_np[:, point, axis2],
                     label="surface" + step_title[point] + "(online)",
-                    color=colorlist[point + 5],
-                    edgecolors="black",
-                    marker="D",
+                    color=colorlist[point],
+                    # edgecolors="black",
+                    marker="o",
                 )
             # plt.scatter(
             #     stack[k + stack_num][start:end, axis1],
