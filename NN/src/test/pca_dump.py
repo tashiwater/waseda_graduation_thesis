@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 import pickle
 
 cs_num = 10
-cs_start = 60 + 90  # + 50  # + 90
+cs_start = 60 + 90 + 50  # + 90
 components = 4
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/pca/cs0/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all/"
 INPUT_PATH = DATA_DIR + "result/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.csv")]
@@ -22,11 +22,11 @@ datas = []
 for path in paths:
     df = pd.read_csv(path)
     # print(df.shape)
-    datas.append(df.values[:120, :])
+    datas.append(df.values)
 datas = np.array(datas)
 # cs = datas[:, :, 64:72]
 
-cs = datas[:20, :, cs_start : cs_start + cs_num]
+cs = datas[:, :, cs_start : cs_start + cs_num]
 # imgs = np.vstack(imgs)
 cs = cs.reshape(-1, cs_num)
 

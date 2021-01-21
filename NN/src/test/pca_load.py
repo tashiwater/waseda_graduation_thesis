@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/pca/cs0/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -23,9 +23,9 @@ with open(INPUT_PATH + "pca_train.pickle", mode="rb") as f:
 
 components = pca_base.n_components
 
-one_num = 120
+one_num = 139
 container_num = 4
-each_container = 5
+each_container = 3
 stack_num = container_num
 
 pca_train = pca_train.reshape(container_num, each_container, one_num, components)
@@ -77,7 +77,7 @@ fig = plt.figure()
 
 show_3d = True
 start = 0
-end = one_num - 110
+end = one_num
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
