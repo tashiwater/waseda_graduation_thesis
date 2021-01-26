@@ -78,8 +78,8 @@ for i in range(components):
             plt.scatter(
                 pca_test[k, :, axis1],
                 pca_test[k, :, axis2],
-                # label="{}".format(k),
-                label=label_list[k],
+                label="{}".format(k),
+                # label=label_list[k],
                 edgecolors=colorlist[k],
                 facecolor=facecolor,
                 marker="o",

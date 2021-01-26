@@ -14,7 +14,7 @@ my_dir = "CAE/0106/all/"
 DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
 DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
-# CORRECT_DIR = DATA_DIR + "result_correct/"
+CORRECT_DIR = DATA_DIR + "result_correct/"
 model_path = (
     CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_221042_5000finish.pth"
 )
@@ -45,8 +45,8 @@ for i, (inputs, labels) in enumerate(testloader):
     loss = criterion(outputs, labels[0])
     print(loss.item())
     # print(torch.min(inputs))
-    # for j, img in enumerate(inputs.cpu()):
-    #     MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+    for j, img in enumerate(inputs.cpu()):
+        MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
     # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
 
     for j, img in enumerate(outputs.cpu()):

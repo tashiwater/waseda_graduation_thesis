@@ -30,15 +30,16 @@ stack_num = container_num
 
 pca_train = pca_train.reshape(container_num, each_container, one_num, components)
 
-mode = "online3"
+mode = "online"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
     test_dir = (
-        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/0107log/output/"
+        CURRENT_DIR
+        + "/../../../../wiping_ws/src/wiping/online/data/0121log_all_train/output/"
     )
-    paths = [test_dir + "cf90_cs10_type03_open08_20210107_145151.csv"]
+    paths = [test_dir + "cf90_cs10_type03_open10_20210121_115633.csv"]
 elif mode == "online2":
     test_dir = (
         CURRENT_DIR
@@ -59,7 +60,7 @@ if mode == "test" or mode == "online" or mode == "online2":
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
     cs_num = pca_base.n_features_
-    cs_start = 60  # $+ 90  # - 90
+    cs_start = 60 + 90  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)
