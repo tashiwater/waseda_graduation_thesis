@@ -16,9 +16,7 @@ my_dir = "CAE/0106/all/"
 DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
 IMAGE_PATH = DATA_DIR + "all/"
 MODEL_BASE = "/media/user/ボリューム/model/"
-model_path = (
-    CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_221042_5000finish.pth"
-)
+model_path = CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_203023_2000.pth"
 
 HIDDEN_DIR = CURRENT_DIR + "/../../../preprocess/data/connect_input/image_feature/"
 

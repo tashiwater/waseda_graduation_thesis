@@ -15,9 +15,7 @@ DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
 DATA_PATH = DATA_DIR + "test"
 RESULT_DIR = DATA_DIR + "result/"
 CORRECT_DIR = DATA_DIR + "result_correct/"
-model_path = (
-    CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_221042_5000finish.pth"
-)
+model_path = CURRENT_DIR + "/../../../../model/" + my_dir + "20210113_203023_2000.pth"
 
 net = Net()
 
@@ -25,7 +23,7 @@ net = Net()
 checkpoint = torch.load(model_path)
 net.load_state_dict(checkpoint["model"])
 
-dataset = MyDataSet(DATA_PATH, img_size=(128, 96), is_test=True, dsize=5)
+dataset = MyDataSet(DATA_PATH, img_size=(128, 96), is_test=False, dsize=5)
 testloader = torch.utils.data.DataLoader(
     dataset,
     batch_size=500,
@@ -46,7 +44,7 @@ for i, (inputs, labels) in enumerate(testloader):
     print(loss.item())
     # print(torch.min(inputs))
     for j, img in enumerate(inputs.cpu()):
-        MyDataSet.save_img(img, CORRECT_DIR + "{}_{}.png".format(i, j))
+        MyDataSet.save_img(img, CORRECT_DIR + "{:03d}_{:03d}.png".format(i, j))
     # torchvision.utils.save_image(img, CORRECT_DIR + "{}_{}.png".format(i, j))
 
     for j, img in enumerate(outputs.cpu()):
