@@ -10,11 +10,11 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/normal/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
-step_df = pd.read_csv(DATA_DIR + "step_test_end.csv")
+step_df = pd.read_csv(DATA_DIR + "step_test_start.csv")
 test_step_np = pd.read_csv(DATA_DIR + "step_test2_end.csv").values
 step_np = step_df.values
 step_title = step_df.columns
@@ -33,7 +33,7 @@ stack_num = container_num
 
 pca_train = pca_train.reshape(-1, one_num, components)
 
-mode = "online2"
+mode = "online3"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
@@ -77,12 +77,12 @@ for i, container in enumerate(pca_train):
     point_list.append(container[step_np[i]])
 point_np = np.array(point_list)
 
-
+"""
 test_point_list = []
 for i, container in enumerate(test_pca):
     test_point_list.append(container[test_step_np[i]])
 test_point_np = np.array(test_point_list)
-
+"""
 # colorlist = plt.get_cmap("tab10").colors
 colorlist = ["r", "g", "b", "c", "m", "y", "k"]
 fig = plt.figure()

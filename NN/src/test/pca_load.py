@@ -30,7 +30,7 @@ stack_num = container_num
 
 pca_train = pca_train.reshape(container_num, each_container, one_num, components)
 
-mode = "online"
+mode = "online3"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
@@ -78,7 +78,7 @@ fig = plt.figure()
 
 show_3d = True
 start = 0
-end = one_num
+end = 25  # one_num
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):

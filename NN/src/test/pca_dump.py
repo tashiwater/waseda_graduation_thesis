@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pickle
 
 cs_num = 10
-cs_start = 60 + 90 + 50  # + 90
+cs_start = 90 + 4 + 50 + 90
 components = 4
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all/"

@@ -55,7 +55,7 @@ fig = plt.figure()
 
 show_3d = True
 start = 0
-end = -1
+end = 55
 if show_3d:
     ax = Axes3D(fig)
     for container in range(container_num):
