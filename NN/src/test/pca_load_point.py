@@ -14,7 +14,7 @@ DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
-step_df = pd.read_csv(DATA_DIR + "step_test_start.csv")
+step_df = pd.read_csv(DATA_DIR + "step_test_end.csv")
 test_step_np = pd.read_csv(DATA_DIR + "step_test2_end.csv").values
 step_np = step_df.values
 step_title = step_df.columns
