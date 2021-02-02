@@ -14,40 +14,33 @@ from model.cs0_maker import Cs0Maker as Model
 if __name__ == "__main__":
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "CAE/0106/cs0maker/"
+    my_dir = "cs0maker_test/0106/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
+    TEST_PATH = DATA_DIR + "test"
     MODEL_BASE = CURRENT_DIR + "/../../../../model/"
     MODEL_DIR = MODEL_BASE + my_dir
 
     trainset = MyDataSet(
         TRAIN_PATH, img_size=(128, 96), is_test=False, dsize=5, noise=0.01
     )
-    testset = []  # MyDataSet(TEST_PATH, img_size=(128, 96), is_test=True, dsize=5)
+    testset = MyDataSet(
+        TEST_PATH, img_size=(128, 96), is_test=True, dsize=5, noise=0.01
+    )
     net = Model()
     param_dict = {
         "train_batch_size": 500,
         "test_batch_size": 500,
-        "epoch": 5000,
+        "epoch": 2000,
         "save_span": 50,
         "graph_span": 5,
         "weight_decay": 0.00001,
     }
     criterion = torch.nn.MSELoss()
+    os.makedirs(MODEL_DIR)
 
     class TrainNet(TrainBase):
-        def set_data_loader(self, trainset, testset):
-            self._trainloader = torch.utils.data.DataLoader(
-                trainset,
-                batch_size=self._param_dict["train_batch_size"],
-                shuffle=True,
-                num_workers=os.cpu_count(),
-            )
-            self._testloader = []
-
         def _each_epoch(self, mode, dataloader):
-            if mode == "test":
-                return 0
             calc_num = 0
             sum_loss = 0
             for (inputs, labels) in dataloader:

@@ -46,7 +46,7 @@ class MyDataSet(torch.utils.data.Dataset):
         # self._imgs = [self.get_img(str(p)) for p in self._image_paths] * 40
         # self._class_id = self._class_id * 40
         self._len = len(self._imgs)
-        cs0_path = dir_path + "/../cs0.csv"
+        cs0_path = dir_path + "/cs0.csv"
         self.cs0_df = np.loadtxt(cs0_path, delimiter=",")
         self.cs0_df = torch.tensor(self.cs0_df.astype(np.float32))
 

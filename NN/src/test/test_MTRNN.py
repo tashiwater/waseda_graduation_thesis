@@ -15,7 +15,7 @@ from dataset.dataset_MTRNN import MyDataSet
 from model.MTRNN import MTRNN as Net
 
 if __name__ == "__main__":
-    is_print = False
+    is_print = True
 
     cf_num = 90
     cs_num = 10

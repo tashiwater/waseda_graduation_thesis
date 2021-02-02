@@ -20,17 +20,17 @@ for path in paths:
 datas = np.array(datas)
 imgs = datas[:, 0:1, 26:]
 imgs = np.vstack(imgs)
-components = 5
+components = 4
 pca = PCA(n_components=components).fit_transform(imgs)
-circle_num = 12
+circle_num = 8
 circle = pca[:circle_num]
 rectangle = pca[circle_num:]
 # circle = pca[:4500]
 # rectangle = pca[4500:]
 
 one_num = 4
-container_num = 6
-stack_num = 6
+container_num = 4
+stack_num = 4
 stack = [0 for i in range(stack_num)]
 
 # stack[0] = tuple([pca[one_num * i + 0 : one_num * i + 3] for i in range(container_num)])
