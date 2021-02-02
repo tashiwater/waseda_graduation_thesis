@@ -30,16 +30,16 @@ stack_num = container_num
 
 pca_train = pca_train.reshape(container_num, each_container, one_num, components)
 
-mode = "online3"
+mode = "online"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
     test_dir = (
         CURRENT_DIR
-        + "/../../../../wiping_ws/src/wiping/online/data/0121log_all_train/output/"
+        + "/../../../../wiping_ws/src/wiping/online/data/0127log_all_CAE2000/output/"
     )
-    paths = [test_dir + "cf90_cs10_type03_open10_20210121_115633.csv"]
+    paths = [test_dir + "cf90_cs10_type02_open10_20210127_145025.csv"]
 elif mode == "online2":
     test_dir = (
         CURRENT_DIR
@@ -60,7 +60,7 @@ if mode == "test" or mode == "online" or mode == "online2":
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
     cs_num = pca_base.n_features_
-    cs_start = 60 + 90  # - 90
+    cs_start = 90 + 90  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)
@@ -78,7 +78,7 @@ fig = plt.figure()
 
 show_3d = True
 start = 0
-end = 25  # one_num
+end = 80  # one_num
 if show_3d:
     ax = Axes3D(fig)
     for container in range(stack_num):
@@ -152,10 +152,12 @@ for i in range(components):
         # continue
         for container in range(stack_num):
             k = container
+            if k != 2:
+                continue
             plt.scatter(
                 pca_train[container, :, start:end, axis1],
                 pca_train[container, :, start:end, axis2],
-                label="{}".format(k),
+                label="{}_offline".format(k),
                 edgecolors=colorlist[k],
                 facecolor="None",
                 marker="o",
@@ -208,7 +210,7 @@ for i in range(components):
             plt.scatter(
                 test_pca[test_start:test_end, axis1],
                 test_pca[test_start:test_end, axis2],
-                # label="test{}".format(k),
+                label="{}_online".format(2),
                 color=colorlist[-1],
                 marker="D",
             )
