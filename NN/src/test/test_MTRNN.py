@@ -116,8 +116,8 @@ if __name__ == "__main__":
         header = (
             # ["input{}".format(i) for i in range(np_input.shape[1])]
             # + ["output{}".format(i) for i in range(np_output.shape[1])]
-            get_header("in ")
-            + get_header("out ")
+            get_header("teach ")
+            + get_header("predict ")
             + ["cf_pca{}".format(i) for i in range(cf_pca.shape[1])]
             + ["cs_pca{}".format(i) for i in range(cs_pca.shape[1])]
             # + ["attention_map{}".format(i) for i in range(attention_map.shape[1])]
@@ -130,14 +130,14 @@ if __name__ == "__main__":
         df_output.to_csv(RESULT_DIR + "output{:02}.csv".format(j + 1), index=False)
 
         if is_print:
+            printnum_list = [7, 7, 16, 15]
             ax = df_output.iloc[:, :7].plot(colormap="Accent", linestyle="--")
-            # plt.plot(df_output.iloc[:, :7])
-            # plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-            # plt.title("input")
-            # plt.subplots_adjust(right=0.7)
-            # plt.show()
             df_output.iloc[:, in_size : in_size + 7].plot(colormap="Accent", ax=ax)
             # plt.plot(df_output.iloc[:, in_size : in_size + 7], linestyle="-")
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
             plt.subplots_adjust(right=0.7)
+            plt.show()
+            plt.savefig(RESULT_DIR + "posi.png")
+            ax = df_output.iloc[:, 7:14].plot(colormap="Accent", linestyle="--")
+            df_output.iloc[:, in_size + 7 : in_size + 14].plot(colormap="Accent", ax=ax)
             plt.show()
