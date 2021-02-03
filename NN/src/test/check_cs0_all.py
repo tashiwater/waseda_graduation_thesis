@@ -11,12 +11,12 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 path = CURRENT_DIR + "/../../data/cs0maker/0106/cs0.csv"
 df = pd.read_csv(path, header=None, index_col=None)
 
-container_num = 4
+container_num_train = 4
 each_container = 3
 components = 4
 pca_base = PCA(n_components=components)
 pca_train = pca_base.fit_transform(df)
-pca_train = pca_train.reshape(container_num, each_container, components)
+pca_train = pca_train.reshape(container_num_train, each_container, components)
 
 test_dir = (
     CURRENT_DIR + "/../../data/MTRNN/0106/pca/cs0/result/"
@@ -61,24 +61,25 @@ for i in range(components):
     axis1 = i
     for j in range(components - i - 1):
         axis2 = 1 + j + i
-        for k in range(container_num):
-            # plt.scatter(
-            #     pca_train[k, :, axis1],
-            #     pca_train[k, :, axis2],
-            #     # label="{} 0deg".format(k),
-            #     # label=label_list[k],
-            #     edgecolors=colorlist[k],
-            #     facecolor="None",
-            #     marker="o",
-            # )
+        for k in range(container_num_train):
+            plt.scatter(
+                pca_train[k, :, axis1],
+                pca_train[k, :, axis2],
+                label="{}_teach".format(k),
+                # label=label_list[k],
+                edgecolors=colorlist[k],
+                facecolor="None",
+                marker="o",
+            )
             if k >= 4:
                 facecolor = colorlist[k]
             else:
                 facecolor = "None"
+            facecolor = colorlist[k]
             plt.scatter(
                 pca_test[k, :, axis1],
                 pca_test[k, :, axis2],
-                label="{}".format(k),
+                label="{}_predict".format(k),
                 # label=label_list[k],
                 edgecolors=colorlist[k],
                 facecolor=facecolor,
@@ -91,7 +92,6 @@ for i in range(components):
             "pca{} ({:.2})".format(axis2 + 1, pca_base.explained_variance_ratio_[axis2])
         )
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-        plt.title("cs0")
         plt.subplots_adjust(right=0.7)
         plt.show()
         # fig.savefig(paths[0] + ".png")
