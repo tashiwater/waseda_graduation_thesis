@@ -56,26 +56,30 @@ label_list = [
 colorlist = ["r", "g", "b", "c", "m", "y", "k", "pink"]
 # colorlist = plt.get_cmap("tab10").colors
 # for i in range(185):
+show_num = 8
 fig = plt.figure()
 for i in range(components):
     axis1 = i
     for j in range(components - i - 1):
         axis2 = 1 + j + i
-        for k in range(container_num_train):
-            plt.scatter(
-                pca_train[k, :, axis1],
-                pca_train[k, :, axis2],
-                label="{}_teach".format(k),
-                # label=label_list[k],
-                edgecolors=colorlist[k],
-                facecolor="None",
-                marker="o",
-            )
+        for k in range(show_num):
+            # plt.scatter(
+            #     pca_train[k, :, axis1],
+            #     pca_train[k, :, axis2],
+            #     label="{}_teach".format(k),
+            #     # label=label_list[k],
+            #     edgecolors=colorlist[k],
+            #     facecolor="None",
+            #     marker="o",
+            # )
             if k >= 4:
                 facecolor = colorlist[k]
             else:
                 facecolor = "None"
-            facecolor = colorlist[k]
+            if k % 4 < 2:
+                marker = "s"
+            else:
+                marker = "o"
             plt.scatter(
                 pca_test[k, :, axis1],
                 pca_test[k, :, axis2],
@@ -83,7 +87,8 @@ for i in range(components):
                 # label=label_list[k],
                 edgecolors=colorlist[k],
                 facecolor=facecolor,
-                marker="o",
+                marker=marker,
+                s=200,
             )
         plt.xlabel(
             "pca{} ({:.2})".format(axis1 + 1, pca_base.explained_variance_ratio_[axis1])

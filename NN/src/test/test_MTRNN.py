@@ -131,8 +131,9 @@ if __name__ == "__main__":
 
         if is_print:
             printnum_list = [7, 7, 16, 15]
-            ax = df_output.iloc[:, :7].plot(colormap="Accent", linestyle="--")
-            df_output.iloc[:, in_size : in_size + 7].plot(colormap="Accent", ax=ax)
+            colormap = "tab20"
+            ax = df_output.iloc[:, :7].plot(colormap=colormap, linestyle="--")
+            df_output.iloc[:, in_size : in_size + 7].plot(colormap=colormap, ax=ax)
             # plt.plot(df_output.iloc[:, in_size : in_size + 7], linestyle="-")
             plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
             plt.subplots_adjust(right=0.7)
