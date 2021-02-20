@@ -9,3 +9,4 @@ NN/data/*/result
 NN/data/GatedMTRNN/train_output
 preprocess/data/*
 .vscode/*
+for_thesis/make_movie/data/*

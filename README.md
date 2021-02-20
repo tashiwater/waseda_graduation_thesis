@@ -12,6 +12,9 @@ You need to rewrite parameters and paths in *.py before you execute them.
 ```
 cd waseda_graduation_thesis
 ```
+
+The model and log are out of this repository because they are too big.
+
 ### CAE
 1. make your data directories(all, result, test, train) in NN/data/CAE/{date}/{name}
 1. pyenv global 2.7.12
@@ -37,6 +40,8 @@ cd waseda_graduation_thesis
 1. python NN/src/train/train_cs0_maker.py
 
 
+## Others
+- for_thesis : make .png for thesis
 
 
 
