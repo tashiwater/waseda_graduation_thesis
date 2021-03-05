@@ -14,7 +14,7 @@ from model.cs0_maker import Cs0Maker as Model
 if __name__ == "__main__":
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "cs0maker_test/0106/"
+    my_dir = "cs0maker/0106/all/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"

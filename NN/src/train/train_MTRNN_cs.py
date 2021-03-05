@@ -26,10 +26,10 @@ if __name__ == "__main__":
         cs_tau = int(cs_tau)
 
     open_rate = 0.01
-    in_size, out_size = 30, 30
+    in_size, out_size = 45, 45
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "MTRNN/0106/cs2/"
+    my_dir = "MTRNN/0106/all_cs0/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
@@ -95,7 +95,7 @@ if __name__ == "__main__":
                 labels_transposed = one_batch_labels.transpose(1, 0)[:, :, :out_size]
                 if mode == "test":
                     each_container = 3
-                    cs0 = self._netnet.cs0[::each_container]
+                    cs0 = self._net.cs0[::each_container]
                     self._net.init_state(inputs_transposed.shape[1], cs0)
                 else:
                     self._net.init_state(inputs_transposed.shape[1])

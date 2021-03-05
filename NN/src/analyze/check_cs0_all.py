@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-path = CURRENT_DIR + "/../../data/cs0maker/0106/cs0.csv"
+path = CURRENT_DIR + "/../../data/cs0maker/0106/all/cs0.csv"
 df = pd.read_csv(path, header=None, index_col=None)
 
 container_num_train = 4
