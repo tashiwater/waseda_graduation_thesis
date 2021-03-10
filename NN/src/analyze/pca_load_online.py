@@ -11,19 +11,21 @@ import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 test_dir = (
-    CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/all_train/output/"
+    CURRENT_DIR
+    + "/../../../../wiping_ws/src/wiping/online/data/good_result/cs0/output/"
 )
 paths = [str(p) for p in Path(test_dir).glob("./*.csv")]
 paths.sort()
+print(paths)
 datas = []
 step_min = 200
 cs_num = 10
 cf_num = 90
 io_num = 50
-in_num = 45
+in_num = 30
 cs_start = in_num * 2 + cf_num
 components = 4
-container_num = 4
+container_num = 8
 each_container = 5
 
 for path in paths:
@@ -48,14 +50,14 @@ pca_base = PCA(n_components=components)
 pca_cs = pca_base.fit_transform(test_np)
 pca_cs = pca_cs.reshape(container_num, each_container, step_min, components)
 
-colorlist = ["r", "g", "b", "c", "m", "y", "k"]
+colorlist = ["r", "g", "b", "c", "m", "y", "k", "pink"]
 # colorlist = plt.get_cmap("tab10").colors
 # for i in range(185):
 fig = plt.figure()
 
-show_3d = True
+show_3d = False
 start = 0
-end = 55
+end = -1
 if show_3d:
     ax = Axes3D(fig)
     for container in range(container_num):
@@ -76,20 +78,40 @@ if show_3d:
     ax.set_zlabel("pca{} ({:.2})".format(2 + 1, pca_base.explained_variance_ratio_[2]))
     # plt.legend()
     plt.show()
-
+label_list = [
+    "0 Big Rectangular",
+    "1 Middle Rectangular",
+    "2 Middle Cylinder",
+    "3 Small Cylinder",
+    "4 Big Rectangular",
+    "5 Small Rectangular",
+    "6 Small Cylinder",
+    "7 Middle Ellipse",
+]
 for i in range(components):
     axis1 = i
     for j in range(components - i - 1):
         axis2 = 1 + j + i
-        for container in range(stack_num):
+        for container in range(container_num):
             k = container
+            # if k >= 4:
+            #     facecolor = colorlist[k]
+            # else:
+            #     facecolor = "None"
+            if k % 4 < 2:
+                marker = "s"
+            else:
+                marker = "o"
+            facecolor = "None"
+            # marker = "o"
             plt.scatter(
                 pca_cs[container, :, start:end, axis1],
                 pca_cs[container, :, start:end, axis2],
-                label="{}".format(k),
+                label=label_list[k].format(k),
                 edgecolors=colorlist[k],
-                facecolor="None",
-                marker="o",
+                facecolor=facecolor,
+                marker=marker,
+                s=10,
             )
 
         plt.xlabel(

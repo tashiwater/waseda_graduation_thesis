@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 import pickle
 
 cs_num = 10
-cs_start = 90 + 4 + 50 + 90
+cs_start = 90 + 4 + 90
 components = 4
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all_cs0/"
 INPUT_PATH = DATA_DIR + "result/"
 # INPUT_PATH = "/home/user/TAKUMI_SHIMIZU/waseda_graduation_thesis/MTRNN/data/train/"
 paths = [str(p) for p in Path(INPUT_PATH).glob("./*.csv")]

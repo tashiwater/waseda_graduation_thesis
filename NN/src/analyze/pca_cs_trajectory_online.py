@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pickle
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/cs2/"
+DATA_DIR = CURRENT_DIR + "/../../data/MTRNN/0106/all_cs0/"
 INPUT_PATH = DATA_DIR + "result/"
 output_fig_path = DATA_DIR + "result/"
 
@@ -30,19 +30,18 @@ stack_num = container_num
 
 pca_train = pca_train.reshape(-1, one_num, components)
 
-mode = "online3"
+mode = "online"
 if mode == "test":
     test_dir = DATA_DIR + "result/"
     paths = [str(p) for p in Path(test_dir).glob("./*.xlsx")]
 elif mode == "online":
     test_dir = (
-        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/0107log/output/"
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/0305log/output/"
     )
-    paths = [test_dir + "cf90_cs10_type03_open08_20210107_145151.csv"]
+    paths = [test_dir + "cs0_cf90_cs10_type02_open10_20210305_184745.csv"]
 elif mode == "online2":
     test_dir = (
-        CURRENT_DIR
-        + "/../../../../wiping_ws/src/wiping/online/data/1223log9006/output/"
+        CURRENT_DIR + "/../../../../wiping_ws/src/wiping/online/data/0305log/output/"
     )
     paths = [str(p) for p in Path(test_dir).glob("./*.csv")]
 
@@ -59,7 +58,7 @@ if mode == "test" or mode == "online" or mode == "online2":
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
     cs_num = pca_base.n_features_
-    cs_start = 60  # $+ 90  # - 90
+    cs_start = 60 + 90  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)
@@ -93,6 +92,8 @@ if show_3d:
             # marker="o",
         )
         if mode == "online2":
+            if n > 2:
+                continue
             test_np = datas[n][:, cs_start : cs_start + cs_num]
             test_np = test_np.reshape(-1, cs_num)
             test_pca = pca_base.transform(test_np)
