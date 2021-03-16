@@ -14,7 +14,7 @@ from model.cs0_maker import Cs0Maker as Model
 if __name__ == "__main__":
     load_path = ""  # input("?.pth:")
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    my_dir = "cs0maker/0106/all/"
+    my_dir = "cs0maker/0106/all_no_test/"
     DATA_DIR = CURRENT_DIR + "/../../data/" + my_dir
     TRAIN_PATH = DATA_DIR + "train"
     TEST_PATH = DATA_DIR + "test"
@@ -71,6 +71,6 @@ if __name__ == "__main__":
         MODEL_DIR,
         param_dict,
         load_path,
-        # torch.device("cuda:0"),
+        torch.device("cuda:0"),
     )
     train_net.run()
