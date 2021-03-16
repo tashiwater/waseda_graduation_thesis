@@ -37,7 +37,7 @@ if __name__ == "__main__":
         "weight_decay": 0.00001,
     }
     criterion = torch.nn.MSELoss()
-    os.makedirs(MODEL_DIR)
+    os.makedirs(MODEL_DIR, exist_ok=True)
 
     class TrainNet(TrainBase):
         def _each_epoch(self, mode, dataloader):
@@ -71,6 +71,6 @@ if __name__ == "__main__":
         MODEL_DIR,
         param_dict,
         load_path,
-        torch.device("cuda:0"),
+        # torch.device("cuda:0"),
     )
     train_net.run()

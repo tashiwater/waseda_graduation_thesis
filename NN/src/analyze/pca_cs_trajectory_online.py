@@ -58,7 +58,7 @@ if mode == "test" or mode == "online" or mode == "online2":
     datas = np.array(datas)
     # test_np = datas[:, :, 82:]
     cs_num = pca_base.n_features_
-    cs_start = 60 + 90  # - 90
+    cs_start = 90 + 90  # - 90
     if mode != "online2":
         test_np = datas[:, :, cs_start : cs_start + cs_num]
         test_np = test_np.reshape(-1, cs_num)
